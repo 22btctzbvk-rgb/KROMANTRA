@@ -121,10 +121,10 @@
 
     <script>
         // ==========================================
-        // ⚙️ CONFIGURACIÓN DE TU NEGOCIO (CONFIGURADO)
+        // ⚙️ CONFIGURACIÓN DE TU NEGOCIO
         // ==========================================
-        const WHATSAPP_NEGOCIO = '5215514494333'; // Tu número de WhatsApp configurado
-        const DATOS_CUENTA_PAGO = 'CLABE: 123456789012345678 | Banco: BBVA | A nombre de: Kromantra'; // ⬅️ Puedes cambiar esto después por tu cuenta real
+        const WHATSAPP_NEGOCIO = '525514494333'; 
+        const DATOS_CUENTA_PAGO = 'Banco: BBVA | Tarjeta: 4152314063676335 | Titular: Carolina Perez Mendez';
         // ==========================================
 
         let carrito = [];
@@ -415,7 +415,13 @@
             `).join('');
         }
 
+        // Carga inicial al abrir la tienda
         cargarCatalogo();
+
+        // Sincronización automática en segundo plano cada 10 segundos
+        setInterval(() => {
+            cargarCatalogo();
+        }, 10000);
     </script>
 </body>
 </html>
