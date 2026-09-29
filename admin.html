@@ -44,6 +44,7 @@
         .search-box { width: 100%; padding: 8px 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; box-sizing: border-box; }
         .section-sub { font-size: 13px; font-weight: 700; color: #475569; margin-top: 15px; margin-bottom: 8px; border-left: 3px solid var(--primary); padding-left: 8px; }
         #titulo-form { color: #4f46e5; }
+        .preview-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -51,7 +52,7 @@
         <a href="/" class="btn-volver">← Ir a la Tienda</a>
         <header>
             <h1>Panel de Administración</h1>
-            <p>Control sencillo de tus productos y pedidos</p>
+            <p>Control sencillo de productos e imágenes</p>
         </header>
 
         <!-- MÉTRICAS RÁPIDAS -->
@@ -80,10 +81,16 @@
                         <input type="text" id="prod-nombre" required placeholder="Taza personalizada">
                     </div>
                 </div>
+                
                 <div class="form-grid">
                     <div>
-                        <label>Nombre de la imagen en GitHub (ej. taza.jpg):</label>
-                        <input type="text" id="prod-imagen" required placeholder="taza.jpg">
+                        <label>Seleccionar Imagen del Producto:</label>
+                        <input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)">
+                        <input type="hidden" id="prod-imagen">
+                    </div>
+                    <div>
+                        <label>Vista previa:</label>
+                        <div id="preview-container"><span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span></div>
                     </div>
                 </div>
 
@@ -130,6 +137,18 @@
             cargarPedidos();
         }
 
+        function convertirImagen(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('prod-imagen').value = e.target.result;
+                    document.getElementById('preview-container').innerHTML = `<img src="${e.target.result}" class="preview-img">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         async function cargarProductos() {
             try {
                 const res = await fetch('/api/productos');
@@ -142,7 +161,7 @@
                         <tr>
                             <td><b>${p.id}</b></td>
                             <td>${p.nombre}</td>
-                            <td>${p.imagen || 'N/A'}</td>
+                            <td>${p.imagen ? `<img src="${p.imagen}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : 'Sin imagen'}</td>
                             <td>
                                 <ul style="margin:0; padding-left:15px; font-size:12px;">
                                     ${(p.rangos || []).map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio}</b></li>`).join('')}
@@ -164,9 +183,15 @@
             document.getElementById('btn-cancelar').style.display = 'block';
 
             document.getElementById('prod-id').value = p.id;
-            document.getElementById('prod-id').readOnly = true; // El ID no cambia
+            document.getElementById('prod-id').readOnly = true;
             document.getElementById('prod-nombre').value = p.nombre;
             document.getElementById('prod-imagen').value = p.imagen || '';
+
+            if (p.imagen) {
+                document.getElementById('preview-container').innerHTML = `<img src="${p.imagen}" class="preview-img">`;
+            } else {
+                document.getElementById('preview-container').innerHTML = '<span style="font-size:12px; color:#94a3b8;">Sin imagen actual</span>';
+            }
 
             if (p.rangos && p.rangos.length > 0) {
                 if (p.rangos[0]) { document.getElementById('min1').value = p.rangos[0].min; document.getElementById('max1').value = p.rangos[0].max; document.getElementById('precio1').value = p.rangos[0].precio; }
@@ -183,13 +208,15 @@
             document.getElementById('btn-cancelar').style.display = 'none';
             document.getElementById('form-producto').reset();
             document.getElementById('prod-id').readOnly = false;
+            document.getElementById('prod-imagen').value = '';
+            document.getElementById('preview-container').innerHTML = '<span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span>';
         }
 
         async function guardarProducto(e) {
             e.preventDefault();
             const id = document.getElementById('prod-id').value.trim();
             const nombre = document.getElementById('prod-nombre').value.trim();
-            const imagen = document.getElementById('prod-imagen').value.trim();
+            const imagen = document.getElementById('prod-imagen').value;
 
             const rangos = [
                 { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
