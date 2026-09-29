@@ -4,14 +4,10 @@ const path = require('path');
 
 const app = express();
 
-// IMPORTANTE: Permitir que Express lea y sirva los archivos de la carpeta raíz (imágenes, logo, etc.)
 app.use(express.static(__dirname));
-
-// Aumentar el límite de tamaño para permitir subir imágenes en Base64
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Conexión a MongoDB Atlas
 const MONGO_URI = process.env.MONGO_URI || 'TU_CONEXION_MONGODB_ATLAS'; 
 
 mongoose.connect(MONGO_URI)
@@ -19,18 +15,14 @@ mongoose.connect(MONGO_URI)
     .catch(err => console.error('Error conectando a MongoDB:', err));
 
 // ==========================================
-// 1. ESQUEMAS Y MODELOS DE BASE DE DATOS
+// 1. ESQUEMAS Y MODELOS
 // ==========================================
 const productoSchema = new mongoose.Schema({
     id: { type: String, unique: true, required: true },
     nombre: { type: String, required: true },
     imagen: String,
     tieneVariantes: Boolean,
-    rangos: [{
-        min: Number,
-        max: Number,
-        precio: Number
-    }]
+    rangos: [{ min: Number, max: Number, precio: Number }]
 });
 const Producto = mongoose.model('Producto', productoSchema);
 
@@ -50,7 +42,9 @@ const pedidoSchema = new mongoose.Schema({
         subtotal: Number
     }],
     total: Number,
-    estado: { type: String, default: 'Pendiente' },
+    metodoPago: String,   // 'Efectivo / En Taller' o 'Tarjeta / En Línea'
+    estadoPago: String,   // 'Pendiente' o 'Pagado'
+    estado: { type: String, default: 'Pendiente' }, // 'Pendiente', 'En Proceso', 'Entregado'
     fecha: String
 });
 const Pedido = mongoose.model('Pedido', pedidoSchema);
@@ -62,9 +56,7 @@ app.get('/api/productos', async (req, res) => {
     try {
         const productos = await Producto.find();
         res.json(productos);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener productos' });
-    }
+    } catch (error) { res.status(500).json({ error: 'Error al obtener productos' }); }
 });
 
 app.post('/api/productos', async (req, res) => {
@@ -72,60 +64,66 @@ app.post('/api/productos', async (req, res) => {
         const nuevo = new Producto(req.body);
         await nuevo.save();
         res.json({ exito: true });
-    } catch (error) {
-        res.status(500).json({ exito: false, error: error.message });
-    }
+    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
 });
 
 app.put('/api/productos/:id', async (req, res) => {
     try {
         const { nombre, imagen, rangos } = req.body;
-        await Producto.findOneAndUpdate({ id: req.params.id }, {
-            nombre,
-            imagen,
-            rangos
-        });
+        await Producto.findOneAndUpdate({ id: req.params.id }, { nombre, imagen, rangos });
         res.json({ exito: true });
-    } catch (error) {
-        res.status(500).json({ exito: false, error: error.message });
-    }
+    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
 });
 
 app.delete('/api/productos/:id', async (req, res) => {
     try {
         await Producto.findOneAndDelete({ id: req.params.id });
         res.json({ exito: true });
-    } catch (error) {
-        res.status(500).json({ exito: false, error: error.message });
-    }
+    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
 });
 
 // ==========================================
-// 3. RUTAS API (PEDIDOS)
+// 3. RUTAS API (PEDIDOS Y RASTREO)
 // ==========================================
 app.post('/api/pedido', async (req, res) => {
     try {
         const datos = req.body;
+        // Si elige en línea, se marca como pagado automáticamente; si es físico, queda pendiente de pago
+        const estPago = datos.metodoPago === 'Tarjeta / En Línea' ? 'Pagado' : 'Pendiente';
+        
         const nuevoPedido = new Pedido({
             folio: Date.now(),
             ...datos,
+            estadoPago: estPago,
             estado: 'Pendiente',
             fecha: new Date().toLocaleString()
         });
         await nuevoPedido.save();
         res.json({ exito: true, folio: nuevoPedido.folio });
-    } catch (error) {
-        res.status(500).json({ exito: false, error: 'Error al guardar pedido' });
-    }
+    } catch (error) { res.status(500).json({ exito: false, error: 'Error al guardar pedido' }); }
 });
 
 app.get('/api/pedidos', async (req, res) => {
     try {
         const pedidos = await Pedido.find().sort({ folio: -1 });
         res.json(pedidos);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener pedidos' });
-    }
+    } catch (error) { res.status(500).json({ error: 'Error al obtener pedidos' }); }
+});
+
+// NUEVA RUTA: Consulta de rastreo pública para clientes
+app.get('/api/rastreo', async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q) return res.json([]);
+        const queryFolio = isNaN(q) ? null : Number(q);
+        const pedidos = await Pedido.find({
+            $or: [
+                { folio: queryFolio },
+                { 'cliente.telefono': { $regex: q,$options: 'i' } }
+            ]
+        });
+        res.json(pedidos);
+    } catch (error) { res.status(500).json({ error: 'Error en rastreo' }); }
 });
 
 app.put('/api/pedidos/:folio', async (req, res) => {
@@ -133,35 +131,21 @@ app.put('/api/pedidos/:folio', async (req, res) => {
         const { estado } = req.body;
         await Pedido.findOneAndUpdate({ folio: req.params.folio }, { estado });
         res.json({ exito: true });
-    } catch (error) {
-        res.status(500).json({ exito: false, error: error.message });
-    }
+    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
 });
 
 app.delete('/api/pedidos/:folio', async (req, res) => {
     try {
         await Pedido.findOneAndDelete({ folio: req.params.folio });
         res.json({ exito: true });
-    } catch (error) {
-        res.status(500).json({ exito: false, error: error.message });
-    }
+    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
 });
 
 // ==========================================
-// 4. RUTAS PARA CARGAR LAS PÁGINAS HTML
+// 4. VISTAS HTML
 // ==========================================
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin.html')));
 
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
-});
-
-// ==========================================
-// 5. INICIALIZACIÓN DEL SERVIDOR
-// ==========================================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor de Kromantra corriendo en el puerto ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Kromantra corriendo en puerto ${PORT}`));
