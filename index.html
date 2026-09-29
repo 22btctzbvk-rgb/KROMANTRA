@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kromantra | Tienda Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 150px; }
+        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 30px 20px; text-align: center; }
+        h1 { margin: 0; font-size: 26px; } p { margin: 6px 0 0 0; opacity: 0.9; font-size: 14px; }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
+        .product-img { width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; background: #e2e8f0; }
+        .card h3 { margin: 0 0 4px 0; font-size: 17px; } 
+        .price-info { font-size: 12px; color: #475569; margin-bottom: 8px; background: #f1f5f9; padding: 6px; border-radius: 6px; }
+        .controls { display: flex; align-items: center; justify-content: space-between; margin-top: 15px; background: #f1f5f9; padding: 8px 12px; border-radius: 8px; }
+        .controls button { background: white; border: 1px solid var(--border); width: 32px; height: 32px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        textarea, select { width: 100%; margin-top: 10px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; outline: none; font-size: 13px; box-sizing: border-box; }
+        .floating-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border); padding: 20px; max-width: 600px; margin: 0 auto; border-radius: 20px 20px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 12px; }
+        .floating-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; }
+        .inputs-cliente { display: flex; gap: 10px; }
+        .inputs-cliente input { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; box-sizing: border-box; }
+        .btn-enviar { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+        .btn-enviar:hover { background: var(--primary-hover); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kromantra</h1>
+        <p>Sistema Inteligente de Regalos Personalizados</p>
+    </header>
+
+    <div class="container" id="catalogo-container">
+        <p style="text-align: center; color: #64748b; grid-column: span 2;">Cargando catálogo...</p>
+    </div>
+
+    <div class="floating-bar">
+        <div class="floating-total">
+            <span>Total Estimado:</span>
+            <span id="total-general" style="color: var(--primary);">$0.00</span>
+        </div>
+        <div class="inputs-cliente">
+            <input type="text" id="nombre-cliente" placeholder="Tu Nombre Completo">
+            <input type="text" id="telefono-cliente" placeholder="Tu Teléfono / WhatsApp">
+        </div>
+        <button class="btn-enviar" onclick="enviarPedido()">Confirmar Pedido al Sistema 🚀</button>
+    </div>
+
+    <script>
+        let catalogo = [];
+        let estadoPedido = {};
+
+        async function cargarCatalogo() {
+            try {
+                const res = await fetch('/api/productos');
+                catalogo = await res.json();
+                if (catalogo.length === 0) {
+                    document.getElementById('catalogo-container').innerHTML = '<p style="text-align: center; color: #e11d48; grid-column: span 2;">No hay productos registrados en la base de datos.</p>';
+                    return;
+                }
+                renderizarCatalogo();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('catalogo-container').innerHTML = '<p style="text-align: center; color: #e11d48; grid-column: span 2;">Error al conectar con el servidor.</p>';
+            }
+        }
+
+        function obtenerPrecioUnitario(prod, cantidad, varianteIdx) {
+            if (cantidad <= 0) return 0;
+            let rangos = prod.tieneVariantes ? prod.opciones[varianteIdx].rangos : prod.rangos;
+            let precioEncontrado = rangos[0].precio;
+            for (let r of rangos) {
+                if (cantidad >= r.min && cantidad <= r.max) {
+                    precioEncontrado = r.precio;
+                    break;
+                }
+                if (cantidad > r.max) {
+                    precioEncontrado = r.precio;
+                }
+            }
+            return precioEncontrado;
+        }
+
+        function renderizarCatalogo() {
+            const container = document.getElementById('catalogo-container');
+            container.innerHTML = catalogo.map(prod => {
+                let state = estadoPedido[prod.id] || { cantidad: 0, varianteIdx: 0, nota: '' };
+                let precioUnitario = obtenerPrecioUnitario(prod, state.cantidad, state.varianteIdx);
+                let subtotal = state.cantidad * precioUnitario;
+
+                let opcionesHtml = prod.tieneVariantes && prod.opciones.length > 0 ? `
+                    <select onchange="cambiarVariante('${prod.id}', this.value)">
+                        ${prod.opciones.map((op, idx) => `<option value="${idx}" ${idx === state.varianteIdx ? 'selected' : ''}>${op.nombre}</option>`).join('')}
+                    </select>
+                ` : '';
+
+                let descRangos = prod.tieneVariantes ? 'Mayoreo según acabado' : prod.rangos.map(r => `${r.min}-${r.max}p: $${r.precio}`).join(' | ');
+
+                return `
+                    <div class="card">
+                        <div>
+                            <img src="${prod.imagen || 'taza.jpg'}" class="product-img" alt="${prod.nombre}">
+                            <h3>${prod.nombre}</h3>
+                            <div class="price-info">📊 ${descRangos}</div>
+                            ${opcionesHtml}
+                            <textarea placeholder="Notas de personalización..." oninput="cambiarNota('${prod.id}', this.value)">${state.nota}</textarea>
+                        </div>
+                        <div>
+                            <div class="controls">
+                                <button onclick="cambiarCantidad('${prod.id}', -1)">-</button>
+                                <span style="font-weight: 600;">${state.cantidad} pzas</span>
+                                <button onclick="cambiarCantidad('${prod.id}', 1)">+</button>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px; color: #64748b;">
+                                <span>Unit: $${precioUnitario.toFixed(2)}</span>
+                                <span>Sub: <b>$${subtotal.toFixed(2)}</b></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            calcularTotalGeneral();
+        }
+
+        function cambiarCantidad(id, cambio) {
+            if (!estadoPedido[id]) estadoPedido[id] = { cantidad: 0, varianteIdx: 0, nota: '' };
+            estadoPedido[id].cantidad = Math.max(0, estadoPedido[id].cantidad + cambio);
+            renderizarCatalogo();
+        }
+        function cambiarVariante(id, idx) {
+            if (!estadoPedido[id]) estadoPedido[id] = { cantidad: 0, varianteIdx: 0, nota: '' };
+            estadoPedido[id].varianteIdx = parseInt(idx);
+            renderizarCatalogo();
+        }
+        function cambiarNota(id, val) {
+            if (!estadoPedido[id]) estadoPedido[id] = { cantidad: 0, varianteIdx: 0, nota: '' };
+            estadoPedido[id].nota = val;
+        }
+
+        function calcularTotalGeneral() {
+            let total = 0;
+            catalogo.forEach(prod => {
+                let st = estadoPedido[prod.id];
+                if (st && st.cantidad > 0) {
+                    total += st.cantidad * obtenerPrecioUnitario(prod, st.cantidad, st.varianteIdx);
+                }
+            });
+            document.getElementById('total-general').innerText = `$${total.toFixed(2)}`;
+        }
+
+        async function enviarPedido() {
+            const nombre = document.getElementById('nombre-cliente').value.trim();
+            const telefono = document.getElementById('telefono-cliente').value.trim();
+            if (!nombre || !telefono) { alert("Ingresa tu nombre y teléfono."); return; }
+
+            let productosSeleccionados = [], totalGeneral = 0;
+            catalogo.forEach(prod => {
+                let st = estadoPedido[prod.id];
+                if (st && st.cantidad > 0) {
+                    let precio = obtenerPrecioUnitario(prod, st.cantidad, st.varianteIdx);
+                    let nombreVar = prod.tieneVariantes ? prod.opciones[st.varianteIdx].nombre : "Estándar";
+                    let subtotal = st.cantidad * precio;
+                    productosSeleccionados.push({ nombre: prod.nombre, variante: nombreVar, cantidad: st.cantidad, precioUnitario: precio, subtotal, personalizacion: st.nota || "Sin notas" });
+                    totalGeneral += subtotal;
+                }
+            });
+
+            if (productosSeleccionados.length === 0) { alert("Selecciona al menos un producto."); return; }
+
+            const res = await fetch('/api/pedido', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cliente: { nombre, telefono }, productos: productosSeleccionados, total: totalGeneral })
+            });
+            const data = await res.json();
+            if (data.exito) {
+                alert(`¡Pedido realizado con éxito!\nFolio: #${data.folio}`);
+                location.reload();
+            }
+        }
+        cargarCatalogo();
+    </script>
+</body>
+</html>
