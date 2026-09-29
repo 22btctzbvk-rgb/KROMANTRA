@@ -8,11 +8,18 @@
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 30px; text-align: center; border-radius: 12px; margin-bottom: 30px; }
+        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 30px; text-align: center; border-radius: 12px; margin-bottom: 20px; }
         header img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 8px; border-radius: 50%; background: white; padding: 5px; }
         h1 { margin: 0; font-size: 26px; }
         p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
         .container { max-width: 1100px; margin: 0 auto; }
+        
+        /* Caja de Rastreo */
+        .rastreo-box { background: white; border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
+        .rastreo-box input { padding: 10px; width: 60%; max-width: 300px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+        .rastreo-box button { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .rastreo-box button:hover { background: var(--primary-hover); }
+
         .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
         .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; }
         .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #e2e8f0; }
@@ -33,7 +40,7 @@
         button.btn-comprar { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
         button.btn-comprar:hover { background: var(--primary-hover); }
         
-        footer { text-align: center; padding: 20px; font-size: 13px; color: #64748b; margin-top: 40px; border-top: 1px solid #e2e8f0; }
+        footer { text-align: center; padding: 20px; font-size: 13px; color: #64748b; margin-top: 40px; border-top: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -43,6 +50,17 @@
             <h1>Kromantra</h1>
             <p>Sistema Inteligente de Regalos Personalizados y Mayoreo</p>
         </header>
+
+        <!-- Rastreo de Pedido para Clientes -->
+        <div class="rastreo-box">
+            <h3 style="margin-top:0; font-size:16px; color:#1e293b;">🔍 Rastrea tu pedido</h3>
+            <p style="color:#64748b; font-size:12px; margin-bottom:10px;">Ingresa tu número de folio o teléfono para ver el estatus:</p>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <input type="text" id="inputRastreo" placeholder="Ej. 17749382910 o teléfono">
+                <button onclick="consultarPedido()">Buscar</button>
+            </div>
+            <div id="resultadoRastreo" style="margin-top:12px; font-size:13px; text-align:left;"></div>
+        </div>
 
         <h2 style="font-size: 20px; margin-bottom: 20px; color: #334155;">📦 Catálogo de Productos</h2>
         <div id="catalogo" class="grid-productos">
@@ -87,25 +105,33 @@
                                         <input type="number" id="cant-${index}" value="1" min="1" oninput="calcularPrecio(${index}, ${JSON.stringify(p).replace(/"/g, '&quot;')})">
                                     </div>
                                     
-                                    <div class="form-control" style="margin-top: 8px;">
-                                        <label>✍️ Texto a grabar / imprimir (Nombre o Frase):</label>
+                                    <div class="form-control">
+                                        <label>✍️ Texto a grabar / imprimir:</label>
                                         <input type="text" id="texto-${index}" placeholder="Ej. Carlos / 'Feliz Cumpleaños'">
                                     </div>
 
-                                    <div class="form-control" style="margin-top: 8px;">
+                                    <div class="form-control">
                                         <label>🎨 Estilo, Color o Variante:</label>
-                                        <input type="text" id="estilo-${index}" placeholder="Ej. Color negro mate / Letra cursiva">
+                                        <input type="text" id="estilo-${index}" placeholder="Ej. Color negro mate">
                                     </div>
 
-                                    <div class="form-control" style="margin-top: 8px;">
+                                    <div class="form-control">
                                         <label>🖼️ Sube tu diseño o logo (Opcional):</label>
                                         <input type="file" id="archivo-${index}" accept="image/*" onchange="convertirDisenoCliente(event, ${index})">
                                         <input type="hidden" id="diseno-base64-${index}">
                                     </div>
 
-                                    <div class="form-control" style="margin-top: 8px;">
-                                        <label>💬 Instrucciones especiales para el taller:</label>
-                                        <textarea id="nota-${index}" rows="2" placeholder="Ej. Centrar el texto, etc."></textarea>
+                                    <div class="form-control">
+                                        <label>💳 Método de Pago:</label>
+                                        <select id="pago-${index}">
+                                            <option value="Efectivo / En Taller">💵 Efectivo / Pago al recoger</option>
+                                            <option value="Tarjeta / En Línea">💳 Tarjeta / Pago en Línea</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-control">
+                                        <label>💬 Notas especiales para el taller:</label>
+                                        <textarea id="nota-${index}" rows="2" placeholder="Instrucciones adicionales"></textarea>
                                     </div>
                                 </div>
 
@@ -177,6 +203,7 @@
             const estilo = document.getElementById(`estilo-${index}`).value.trim();
             const notaTaller = document.getElementById(`nota-${index}`).value.trim();
             const disenoCliente = document.getElementById(`diseno-base64-${index}`).value;
+            const metodoPago = document.getElementById(`pago-${index}`).value;
 
             let personalizacionCompleta = '';
             if (textoPersonalizado) personalizacionCompleta += `Texto: "${textoPersonalizado}" `;
@@ -203,22 +230,18 @@
             if (!telefonoCliente) return;
 
             const datosPedido = {
-                cliente: {
-                    nombre: nombreCliente,
-                    telefono: telefonoCliente
-                },
-                productos: [
-                    {
-                        id: producto.id,
-                        nombre: producto.nombre,
-                        cantidad: cantidad,
-                        variante: estilo || 'Estándar',
-                        personalizacion: personalizacionCompleta,
-                        diseno: disenoCliente, // <--- Se envía el diseño adjunto
-                        subtotal: total
-                    }
-                ],
-                total: total
+                cliente: { nombre: nombreCliente, telefono: telefonoCliente },
+                productos: [{
+                    id: producto.id,
+                    nombre: producto.nombre,
+                    cantidad: cantidad,
+                    variante: estilo || 'Estándar',
+                    personalizacion: personalizacionCompleta,
+                    diseno: disenoCliente,
+                    subtotal: total
+                }],
+                total: total,
+                metodoPago: metodoPago
             };
 
             try {
@@ -229,7 +252,10 @@
                 });
                 const data = await res.json();
                 if (data.exito) {
-                    alert(`¡Pedido realizado con éxito! Tu número de folio es #${data.folio}.`);
+                    const mensajeWa = encodeURIComponent(`Hola Kromantra, acabo de realizar un pedido. Mi folio es #${data.folio} a nombre de ${nombreCliente}.`);
+                    if(confirm(`¡Pedido realizado con éxito! Folio #${data.folio}.\n\n¿Deseas enviar los detalles por WhatsApp al taller?`)) {
+                        window.open(`https://wa.me/?text=${mensajeWa}`, '_blank');
+                    }
                     document.getElementById(`texto-${index}`).value = '';
                     document.getElementById(`estilo-${index}`).value = '';
                     document.getElementById(`nota-${index}`).value = '';
@@ -243,6 +269,32 @@
             } catch (err) {
                 console.error(err);
                 alert('Error de conexión con el servidor.');
+            }
+        }
+
+        async function consultarPedido() {
+            const q = document.getElementById('inputRastreo').value.trim();
+            const contenedor = document.getElementById('resultadoRastreo');
+            if (!q) {
+                contenedor.innerHTML = "<span style='color:red;'>Escribe un folio o teléfono.</span>";
+                return;
+            }
+            try {
+                const res = await fetch(`/api/rastreo?q=${q}`);
+                const data = await res.json();
+                if (data.length === 0) {
+                    contenedor.innerHTML = "<span style='color:#d97706;'>No se encontraron pedidos con ese dato.</span>";
+                    return;
+                }
+                contenedor.innerHTML = data.map(p => `
+                    <div style="background:#f8fafc; padding:10px; border-radius:6px; margin-top:6px; border:1px solid #cbd5e1;">
+                        <b>Folio:</b> #${p.folio} | <b>Cliente:</b> ${p.cliente.nombre}<br>
+                        <b>Estatus Taller:</b> <span style="color:var(--primary); font-weight:bold;">${p.estado}</span><br>
+                        <b>Pago:</b> ${p.estadoPago} (${p.metodoPago})
+                    </div>
+                `).join('');
+            } catch (e) {
+                contenedor.innerHTML = "<span style='color:red;'>Error al consultar.</span>";
             }
         }
 
