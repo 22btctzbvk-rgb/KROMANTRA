@@ -3,267 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kromantra | Panel de Administración y Control Total</title>
+    <title>Kromantra | Panel de Administración Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: 0 auto; }
-        header { background: #1e293b; color: white; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        h1 { margin: 0; font-size: 22px; }
-        .section { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        h2 { margin-top: 0; font-size: 18px; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 25px; }
+        h1 { margin: 0; font-size: 24px; } p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
+        .container { max-width: 1050px; margin: 0 auto; }
+        
+        /* Estadísticas */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .stat-card h3 { margin: 0; font-size: 13px; color: #64748b; }
+        .stat-card p { font-size: 22px; font-weight: 700; color: var(--primary); margin-top: 5px; }
+
+        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        h2 { font-size: 16px; margin-top: 0; color: #334155; border-bottom: 2px solid var(--border); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { border: 1px solid var(--border); padding: 10px; text-align: left; vertical-align: middle; }
         th { background: #f1f5f9; font-weight: 600; }
-        .badge { background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
-        .btn-volver { background: var(--primary); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
-        .rango-box { background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border); }
-        .rango-box h4 { margin: 0 0 8px 0; font-size: 13px; color: #475569; }
-        input { padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; width: 100%; box-sizing: border-box; margin-bottom: 8px; background: white; }
-        .btn-accion { background: #10b981; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 15px; width: 100%; font-size: 15px; }
-        .btn-accion:hover { background: #059669; }
-        .btn-eliminar { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        
+        .btn-volver { display: inline-block; margin-bottom: 15px; background: #e2e8f0; color: #1e293b; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 13px; }
+        .btn-volver:hover { background: #cbd5e1; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
+        input, select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 13px; }
+        
+        button { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; width: 100%; }
+        button:hover { background: var(--primary-hover); }
+        .btn-danger { background: #e11d48; padding: 6px 10px; font-size: 12px; width: auto; }
+        .btn-danger:hover { background: #be123c; }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .badge-Pendiente { background: #fef3c7; color: #d97706; }
+        .badge-Proceso { background: #e0f2fe; color: #0284c7; }
+        .badge-Entregado { background: #dcfce7; color: #16a34a; }
+        
+        .search-box { width: 100%; padding: 8px 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; box-sizing: border-box; }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="/" class="btn-volver">← Ir a la Tienda</a>
         <header>
-            <h1>Panel de Control de Precios y Mayoreo - Kromantra 👑</h1>
-            <a href="/" target="_blank" class="btn-volver">Ver Tienda 🛍️</a>
+            <h1>Panel de Control Kromantra Pro</h1>
+            <p>Gestión avanzada de productos, métricas y pedidos en tiempo real</p>
         </header>
 
-        <!-- SECCIÓN 1: GESTIÓN DE PRODUCTOS Y MAYOREO -->
-        <div class="section">
-            <h2>⚙️ Catálogo y Precios de Mayoreo en Tiempo Real</h2>
-            <p style="font-size: 13px; color: #64748b;">Aquí puedes ver los productos activos y dar de alta nuevos artículos seleccionando su foto e indicando sus precios por volumen.</p>
-            
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>ID / Clave</th>
-                            <th>Nombre del Producto</th>
-                            <th>Rangos de Mayoreo y Precios</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productos-tbody">
-                        <tr><td colspan="5" style="text-align: center; color: #64748b;">Cargando catálogo...</td></tr>
-                    </tbody>
-                </table>
+        <!-- TARJETAS DE MÉTRICAS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Ventas Totales Acumuladas</h3>
+                <p id="stat-ventas">$0.00</p>
             </div>
-
-            <h3 style="margin-top: 30px; font-size: 16px; color: #1e293b;">➕ Agregar Nuevo Producto con Mayoreo</h3>
-            <div class="form-grid">
-                <div>
-                    <label style="font-size: 12px; font-weight: 600;">ID único (ej. gorras):</label>
-                    <input type="text" id="nuevo-id" placeholder="ej. gorras">
-                </div>
-                <div>
-                    <label style="font-size: 12px; font-weight: 600;">Nombre del Producto:</label>
-                    <input type="text" id="nuevo-nombre" placeholder="ej. Gorras Bordadas">
-                </div>
-                <div>
-                    <label style="font-size: 12px; font-weight: 600;">Seleccionar Foto:</label>
-                    <input type="file" id="nuevo-imagen-file" accept="image/*" style="padding: 6px;">
-                </div>
+            <div class="stat-card">
+                <h3>Pedidos Pendientes</h3>
+                <p id="stat-pendientes">0</p>
             </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
-                <div class="rango-box">
-                    <h4>Rango 1 (Menudeo / Inicial)</h4>
-                    <input type="number" id="r1-min" placeholder="Desde (ej. 1)" value="1">
-                    <input type="number" id="r1-max" placeholder="Hasta (ej. 10)" value="10">
-                    <input type="number" id="r1-precio" placeholder="Precio unitario ($)">
-                </div>
-                <div class="rango-box">
-                    <h4>Rango 2 (Mayoreo Medio)</h4>
-                    <input type="number" id="r2-min" placeholder="Desde (ej. 11)" value="11">
-                    <input type="number" id="r2-max" placeholder="Hasta (ej. 99)" value="99">
-                    <input type="number" id="r2-precio" placeholder="Precio unitario ($)">
-                </div>
-                <div class="rango-box">
-                    <h4>Rango 3 (Mayoreo Alto)</h4>
-                    <input type="number" id="r3-min" placeholder="Desde (ej. 100)" value="100">
-                    <input type="number" id="r3-max" placeholder="Hasta (ej. 1000)" value="1000">
-                    <input type="number" id="r3-precio" placeholder="Precio unitario ($)">
-                </div>
-            </div>
-
-            <button class="btn-accion" onclick="agregarProductoConMayoreo()">Guardar Producto y Mayoreo en el Sistema 🚀</button>
         </div>
 
-        <!-- SECCIÓN 2: PEDIDOS EN TIEMPO REAL -->
-        <div class="section">
-            <h2>📦 Pedidos Recibidos de Clientes</h2>
-            <div id="pedidos-container">
-                <p style="color: #64748b;">Buscando nuevos pedidos...</p>
-            </div>
+        <!-- AGREGAR PRODUCTO -->
+        <div class="card">
+            <h2>➕ Agregar Producto Nuevo</h2>
+            <form id="form-producto" onsubmit="agregarProducto(event)">
+                <div class="form-grid">
+                    <div>
+                        <label>ID único (ej. termo):</label>
+                        <input type="text" id="prod-id" required placeholder="termo">
+                    </div>
+                    <div>
+                        <label>Nombre del Producto:</label>
+                        <input type="text" id="prod-nombre" required placeholder="Termo personalizado">
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div>
+                        <label>Imagen (ej. termo_1.jpg):</label>
+                        <input type="text" id="prod-imagen" placeholder="termo_1.jpg">
+                    </div>
+                    <div>
+                        <label>Precio Base ($):</label>
+                        <input type="number" id="prod-precio" required placeholder="350">
+                    </div>
+                </div>
+                <button type="submit">Guardar en la Base de Datos 🚀</button>
+            </form>
+        </div>
+
+        <!-- LISTA DE PRODUCTOS -->
+        <div class="card">
+            <h2>📦 Productos en la Base de Datos</h2>
+            <div id="productos-container">Cargando catálogo...</div>
+        </div>
+
+        <!-- PEDIDOS -->
+        <div class="card">
+            <h2>
+                <span>🛍️ Pedidos de Clientes</span>
+            </h2>
+            <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar por nombre de cliente o teléfono..." oninput="filtrarPedidos()">
+            <div id="pedidos-container">Cargando pedidos...</div>
         </div>
     </div>
 
     <script>
-        async function cargarProductosAdmin() {
+        let globalPedidos = [];
+
+        async function cargarTodo() {
+            cargarProductos();
+            cargarPedidos();
+        }
+
+        async function cargarProductos() {
             try {
                 const res = await fetch('/api/productos');
-                const productos = await res.json();
-                const tbody = document.getElementById('productos-tbody');
-
-                tbody.innerHTML = productos.map(p => {
-                    let detallePrecios = '';
-                    if (p.tieneVariantes) {
-                        detallePrecios = p.opciones.map(op => `<b>${op.nombre}:</b> ` + op.rangos.map(r=>`${r.min}-${r.max}p: $${r.precio}`).join(', ')).join('<br>');
-                    } else if (p.rangos && p.rangos.length > 0) {
-                        detallePrecios = p.rangos.map(r => `${r.min}-${r.max} pzas: <b>$${r.precio}</b>`).join(' | ');
-                    }
-
-                    return `
-                        <tr>
-                            <td><img src="${p.imagen || 'taza.jpg'}" width="40" height="40" style="object-fit:cover; border-radius:6px;"></td>
-                            <td><code>${p.id}</code></td>
-                            <td><b>${p.nombre}</b></td>
-                            <td style="font-size: 13px;">${detallePrecios}</td>
-                            <td>
-                                <button class="btn-eliminar" onclick="eliminarProducto('${p.id}')">Eliminar</button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            } catch (err) {
-                console.error("Error al cargar productos:", err);
-            }
-        }
-
-        async function agregarProductoConMayoreo() {
-            const id = document.getElementById('nuevo-id').value.trim();
-            const nombre = document.getElementById('nuevo-nombre').value.trim();
-            const fileInput = document.getElementById('nuevo-imagen-file');
-
-            const r1Min = parseInt(document.getElementById('r1-min').value);
-            const r1Max = parseInt(document.getElementById('r1-max').value);
-            const r1Precio = parseFloat(document.getElementById('r1-precio').value);
-
-            const r2Min = parseInt(document.getElementById('r2-min').value);
-            const r2Max = parseInt(document.getElementById('r2-max').value);
-            const r2Precio = parseFloat(document.getElementById('r2-precio').value);
-
-            const r3Min = parseInt(document.getElementById('r3-min').value);
-            const r3Max = parseInt(document.getElementById('r3-max').value);
-            const r3Precio = parseFloat(document.getElementById('r3-precio').value);
-
-            if (!id || !nombre || isNaN(r1Precio)) {
-                alert("Por favor completa al menos el ID, el Nombre y el Precio del Rango 1.");
-                return;
-            }
-
-            // Procesar la imagen seleccionada a base64 automáticamente
-            let imagenUrl = 'taza.jpg';
-            if (fileInput.files && fileInput.files[0]) {
-                imagenUrl = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.readAsDataURL(fileInput.files[0]);
-                });
-            }
-
-            let rangos = [
-                { min: r1Min || 1, max: r1Max || 10, precio: r1Precio }
-            ];
-
-            if (!isNaN(r2Precio)) {
-                rangos.push({ min: r2Min || 11, max: r2Max || 99, precio: r2Precio });
-            }
-            if (!isNaN(r3Precio)) {
-                rangos.push({ min: r3Min || 100, max: r3Max || 1000, precio: r3Precio });
-            }
-
-            const nuevoProd = {
-                id,
-                nombre,
-                imagen: imagenUrl,
-                tieneVariantes: false,
-                rangos: rangos
-            };
-
-            const res = await fetch('/api/productos', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(nuevoProd)
-            });
-            const data = await res.json();
-            if (data.exito) {
-                alert("¡Producto, foto y rangos de mayoreo guardados con éxito!");
-                document.getElementById('nuevo-id').value = '';
-                document.getElementById('nuevo-nombre').value = '';
-                document.getElementById('nuevo-imagen-file').value = '';
-                document.getElementById('r1-precio').value = '';
-                document.getElementById('r2-precio').value = '';
-                document.getElementById('r3-precio').value = '';
-                cargarProductosAdmin();
-            } else {
-                alert("Error al guardar el producto.");
-            }
-        }
-
-        async function eliminarProducto(id) {
-            if (!confirm(`¿Estás segura de eliminar el producto ${id}?`)) return;
-            const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
-            const data = await res.json();
-            if (data.exito) {
-                cargarProductosAdmin();
-            }
+                const prods = await res.json();
+                const div = document.getElementById('productos-container');
+                if (prods.length === 0) { div.innerHTML = '<p>No hay productos.</p>'; return; }
+                div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Imagen</th><th>Acción</th></tr>` +
+                    prods.map(p => `<tr><td>${p.id}</td><td>${p.nombre}</td><td>${p.imagen || 'N/A'}</td><td><button class="btn-danger" onclick="eliminar('${p.id}')">Eliminar</button></td></tr>`).join('') + `</table>`;
+            } catch (e) { document.getElementById('productos-container').innerHTML = 'Error al cargar.'; }
         }
 
         async function cargarPedidos() {
             try {
                 const res = await fetch('/api/pedidos');
-                const pedidos = await res.json();
-                const container = document.getElementById('pedidos-container');
+                globalPedidos = await res.json();
+                renderizarPedidos(globalPedidos);
+                calcularMetricas(globalPedidos);
+            } catch (e) { document.getElementById('pedidos-container').innerHTML = 'Error al cargar.'; }
+        }
 
-                if (pedidos.length === 0) {
-                    container.innerHTML = '<p style="color: #64748b;">Aún no hay pedidos registrados.</p>';
-                    return;
-                }
+        function calcularMetricas(pedidos) {
+            let totalVentas = pedidos.reduce((acc, p) => acc + (p.total || 0), 0);
+            let pendientes = pedidos.filter(p => p.estado === 'Pendiente').length;
+            
+            document.getElementById('stat-ventas').innerText = `$${totalVentas.toFixed(2)}`;
+            document.getElementById('stat-pendientes').innerText = pendientes;
+        }
 
-                container.innerHTML = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Folio</th>
-                                <th>Cliente</th>
-                                <th>Teléfono</th>
-                                <th>Productos</th>
-                                <th>Total</th>
-                                <th>Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${pedidos.map(p => `
-                                <tr>
-                                    <td><span class="badge">#${p.folio}</span></td>
-                                    <td><b>${p.cliente.nombre}</b></td>
-                                    <td>${p.cliente.telefono}</td>
-                                    <td>
-                                        ${p.productos.map(prod => `<div>• ${prod.cantidad}x ${prod.nombre} (${prod.variante}) - <i>${prod.personalizacion}</i></div>`).join('')}
-                                    </td>
-                                    <td><b>$${p.total.toFixed(2)}</b></td>
-                                    <td style="font-size: 12px; color: #64748b;">${p.fecha}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
-            } catch (err) {
-                console.error("Error al cargar pedidos:", err);
+        function renderizarPedidos(pedidos) {
+            const div = document.getElementById('pedidos-container');
+            if (pedidos.length === 0) { div.innerHTML = '<p>No hay pedidos registrados.</p>'; return; }
+            
+            div.innerHTML = `<table>
+                <tr>
+                    <th>Folio / Fecha</th>
+                    <th>Cliente</th>
+                    <th>Productos y Notas</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>` +
+                pedidos.map(p => `
+                    <tr>
+                        <td><b>#${p.folio}</b><br><small style="color:#64748b">${p.fecha}</small></td>
+                        <td><b>${p.cliente.nombre}</b><br>📞 ${p.cliente.telefono}</td>
+                        <td>
+                            <ul style="margin:0; padding-left:15px; font-size:12px;">
+                                ${p.productos.map(prod => `
+                                    <li><b>${prod.cantidad}x</b> ${prod.nombre}${prod.variante ? `(<i>${prod.variante}</i>)` : ''} 
+                                        ${prod.personalizacion ? `<br>💬 <span style="color:#4f46e5;">Nota: "${prod.personalizacion}"</span>` : ''}
+                                    </li>`).join('')}
+                            </ul>
+                        </td>
+                        <td><b>$${p.total.toFixed(2)}</b></td>
+                        <td>
+                            <select onchange="cambiarEstado('${p.folio}', this.value)" style="padding:4px; font-size:12px;">
+                                <option value="Pendiente" ${p.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                                <option value="En proceso" ${p.estado === 'En proceso' ? 'selected' : ''}>En proceso</option>
+                                <option value="Entregado" ${p.estado === 'Entregado' ? 'selected' : ''}>Entregado</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join('') + `</table>`;
+        }
+
+        function filtrarPedidos() {
+            const texto = document.getElementById('buscador').value.toLowerCase();
+            const filtrados = globalPedidos.filter(p => 
+                p.cliente.nombre.toLowerCase().includes(texto) || 
+                p.cliente.telefono.toLowerCase().includes(texto) ||
+                String(p.folio).includes(texto)
+            );
+            renderizarPedidos(filtrados);
+        }
+
+        async function cambiarEstado(folio, nuevoEstado) {
+            const res = await fetch(`/api/pedidos/${folio}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estado: nuevoEstado })
+            });
+            const data = await res.json();
+            if (data.exito) {
+                cargarPedidos();
+            } else {
+                alert('No se pudo actualizar el estado.');
             }
         }
 
-        cargarProductosAdmin();
-        cargarPedidos();
-        setInterval(cargarPedidos, 5000);
+        async function agregarProducto(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value.trim();
+            const nombre = document.getElementById('prod-nombre').value.trim();
+            const imagen = document.getElementById('prod-imagen').value.trim();
+            const precio = parseFloat(document.getElementById('prod-precio').value);
+
+            const res = await fetch('/api/productos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, nombre, imagen, tieneVariantes: false, rangos: [{ min: 1, max: 1000, precio }] })
+            });
+            const data = await res.json();
+            if (data.exito) {
+                alert('¡Producto agregado con éxito!');
+                document.getElementById('form-producto').reset();
+                cargarProductos();
+            } else { alert('Error al guardar.'); }
+        }
+
+        async function eliminar(id) {
+            if (!confirm(`¿Estás seguro de eliminar el producto ${id}?`)) return;
+            const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.exito) { cargarProductos(); }
+        }
+
+        cargarTodo();
     </script>
 </body>
 </html>
