@@ -7,180 +7,195 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 150px; }
-        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 30px 20px; text-align: center; }
-        h1 { margin: 0; font-size: 26px; } p { margin: 6px 0 0 0; opacity: 0.9; font-size: 14px; }
-        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border-radius: 16px; padding: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
-        .product-img { width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; background: #e2e8f0; }
-        .card h3 { margin: 0 0 4px 0; font-size: 17px; } 
-        .price-info { font-size: 12px; color: #475569; margin-bottom: 8px; background: #f1f5f9; padding: 6px; border-radius: 6px; }
-        .controls { display: flex; align-items: center; justify-content: space-between; margin-top: 15px; background: #f1f5f9; padding: 8px 12px; border-radius: 8px; }
-        .controls button { background: white; border: 1px solid var(--border); width: 32px; height: 32px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        textarea, select { width: 100%; margin-top: 10px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; outline: none; font-size: 13px; box-sizing: border-box; }
-        .floating-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border); padding: 20px; max-width: 600px; margin: 0 auto; border-radius: 20px 20px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 12px; }
-        .floating-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; }
-        .inputs-cliente { display: flex; gap: 10px; }
-        .inputs-cliente input { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; box-sizing: border-box; }
-        .btn-enviar { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
-        .btn-enviar:hover { background: var(--primary-hover); }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 30px; text-align: center; border-radius: 12px; margin-bottom: 30px; }
+        header img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 8px; border-radius: 50%; background: white; padding: 5px; }
+        h1 { margin: 0; font-size: 26px; }
+        p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #e2e8f0; }
+        .card h3 { margin: 0 0 10px 0; font-size: 18px; color: #1e293b; }
+        .rango-box { font-size: 12px; color: #64748b; background: #f1f5f9; padding: 8px; border-radius: 6px; margin-bottom: 12px; }
+        .rango-box ul { margin: 0; padding-left: 15px; }
+        .form-control { margin-bottom: 12px; }
+        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
+        input, textarea { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 13px; }
+        .precio-actual { font-size: 18px; font-weight: 700; color: #4f46e5; margin: 10px 0; }
+        .aviso-descuento { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 8px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; display: none; }
+        button.btn-comprar { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
+        button.btn-comprar:hover { background: var(--primary-hover); }
+        footer { text-align: center; padding: 20px; font-size: 13px; color: #64748b; margin-top: 40px; border-top: 1px solid #e2e8f0; }
+        footer a { color: #6366f1; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
-    <header>
-    <img src="logo.jpg" alt="Logo Kromantra" style="width: 70px; height: 70px; object-fit: contain; margin-bottom: 8px; border-radius: 50%;">
-    <h1>Kromantra</h1>
-    <p>Sistema Inteligente de Regalos Personalizados</p>
-</header>
+    <div class="container">
+        <header>
+            <img src="logo.jpg" alt="Logo Kromantra" onerror="this.style.display='none'">
+            <h1>Kromantra</h1>
+            <p>Sistema Inteligente de Regalos Personalizados y Mayoreo</p>
+        </header>
 
-    <div class="container" id="catalogo-container">
-        <p style="text-align: center; color: #64748b; grid-column: span 2;">Cargando catálogo...</p>
-    </div>
+        <h2 style="font-size: 20px; margin-bottom: 20px; color: #334155;">📦 Catálogo de Productos</h2>
+        <div id="catalogo" class="grid-productos">
+            <p>Cargando productos...</p>
+        </div>
 
-    <div class="floating-bar">
-        <div class="floating-total">
-            <span>Total Estimado:</span>
-            <span id="total-general" style="color: var(--primary);">$0.00</span>
-        </div>
-        <div class="inputs-cliente">
-            <input type="text" id="nombre-cliente" placeholder="Tu Nombre Completo">
-            <input type="text" id="telefono-cliente" placeholder="Tu Teléfono / WhatsApp">
-        </div>
-        <button class="btn-enviar" onclick="enviarPedido()">Confirmar Pedido al Sistema 🚀</button>
+        <footer>
+            Kromantra © 2026 — 
+            <a href="/admin">Panel de Administración</a>
+        </footer>
     </div>
 
     <script>
-        let catalogo = [];
-        let estadoPedido = {};
-
         async function cargarCatalogo() {
             try {
                 const res = await fetch('/api/productos');
-                catalogo = await res.json();
-                if (catalogo.length === 0) {
-                    document.getElementById('catalogo-container').innerHTML = '<p style="text-align: center; color: #e11d48; grid-column: span 2;">No hay productos registrados en la base de datos.</p>';
+                const productos = await res.json();
+                const container = document.getElementById('catalogo');
+
+                if (productos.length === 0) {
+                    container.innerHTML = '<p>No hay productos disponibles por el momento.</p>';
                     return;
                 }
-                renderizarCatalogo();
+
+                container.innerHTML = productos.map((p, index) => {
+                    const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
+                    return `
+                        <div class="card" id="card-${index}">
+                            <div>
+                                <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Sin+Imagen'">
+                                <h3>${p.nombre}</h3>
+                                <div class="rango-box">
+                                    <b>Precios por volumen:</b>
+                                    <ul>
+                                        ${(p.rangos || []).map(r => `<li>De ${r.min} a ${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-control">
+                                    <label>Cantidad:</label>
+                                    <input type="number" id="cant-${index}" value="1" min="1" oninput="calcularPrecio(${index}, ${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                                </div>
+                                <div class="form-control">
+                                    <label>Notas de Personalización:</label>
+                                    <textarea id="nota-${index}" placeholder="Ej. Nombre a grabar, diseño, etc."></textarea>
+                                </div>
+                                <div class="precio-actual" id="precio-total-${index}">Total: $${precioBase.toFixed(2)}</div>
+                                <div class="aviso-descuento" id="aviso-${index}"></div>
+                                <button class="btn-comprar" onclick="realizarPedido(${index}, ${JSON.stringify(p).replace(/"/g, '&quot;')})">Ordenar Pedido 🚀</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                productos.forEach((p, index) => calcularPrecio(index, p));
+
             } catch (err) {
                 console.error(err);
-                document.getElementById('catalogo-container').innerHTML = '<p style="text-align: center; color: #e11d48; grid-column: span 2;">Error al conectar con el servidor.</p>';
+                document.getElementById('catalogo').innerHTML = '<p style="color: red;">Error al cargar el catálogo de la tienda.</p>';
             }
         }
 
-        function obtenerPrecioUnitario(prod, cantidad, varianteIdx) {
-            if (cantidad <= 0) return 0;
-            let rangos = prod.tieneVariantes ? prod.opciones[varianteIdx].rangos : prod.rangos;
-            let precioEncontrado = rangos[0].precio;
+        function calcularPrecio(index, producto) {
+            const cantidadInput = document.getElementById(`cant-${index}`);
+            const cantidad = parseInt(cantidadInput.value) || 1;
+            const precioTotalDiv = document.getElementById(`precio-total-${index}`);
+            const avisoDiv = document.getElementById(`aviso-${index}`);
+
+            if (!producto.rangos || producto.rangos.length === 0) return;
+
+            const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
+
+            let rangoAplicable = rangos[0];
             for (let r of rangos) {
                 if (cantidad >= r.min && cantidad <= r.max) {
-                    precioEncontrado = r.precio;
+                    rangoAplicable = r;
                     break;
-                }
-                if (cantidad > r.max) {
-                    precioEncontrado = r.precio;
+                } else if (cantidad > r.max) {
+                    rangoAplicable = r;
                 }
             }
-            return precioEncontrado;
-        }
 
-        function renderizarCatalogo() {
-            const container = document.getElementById('catalogo-container');
-            container.innerHTML = catalogo.map(prod => {
-                let state = estadoPedido[prod.id] || { cantidad: 0, varianteIdx: 0, nota: '' };
-                let precioUnitario = obtenerPrecioUnitario(prod, state.cantidad, state.varianteIdx);
-                let subtotal = state.cantidad * precioUnitario;
+            const precioUnitario = rangoAplicable.precio;
+            const total = cantidad * precioUnitario;
+            precioTotalDiv.innerHTML = `Total: $${total.toFixed(2)} <span style="font-size:12px; color:#64748b; font-weight:normal;">($${precioUnitario} c/u)</span>`;
 
-                let opcionesHtml = prod.tieneVariantes && prod.opciones.length > 0 ? `
-                    <select onchange="cambiarVariante('${prod.id}', this.value)">
-                        ${prod.opciones.map((op, idx) => `<option value="${idx}" ${idx === state.varianteIdx ? 'selected' : ''}>${op.nombre}</option>`).join('')}
-                    </select>
-                ` : '';
-
-                let descRangos = prod.tieneVariantes ? 'Mayoreo según acabado' : prod.rangos.map(r => `${r.min}-${r.max}p: $${r.precio}`).join(' | ');
-
-                return `
-                    <div class="card">
-                        <div>
-                            <img src="${prod.imagen || 'taza.jpg'}" class="product-img" alt="${prod.nombre}">
-                            <h3>${prod.nombre}</h3>
-                            <div class="price-info">📊 ${descRangos}</div>
-                            ${opcionesHtml}
-                            <textarea placeholder="Notas de personalización..." oninput="cambiarNota('${prod.id}', this.value)">${state.nota}</textarea>
-                        </div>
-                        <div>
-                            <div class="controls">
-                                <button onclick="cambiarCantidad('${prod.id}', -1)">-</button>
-                                <span style="font-weight: 600;">${state.cantidad} pzas</span>
-                                <button onclick="cambiarCantidad('${prod.id}', 1)">+</button>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px; color: #64748b;">
-                                <span>Unit: $${precioUnitario.toFixed(2)}</span>
-                                <span>Sub: <b>$${subtotal.toFixed(2)}</b></span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            calcularTotalGeneral();
-        }
-
-        function cambiarCantidad(id, cambio) {
-            if (!estadoPedido[id]) estadoPedido[id] = { cantidad: 0, varianteIdx: 0, nota: '' };
-            estadoPedido[id].cantidad = Math.max(0, estadoPedido[id].cantidad + cambio);
-            renderizarCatalogo();
-        }
-        function cambiarVariante(id, idx) {
-            if (!estadoPedido[id]) estadoPedido[id] = { cantidad: 0, varianteIdx: 0, nota: '' };
-            estadoPedido[id].varianteIdx = parseInt(idx);
-            renderizarCatalogo();
-        }
-        function cambiarNota(id, val) {
-            if (!estadoPedido[id]) estadoPedido[id] = { cantidad: 0, varianteIdx: 0, nota: '' };
-            estadoPedido[id].nota = val;
-        }
-
-        function calcularTotalGeneral() {
-            let total = 0;
-            catalogo.forEach(prod => {
-                let st = estadoPedido[prod.id];
-                if (st && st.cantidad > 0) {
-                    total += st.cantidad * obtenerPrecioUnitario(prod, st.cantidad, st.varianteIdx);
-                }
-            });
-            document.getElementById('total-general').innerText = `$${total.toFixed(2)}`;
-        }
-
-        async function enviarPedido() {
-            const nombre = document.getElementById('nombre-cliente').value.trim();
-            const telefono = document.getElementById('telefono-cliente').value.trim();
-            if (!nombre || !telefono) { alert("Ingresa tu nombre y teléfono."); return; }
-
-            let productosSeleccionados = [], totalGeneral = 0;
-            catalogo.forEach(prod => {
-                let st = estadoPedido[prod.id];
-                if (st && st.cantidad > 0) {
-                    let precio = obtenerPrecioUnitario(prod, st.cantidad, st.varianteIdx);
-                    let nombreVar = prod.tieneVariantes ? prod.opciones[st.varianteIdx].nombre : "Estándar";
-                    let subtotal = st.cantidad * precio;
-                    productosSeleccionados.push({ nombre: prod.nombre, variante: nombreVar, cantidad: st.cantidad, precioUnitario: precio, subtotal, personalizacion: st.nota || "Sin notas" });
-                    totalGeneral += subtotal;
-                }
-            });
-
-            if (productosSeleccionados.length === 0) { alert("Selecciona al menos un producto."); return; }
-
-            const res = await fetch('/api/pedido', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cliente: { nombre, telefono }, productos: productosSeleccionados, total: totalGeneral })
-            });
-            const data = await res.json();
-            if (data.exito) {
-                alert(`¡Pedido realizado con éxito!\nFolio: #${data.folio}`);
-                location.reload();
+            let siguienteRango = rangos.find(r => r.min > cantidad);
+            if (siguienteRango) {
+                let piezasFaltantes = siguienteRango.min - cantidad;
+                avisoDiv.innerHTML = `💡 ¡Te faltan <b>${piezasFaltantes} pieza(s) más</b> para activar el precio de <b>$${siguienteRango.precio} c/u</b>!`;
+                avisoDiv.style.display = 'block';
+            } else {
+                avisoDiv.innerHTML = `🎉 ¡Felicidades! Tienes el precio máximo de mayoreo aplicado.`;
+                avisoDiv.style.display = 'block';
             }
         }
+
+        async function realizarPedido(index, producto) {
+            const cantidad = parseInt(document.getElementById(`cant-${index}`).value) || 1;
+            const personalizacion = document.getElementById(`nota-${index}`).value.trim();
+
+            const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
+            let rangoAplicable = rangos[0];
+            for (let r of rangos) {
+                if (cantidad >= r.min && cantidad <= r.max) {
+                    rangoAplicable = r;
+                    break;
+                } else if (cantidad > r.max) {
+                    rangoAplicable = r;
+                }
+            }
+            const precioUnitario = rangoAplicable.precio;
+            const total = cantidad * precioUnitario;
+
+            const nombreCliente = prompt("Ingresa tu Nombre completo para el pedido:");
+            if (!nombreCliente) return;
+            const telefonoCliente = prompt("Ingresa tu Teléfono de contacto:");
+            if (!telefonoCliente) return;
+
+            const datosPedido = {
+                cliente: {
+                    nombre: nombreCliente,
+                    telefono: telefonoCliente
+                },
+                productos: [
+                    {
+                        id: producto.id,
+                        nombre: producto.nombre,
+                        cantidad: cantidad,
+                        variante: 'Estándar',
+                        personalizacion: personalizacion,
+                        subtotal: total
+                    }
+                ],
+                total: total
+            };
+
+            try {
+                const res = await fetch('/api/pedido', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datosPedido)
+                });
+                const data = await res.json();
+                if (data.exito) {
+                    alert(`¡Pedido realizado con éxito! Tu número de folio es #${data.folio}. Nos pondremos en contacto contigo.`);
+                    document.getElementById(`nota-${index}`).value = '';
+                    document.getElementById(`cant-${index}`).value = 1;
+                    calcularPrecio(index, producto);
+                } else {
+                    alert('Error al procesar el pedido.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error de conexión con el servidor.');
+            }
+        }
+
         cargarCatalogo();
     </script>
 </body>
