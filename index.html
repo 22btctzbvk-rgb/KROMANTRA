@@ -15,6 +15,9 @@
         header img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 6px; border-radius: 50%; background: white; padding: 4px; }
         h1 { margin: 0; font-size: 24px; } p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.9; }
 
+        /* Notificación flotante limpia */
+        #toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 1000; transition: opacity 0.3s ease; }
+
         /* Sección Izquierda: Catálogo y Rastreo */
         .main-content { display: flex; flex-direction: column; gap: 20px; }
         .rastreo-box { background: white; border: 1px solid var(--border); padding: 15px 20px; border-radius: 10px; display: flex; gap: 10px; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
@@ -45,6 +48,10 @@
         
         .cart-item { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
         .cart-item-info { flex: 1; }
+        .cart-controls { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+        .cart-controls button { background: #e2e8f0; border: none; width: 22px; height: 22px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .cart-controls button:hover { background: #cbd5e1; }
+        
         .cart-total { font-size: 18px; font-weight: 700; color: #1e293b; margin: 15px 0; text-align: right; }
         
         .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
@@ -55,6 +62,9 @@
     </style>
 </head>
 <body>
+    <!-- Notificación flotante -->
+    <div id="toast">¡Producto agregado al carrito!</div>
+
     <div class="container">
         <!-- Encabezado -->
         <header>
@@ -81,7 +91,7 @@
         <!-- Columna Derecha: Carrito y Pago Unificado -->
         <div class="sidebar">
             <h2>🛒 Tu Carrito de Pedido</h2>
-            <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;">
+            <div id="carrito-lista" style="max-height: 280px; overflow-y: auto;">
                 <p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>
             </div>
             
@@ -181,7 +191,7 @@
         }
 
         function calcularSubtotalProducto(producto, cantidad) {
-            if (!producto.rangos || producto.rangos.length === 0) return 0;
+            if (!producto.rangos || producto.rangos.length === 0) return { precioUnitario: 0, total: 0 };
             const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
             let rangoAplicable = rangos[0];
             for (let r of rangos) {
@@ -202,9 +212,20 @@
             document.getElementById(`preview-precio-${index}`).innerText = `$${calculo.total.toFixed(2)} ($${calculo.precioUnitario} c/u)`;
         }
 
+        function mostrarToast(mensaje) {
+            const toast = document.getElementById('toast');
+            toast.innerText = mensaje;
+            toast.style.display = 'block';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => { toast.style.display = 'none'; }, 300);
+            }, 2000);
+        }
+
         function agregarAlCarrito(index) {
             const producto = productosGlobal[index];
-            const cantidad = parseInt(document.getElementById(`cant-${index}`).value) || 1;
+            const cantidadAgregada = parseInt(document.getElementById(`cant-${index}`).value) || 1;
             const texto = document.getElementById(`texto-${index}`).value.trim();
             const estilo = document.getElementById(`estilo-${index}`).value.trim();
             const diseno = document.getElementById(`base64-${index}`).value;
@@ -214,20 +235,52 @@
             if (estilo) especificaciones += `| Estilo: ${estilo}`;
             if (!especificaciones) especificaciones = 'Estándar';
 
-            const calculo = calcularSubtotalProducto(producto, cantidad);
+            // Buscar si ya existe un item idéntico en el carrito para agruparlo
+            const indexExistente = carrito.findIndex(item => 
+                item.id === producto.id && item.personalizacion === especificaciones
+            );
 
-            carrito.push({
-                id: producto.id,
-                nombre: producto.nombre,
-                cantidad: cantidad,
-                variante: estilo || 'Estándar',
-                personalizacion: especificaciones,
-                diseno: diseno,
-                subtotal: calculo.total
-            });
+            let nuevaCantidadTotal = cantidadAgregada;
+            if (indexExistente !== -1) {
+                nuevaCantidadTotal += carrito[indexExistente].cantidad;
+            }
+
+            const calculo = calcularSubtotalProducto(producto, nuevaCantidadTotal);
+
+            if (indexExistente !== -1) {
+                carrito[indexExistente].cantidad = nuevaCantidadTotal;
+                carrito[indexExistente].subtotal = calculo.total;
+            } else {
+                carrito.push({
+                    id: producto.id,
+                    nombre: producto.nombre,
+                    cantidad: cantidadAgregada,
+                    variante: estilo || 'Estándar',
+                    personalizacion: especificaciones,
+                    diseno: diseno,
+                    subtotal: calculo.total
+                });
+            }
 
             renderizarCarrito();
-            alert(`¡"${producto.nombre}" agregado al carrito!`);
+            mostrarToast(`¡${producto.nombre} agregado al carrito!`);
+        }
+
+        function cambiarCantidad(idx, delta) {
+            const item = carrito[idx];
+            const producto = productosGlobal.find(p => p.id === item.id);
+            if (!producto) return;
+
+            const nuevaCantidad = item.cantidad + delta;
+            if (nuevaCantidad <= 0) {
+                eliminarDelCarrito(idx);
+                return;
+            }
+
+            const calculo = calcularSubtotalProducto(producto, nuevaCantidad);
+            item.cantidad = nuevaCantidad;
+            item.subtotal = calculo.total;
+            renderizarCarrito();
         }
 
         function renderizarCarrito() {
@@ -244,12 +297,17 @@
                 return `
                     <div class="cart-item">
                         <div class="cart-item-info">
-                            <b>${item.cantidad}x ${item.nombre}</b><br>
+                            <b>${item.nombre}</b><br>
                             <span style="color:#64748b; font-size:11px;">${item.personalizacion}</span>
+                            <div class="cart-controls">
+                                <button onclick="cambiarCantidad(${idx}, -1)">-</button>
+                                <span style="font-weight:600;">${item.cantidad} pzas</span>
+                                <button onclick="cambiarCantidad(${idx}, 1)">+</button>
+                            </div>
                         </div>
                         <div style="text-align: right;">
                             <b>$${item.subtotal.toFixed(2)}</b><br>
-                            <button onclick="eliminarDelCarrito(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:11px; padding:0;">Eliminar</button>
+                            <button onclick="eliminarDelCarrito(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:11px; padding:0; margin-top:4px;">Eliminar</button>
                         </div>
                     </div>
                 `;
