@@ -54,6 +54,24 @@
     </style>
 </head>
 <body>
+    <script>
+        // Sistema de PIN Inteligente: Te lo pide una sola vez por dispositivo/navegador (PIN por defecto: 4321)
+        (function verificarAccesoAdmin() {
+            const PIN_SECRETO = '4321'; 
+            const pinGuardado = localStorage.getItem('kromantra_admin_ok');
+            
+            if (pinGuardado !== PIN_SECRETO) {
+                const ingreso = prompt('🔒 Ingresa el PIN de acceso al taller de Kromantra (Solo se te pedirá esta vez en este dispositivo):');
+                if (ingreso === PIN_SECRETO) {
+                    localStorage.setItem('kromantra_admin_ok', PIN_SECRETO);
+                } else {
+                    alert('PIN incorrecto. Acceso denegado.');
+                    window.location.href = '/';
+                }
+            }
+        })();
+    </script>
+
     <div class="container">
         <a href="/" class="btn-volver">← Ir a la Tienda</a>
         <header>
