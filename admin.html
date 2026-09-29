@@ -40,7 +40,6 @@
         .btn-warning:hover { background: #b45309; }
         .btn-secondary { background: #64748b; margin-top: 5px; }
 
-        /* Pestañas de filtro */
         .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
         .tab-btn { background: #f1f5f9; color: #475569; border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; width: auto; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
@@ -50,20 +49,35 @@
         #titulo-form { color: #4f46e5; }
         .preview-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); margin-top: 5px; }
 
-        /* Contenedor de Tarjetas de Pedidos */
         .pedidos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-top: 15px; }
         .pedido-ticket { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
     </style>
 </head>
 <body>
+    <script>
+        // Sistema de seguridad por PIN para el panel (PIN por defecto: 4321, puedes cambiarlo aquí)
+        (function verificarAccesoAdmin() {
+            const PIN_SECRETO = '4321'; 
+            const pinActual = sessionStorage.getItem('kromantra_admin_ok');
+            if (pinActual !== PIN_SECRETO) {
+                const ingreso = prompt('🔒 Ingresa el PIN de acceso al taller de Kromantra:');
+                if (ingreso === PIN_SECRETO) {
+                    sessionStorage.setItem('kromantra_admin_ok', PIN_SECRETO);
+                } else {
+                    alert('PIN incorrecto. Acceso denegado.');
+                    window.location.href = '/';
+                }
+            }
+        })();
+    </script>
+
     <div class="container">
         <a href="/" class="btn-volver">← Ir a la Tienda</a>
         <header>
             <h1>Panel de Taller Kromantra</h1>
-            <p>Control visual de producción por pedido</p>
+            <p>Control visual de producción, pagos y pedidos</p>
         </header>
 
-        <!-- MÉTRICAS RÁPIDAS -->
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>Ventas Totales</h3>
@@ -79,7 +93,6 @@
             </div>
         </div>
 
-        <!-- FORMULARIO DE PRODUCTO (CREAR / EDITAR) -->
         <div class="card">
             <h2 id="titulo-form">➕ Agregar Producto Nuevo</h2>
             <form id="form-producto" onsubmit="guardarProducto(event)">
@@ -126,17 +139,14 @@
             </form>
         </div>
 
-        <!-- LISTA DE PRODUCTOS -->
         <div class="card">
             <h2>📦 Tus Productos</h2>
             <div id="productos-container">Cargando catálogo...</div>
         </div>
 
-        <!-- PEDIDOS EN TARJETAS INDIVIDUALES -->
         <div class="card">
             <h2>🛍️ Tickets de Pedidos y Producción</h2>
 
-            <!-- Pestañas de Filtro Rápido -->
             <div class="tabs" style="margin-top: 15px;">
                 <button class="tab-btn active" onclick="cambiarFiltro('todos', this)">Todos</button>
                 <button class="tab-btn" onclick="cambiarFiltro('Pendiente', this)">🟡 Pendientes</button>
@@ -156,11 +166,27 @@
         let globalPedidos = [];
         let filtroActual = 'todos';
         let modoEdicion = false;
+        let totalPedidosAnterior = 0;
 
         async function cargarTodo() {
             cargarProductos();
             cargarPedidos();
-            setInterval(cargarPedidosSilencioso, 15000); // Auto-actualizar cada 15s
+            setInterval(cargarPedidosSilencioso, 15000);
+        }
+
+        function reproducirAlertaSonora() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscilador = audioCtx.createOscillator();
+                const ganancia = audioCtx.createGain();
+                oscilador.type = 'sine';
+                oscilador.frequency.setValueAtTime(659.25, audioCtx.currentTime);
+                ganancia.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                oscilador.connect(ganancia);
+                ganancia.connect(audioCtx.destination);
+                oscilador.start();
+                oscilador.stop(audioCtx.currentTime + 0.25);
+            } catch (e) {}
         }
 
         function convertirImagen(event) {
@@ -280,6 +306,7 @@
             try {
                 const res = await fetch('/api/pedidos');
                 globalPedidos = await res.json();
+                totalPedidosAnterior = globalPedidos.length;
                 aplicarFiltrosYRenderizar();
                 calcularMetricas(globalPedidos);
             } catch (e) { document.getElementById('pedidos-container').innerHTML = '<p>Error al cargar.</p>'; }
@@ -288,7 +315,14 @@
         async function cargarPedidosSilencioso() {
             try {
                 const res = await fetch('/api/pedidos');
-                globalPedidos = await res.json();
+                const nuevosPedidos = await res.json();
+                
+                if (totalPedidosAnterior > 0 && nuevosPedidos.length > totalPedidosAnterior) {
+                    reproducirAlertaSonora();
+                }
+                totalPedidosAnterior = nuevosPedidos.length;
+                globalPedidos = nuevosPedidos;
+                
                 aplicarFiltrosYRenderizar();
                 calcularMetricas(globalPedidos);
             } catch (e) {}
@@ -311,7 +345,6 @@
 
         function aplicarFiltrosYRenderizar() {
             const texto = document.getElementById('buscador').value.toLowerCase();
-            
             let filtrados = globalPedidos.filter(p => {
                 const coincideTexto = p.cliente.nombre.toLowerCase().includes(texto) || 
                                       p.cliente.telefono.toLowerCase().includes(texto) ||
@@ -319,7 +352,6 @@
                 const coincideEstado = (filtroActual === 'todos' || p.estado === filtroActual);
                 return coincideTexto && coincideEstado;
             });
-
             renderizarPedidos(filtrados);
         }
 
@@ -340,6 +372,7 @@
                         </div>
                         <p style="margin:4px 0; font-size:13px;"><b>Cliente:</b> ${p.cliente.nombre}</p>
                         <p style="margin:4px 0; font-size:13px;"><b>Teléfono:</b> ${p.cliente.telefono}</p>
+                        <p style="margin:4px 0; font-size:13px;"><b>Pago:</b> ${p.estadoPago || 'Pendiente'} (${p.metodoPago || 'Efectivo'})</p>
                         
                         <hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;">
                         
