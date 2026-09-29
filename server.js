@@ -1,127 +1,59 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(express.static(__dirname));
+// IMPORTANTE: Aumentar el límite de tamaño para permitir subir imágenes (diseños y fotos de productos)
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Conexión a MongoDB Atlas (Reemplaza con tu cadena de conexión si manejas variables de entorno o déjala así si ya funciona)
+const MONGO_URI = process.env.MONGO_URI || 'TU_CONEXION_MONGODB_ATLAS'; 
+
+mongoose.connect(MONGO_URI)
+    .then(() => console.log('Conectado exitosamente a MongoDB Atlas'))
+    .catch(err => console.error('Error conectando a MongoDB:', err));
 
 // ==========================================
-// 1. CONEXIÓN A MONGODB ATLAS
-// ==========================================
-const MONGO_URI = 'mongodb+srv://angelvalderrama944_db_user:UAT5y3u0Jqzbd1mQ@cluster0.xlybp0s.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'; 
-
-// ==========================================
-// 2. ESQUEMAS Y MODELOS
+// 1. ESQUEMAS Y MODELOS DE BASE DE DATOS
 // ==========================================
 const productoSchema = new mongoose.Schema({
-    id: { type: String, required: true, unique: true },
+    id: { type: String, unique: true, required: true },
     nombre: { type: String, required: true },
-    imagen: { type: String },
-    tieneVariantes: { type: Boolean, default: false },
-    opciones: [{
-        nombre: String,
-        rangos: [{ min: Number, max: Number, precio: Number }]
-    }],
-    rangos: [{ min: Number, max: Number, precio: Number }]
+    imagen: String,
+    tieneVariantes: Boolean,
+    rangos: [{
+        min: Number,
+        max: Number,
+        precio: Number
+    }]
 });
+const Producto = mongoose.model('Producto', productoSchema);
 
 const pedidoSchema = new mongoose.Schema({
     folio: Number,
-    cliente: { nombre: String, telefono: String },
-    productos: Array,
+    cliente: {
+        nombre: String,
+        telefono: String
+    },
+    productos: [{
+        id: String,
+        nombre: String,
+        cantidad: Number,
+        variante: String,
+        personalizacion: String,
+        diseno: String, // <--- Imagen o logotipo adjuntado por el cliente
+        subtotal: Number
+    }],
     total: Number,
     estado: { type: String, default: 'Pendiente' },
     fecha: String
 });
-
-const Producto = mongoose.model('Producto', productoSchema);
 const Pedido = mongoose.model('Pedido', pedidoSchema);
 
-// Cargar catálogo inicial si está vacío
-async function inicializarCatalogo() {
-    try {
-        const count = await Producto.countDocuments();
-        if (count === 0) {
-            await Producto.insertMany([
-                {
-                    id: 'taza',
-                    nombre: 'Tazas personalizadas de 11 oz',
-                    imagen: 'taza.jpg',
-                    tieneVariantes: false,
-                    rangos: [
-                        { min: 1, max: 10, precio: 100 },
-                        { min: 11, max: 99, precio: 80 },
-                        { min: 100, max: 1000, precio: 40 }
-                    ]
-                },
-                {
-                    id: 'pines',
-                    nombre: 'Pines 5.5 cm',
-                    imagen: 'pines.jpg',
-                    tieneVariantes: false,
-                    rangos: [
-                        { min: 1, max: 25, precio: 22 },
-                        { min: 26, max: 50, precio: 20 },
-                        { min: 51, max: 100, precio: 18 }
-                    ]
-                },
-                {
-                    id: 'vaso_cubero',
-                    nombre: 'Vaso cubero de 295 ml',
-                    imagen: 'vaso_cubero.jpg',
-                    tieneVariantes: false,
-                    rangos: [
-                        { min: 12, max: 24, precio: 55 },
-                        { min: 25, max: 49, precio: 45 },
-                        { min: 50, max: 100, precio: 35 }
-                    ]
-                },
-                {
-                    id: 'vaso_popote',
-                    nombre: 'Vaso de plástico con popote (474 ml)',
-                    imagen: 'vaso_popote.jpg',
-                    tieneVariantes: false,
-                    rangos: [
-                        { min: 1, max: 30, precio: 45 },
-                        { min: 31, max: 89, precio: 43 },
-                        { min: 90, max: 1000, precio: 40 }
-                    ]
-                },
-                {
-                    id: 'termo',
-                    nombre: 'Termos personalizados de 30 Oz',
-                    imagen: 'termo_1.jpg',
-                    tieneVariantes: true,
-                    opciones: [
-                        {
-                            nombre: 'Grabado 1 Cara',
-                            rangos: [
-                                { min: 1, max: 4, precio: 350 },
-                                { min: 5, max: 100, precio: 320 }
-                            ]
-                        },
-                        {
-                            nombre: 'Grabado 2 Caras',
-                            rangos: [
-                                { min: 1, max: 4, precio: 430 },
-                                { min: 5, max: 100, precio: 400 }
-                            ]
-                        }
-                    ]
-                }
-            ]);
-            console.log('📦 Catálogo inicial cargado en MongoDB.');
-        }
-    } catch (err) {
-        console.error('Error al inicializar catálogo:', err);
-    }
-}
-
-
 // ==========================================
-// 3. RUTAS API (PRODUCTOS Y PEDIDOS)
+// 2. RUTAS API (PRODUCTOS)
 // ==========================================
 app.get('/api/productos', async (req, res) => {
     try {
@@ -142,7 +74,6 @@ app.post('/api/productos', async (req, res) => {
     }
 });
 
-// Actualizar producto existente
 app.put('/api/productos/:id', async (req, res) => {
     try {
         const { nombre, imagen, rangos } = req.body;
@@ -166,6 +97,9 @@ app.delete('/api/productos/:id', async (req, res) => {
     }
 });
 
+// ==========================================
+// 3. RUTAS API (PEDIDOS)
+// ==========================================
 app.post('/api/pedido', async (req, res) => {
     try {
         const datos = req.body;
@@ -191,7 +125,6 @@ app.get('/api/pedidos', async (req, res) => {
     }
 });
 
-// NUEVO: Actualizar estado del pedido (Pendiente, En proceso, Entregado)
 app.put('/api/pedidos/:folio', async (req, res) => {
     try {
         const { estado } = req.body;
@@ -202,30 +135,30 @@ app.put('/api/pedidos/:folio', async (req, res) => {
     }
 });
 
+app.delete('/api/pedidos/:folio', async (req, res) => {
+    try {
+        await Pedido.findOneAndDelete({ folio: req.params.folio });
+        res.json({ exito: true });
+    } catch (error) {
+        res.status(500).json({ exito: false, error: error.message });
+    }
+});
+
 // ==========================================
-// 4. RUTAS DE VISTAS (TIENDA Y ADMIN)
+// 4. RUTAS PARA CARGAR LAS PÁGINAS HTML
 // ==========================================
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 // ==========================================
-// 5. INICIALIZACIÓN SEGURA DEL SERVIDOR
+// 5. INICIALIZACIÓN DEL SERVIDOR
 // ==========================================
-async function iniciarServidor() {
-    try {
-        await mongoose.connect(MONGO_URI);
-        console.log('🟢 Conectado exitosamente a la base de datos de MongoDB');
-
-        await inicializarCatalogo();
-
-        app.listen(PORT, () => {
-            console.log(`🌟 Servidor Kromantra activo en http://localhost:${PORT}`);
-            console.log(`📊 Panel de administración: http://localhost:${PORT}/admin`);
-        });
-    } catch (err) {
-        console.error('🔴 Error al conectar a MongoDB:', err);
-    }
-}
-
-iniciarServidor();
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor de Kromantra corriendo en el puerto ${PORT}`);
+});
