@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kromantra | Panel de Administración Pro</title>
+    <title>Kromantra | Panel Fácil</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 25px; }
-        h1 { margin: 0; font-size: 24px; } p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
-        .container { max-width: 1050px; margin: 0 auto; }
+        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 20px; text-align: center; border-radius: 12px; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 22px; } p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
+        .container { max-width: 1000px; margin: 0 auto; }
         
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
         .stat-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .stat-card h3 { margin: 0; font-size: 13px; color: #64748b; }
-        .stat-card p { font-size: 22px; font-weight: 700; color: var(--primary); margin-top: 5px; }
+        .stat-card h3 { margin: 0; font-size: 12px; color: #64748b; }
+        .stat-card p { font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 5px; }
 
         .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         h2 { font-size: 16px; margin-top: 0; color: #334155; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
@@ -34,25 +34,30 @@
         
         button { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; width: 100%; }
         button:hover { background: var(--primary-hover); }
-        .btn-danger { background: #e11d48; padding: 6px 10px; font-size: 12px; width: auto; }
+        .btn-danger { background: #e11d48; padding: 5px 10px; font-size: 12px; width: auto; }
         .btn-danger:hover { background: #be123c; }
+        .btn-warning { background: #d97706; padding: 5px 10px; font-size: 12px; width: auto; color: white; text-decoration: none; display: inline-block; text-align: center; border-radius: 6px; border: none; cursor: pointer;}
+        .btn-warning:hover { background: #b45309; }
+        .btn-secondary { background: #64748b; margin-top: 5px; }
+        .btn-secondary:hover { background: #475569; }
 
         .search-box { width: 100%; padding: 8px 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; box-sizing: border-box; }
         .section-sub { font-size: 13px; font-weight: 700; color: #475569; margin-top: 15px; margin-bottom: 8px; border-left: 3px solid var(--primary); padding-left: 8px; }
+        #titulo-form { color: #4f46e5; }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="/" class="btn-volver">← Ir a la Tienda</a>
         <header>
-            <h1>Panel de Control Kromantra Pro</h1>
-            <p>Gestión avanzada de productos, descuentos por mayoreo y pedidos en tiempo real</p>
+            <h1>Panel de Administración</h1>
+            <p>Control sencillo de tus productos y pedidos</p>
         </header>
 
-        <!-- TARJETAS DE MÉTRICAS -->
+        <!-- MÉTRICAS RÁPIDAS -->
         <div class="stats-grid">
             <div class="stat-card">
-                <h3>Ventas Totales Acumuladas</h3>
+                <h3>Ventas Totales</h3>
                 <p id="stat-ventas">$0.00</p>
             </div>
             <div class="stat-card">
@@ -61,94 +66,64 @@
             </div>
         </div>
 
-        <!-- AGREGAR PRODUCTO CON DESCUENTOS Y PROMOCIONES -->
+        <!-- FORMULARIO DE PRODUCTO (CREAR / EDITAR) -->
         <div class="card">
-            <h2>➕ Agregar Producto con Descuentos por Mayoreo</h2>
-            <form id="form-producto" onsubmit="agregarProducto(event)">
+            <h2 id="titulo-form">➕ Agregar Producto Nuevo</h2>
+            <form id="form-producto" onsubmit="guardarProducto(event)">
                 <div class="form-grid">
                     <div>
-                        <label>ID único (ej. termo):</label>
-                        <input type="text" id="prod-id" required placeholder="termo">
+                        <label>ID único (ej. taza):</label>
+                        <input type="text" id="prod-id" required placeholder="taza">
                     </div>
                     <div>
                         <label>Nombre del Producto:</label>
-                        <input type="text" id="prod-nombre" required placeholder="Termo personalizado">
+                        <input type="text" id="prod-nombre" required placeholder="Taza personalizada">
                     </div>
                 </div>
                 <div class="form-grid">
                     <div>
-                        <label>Nombre de la imagen en GitHub (ej. termo_1.jpg):</label>
-                        <input type="text" id="prod-imagen" required placeholder="termo_1.jpg">
+                        <label>Nombre de la imagen en GitHub (ej. taza.jpg):</label>
+                        <input type="text" id="prod-imagen" required placeholder="taza.jpg">
                     </div>
                 </div>
 
-                <div class="section-sub">Configuración de Precios y Mayoreo (Descuentos por cantidad)</div>
+                <div class="section-sub">Precios y Descuentos por Mayoreo</div>
                 
                 <div class="form-grid-3">
-                    <div>
-                        <label>Rango 1 (Desde):</label>
-                        <input type="number" id="min1" value="1" required>
-                    </div>
-                    <div>
-                        <label>Rango 1 (Hasta):</label>
-                        <input type="number" id="max1" value="10" required>
-                    </div>
-                    <div>
-                        <label>Precio Unitario ($):</label>
-                        <input type="number" id="precio1" placeholder="100" required>
-                    </div>
+                    <div><label>Rango 1 (Desde - Hasta):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="10"></div></div>
+                    <div><label>Precio Unitario ($):</label><input type="number" id="precio1" placeholder="100" required></div>
                 </div>
-
                 <div class="form-grid-3">
-                    <div>
-                        <label>Rango 2 (Desde):</label>
-                        <input type="number" id="min2" value="11" required>
-                    </div>
-                    <div>
-                        <label>Rango 2 (Hasta):</label>
-                        <input type="number" id="max2" value="99" required>
-                    </div>
-                    <div>
-                        <label>Precio Mayoreo ($):</label>
-                        <input type="number" id="precio2" placeholder="80" required>
-                    </div>
+                    <div><label>Rango 2 (Desde - Hasta):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="11"><input type="number" id="max2" value="99"></div></div>
+                    <div><label>Precio Mayoreo ($):</label><input type="number" id="precio2" placeholder="80" required></div>
                 </div>
-
                 <div class="form-grid-3" style="margin-bottom: 15px;">
-                    <div>
-                        <label>Rango 3 (Desde):</label>
-                        <input type="number" id="min3" value="100" required>
-                    </div>
-                    <div>
-                        <label>Rango 3 (Hasta):</label>
-                        <input type="number" id="max3" value="1000" required>
-                    </div>
-                    <div>
-                        <label>Precio Gran Mayoreo ($):</label>
-                        <input type="number" id="precio3" placeholder="40" required>
-                    </div>
+                    <div><label>Rango 3 (Desde - Hasta):</label><div style="display:flex; gap:5px;"><input type="number" id="min3" value="100"><input type="number" id="max3" value="1000"></div></div>
+                    <div><label>Precio Gran Mayoreo ($):</label><input type="number" id="precio3" placeholder="40" required></div>
                 </div>
 
-                <button type="submit">Guardar Producto con Descuentos 🚀</button>
+                <button type="submit" id="btn-submit">Guardar Producto 🚀</button>
+                <button type="button" id="btn-cancelar" class="btn-secondary" style="display:none;" onclick="cancelarEdicion()">Cancelar Edición</button>
             </form>
         </div>
 
         <!-- LISTA DE PRODUCTOS -->
         <div class="card">
-            <h2>📦 Productos en la Base de Datos</h2>
+            <h2>📦 Tus Productos</h2>
             <div id="productos-container">Cargando catálogo...</div>
         </div>
 
         <!-- PEDIDOS -->
         <div class="card">
             <h2>🛍️ Pedidos de Clientes</h2>
-            <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar por nombre de cliente o teléfono..." oninput="filtrarPedidos()">
+            <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar por nombre o teléfono..." oninput="filtrarPedidos()">
             <div id="pedidos-container">Cargando pedidos...</div>
         </div>
     </div>
 
     <script>
         let globalPedidos = [];
+        let modoEdicion = false;
 
         async function cargarTodo() {
             cargarProductos();
@@ -161,21 +136,91 @@
                 const prods = await res.json();
                 const div = document.getElementById('productos-container');
                 if (prods.length === 0) { div.innerHTML = '<p>No hay productos.</p>'; return; }
-                div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Imagen</th><th>Rangos de Precio</th><th>Acción</th></tr>` +
+                
+                div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Imagen</th><th>Precios</th><th>Acciones</th></tr>` +
                     prods.map(p => `
                         <tr>
-                            <td>${p.id}</td>
+                            <td><b>${p.id}</b></td>
                             <td>${p.nombre}</td>
                             <td>${p.imagen || 'N/A'}</td>
                             <td>
                                 <ul style="margin:0; padding-left:15px; font-size:12px;">
-                                    ${(p.rangos || []).map(r => `<li>De ${r.min} a ${r.max} pzas: <b>$${r.precio}</b></li>`).join('')}
+                                    ${(p.rangos || []).map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio}</b></li>`).join('')}
                                 </ul>
                             </td>
-                            <td><button class="btn-danger" onclick="eliminar('${p.id}')">Eliminar</button></td>
+                            <td>
+                                <button class="btn-warning" onclick='prepararEdicion(${JSON.stringify(p)})'>✏️ Editar</button>
+                                <button class="btn-danger" onclick="eliminar('${p.id}')">🗑️</button>
+                            </td>
                         </tr>
                     `).join('') + `</table>`;
             } catch (e) { document.getElementById('productos-container').innerHTML = 'Error al cargar.'; }
+        }
+
+        function prepararEdicion(p) {
+            modoEdicion = true;
+            document.getElementById('titulo-form').innerText = `✏️ Editando Producto: ${p.id}`;
+            document.getElementById('btn-submit').innerText = 'Actualizar Producto 🔄';
+            document.getElementById('btn-cancelar').style.display = 'block';
+
+            document.getElementById('prod-id').value = p.id;
+            document.getElementById('prod-id').readOnly = true; // El ID no cambia
+            document.getElementById('prod-nombre').value = p.nombre;
+            document.getElementById('prod-imagen').value = p.imagen || '';
+
+            if (p.rangos && p.rangos.length > 0) {
+                if (p.rangos[0]) { document.getElementById('min1').value = p.rangos[0].min; document.getElementById('max1').value = p.rangos[0].max; document.getElementById('precio1').value = p.rangos[0].precio; }
+                if (p.rangos[1]) { document.getElementById('min2').value = p.rangos[1].min; document.getElementById('max2').value = p.rangos[1].max; document.getElementById('precio2').value = p.rangos[1].precio; }
+                if (p.rangos[2]) { document.getElementById('min3').value = p.rangos[2].min; document.getElementById('max3').value = p.rangos[2].max; document.getElementById('precio3').value = p.rangos[2].precio; }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelarEdicion() {
+            modoEdicion = false;
+            document.getElementById('titulo-form').innerText = '➕ Agregar Producto Nuevo';
+            document.getElementById('btn-submit').innerText = 'Guardar Producto 🚀';
+            document.getElementById('btn-cancelar').style.display = 'none';
+            document.getElementById('form-producto').reset();
+            document.getElementById('prod-id').readOnly = false;
+        }
+
+        async function guardarProducto(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value.trim();
+            const nombre = document.getElementById('prod-nombre').value.trim();
+            const imagen = document.getElementById('prod-imagen').value.trim();
+
+            const rangos = [
+                { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
+                { min: parseInt(document.getElementById('min2').value), max: parseInt(document.getElementById('max2').value), precio: parseFloat(document.getElementById('precio2').value) },
+                { min: parseInt(document.getElementById('min3').value), max: parseInt(document.getElementById('max3').value), precio: parseFloat(document.getElementById('precio3').value) }
+            ];
+
+            const url = modoEdicion ? `/api/productos/${id}` : '/api/productos';
+            const method = modoEdicion ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, nombre, imagen, tieneVariantes: false, rangos })
+            });
+            const data = await res.json();
+            
+            if (data.exito) {
+                alert(modoEdicion ? '¡Producto actualizado correctamente!' : '¡Producto agregado con éxito!');
+                cancelarEdicion();
+                cargarProductos();
+            } else { 
+                alert('Error al guardar: ' + (data.error || 'Desconocido')); 
+            }
+        }
+
+        async function eliminar(id) {
+            if (!confirm(`¿Estás seguro de eliminar el producto ${id}?`)) return;
+            const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.exito) { cargarProductos(); }
         }
 
         async function cargarPedidos() {
@@ -190,7 +235,6 @@
         function calcularMetricas(pedidos) {
             let totalVentas = pedidos.reduce((acc, p) => acc + (p.total || 0), 0);
             let pendientes = pedidos.filter(p => p.estado === 'Pendiente').length;
-            
             document.getElementById('stat-ventas').innerText = `$${totalVentas.toFixed(2)}`;
             document.getElementById('stat-pendientes').innerText = pendientes;
         }
@@ -200,13 +244,7 @@
             if (pedidos.length === 0) { div.innerHTML = '<p>No hay pedidos registrados.</p>'; return; }
             
             div.innerHTML = `<table>
-                <tr>
-                    <th>Folio / Fecha</th>
-                    <th>Cliente</th>
-                    <th>Productos y Notas</th>
-                    <th>Total</th>
-                    <th>Estado</th>
-                </tr>` +
+                <tr><th>Folio / Fecha</th><th>Cliente</th><th>Productos y Notas</th><th>Total</th><th>Estado</th></tr>` +
                 pedidos.map(p => `
                     <tr>
                         <td><b>#${p.folio}</b><br><small style="color:#64748b">${p.fecha}</small></td>
@@ -214,8 +252,7 @@
                         <td>
                             <ul style="margin:0; padding-left:15px; font-size:12px;">
                                 ${p.productos.map(prod => `
-                                    <li><b>${prod.cantidad}x</b> ${prod.nombre}${prod.variante ? `(<i>${prod.variante}</i>)` : ''} 
-                                        ${prod.personalizacion ? `<br>💬 <span style="color:#4f46e5;">Nota: "${prod.personalizacion}"</span>` : ''}
+                                    <li><b>${prod.cantidad}x</b> ${prod.nombre}${prod.personalizacion ? `<br>💬 <span style="color:#4f46e5;">Nota: "${prod.personalizacion}"</span>` : ''}
                                     </li>`).join('')}
                             </ul>
                         </td>
@@ -242,49 +279,12 @@
         }
 
         async function cambiarEstado(folio, nuevoEstado) {
-            const res = await fetch(`/api/pedidos/${folio}`, {
+            await fetch(`/api/pedidos/${folio}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ estado: nuevoEstado })
             });
-            const data = await res.json();
-            if (data.exito) {
-                cargarPedidos();
-            } else {
-                alert('No se pudo actualizar el estado.');
-            }
-        }
-
-        async function agregarProducto(e) {
-            e.preventDefault();
-            const id = document.getElementById('prod-id').value.trim();
-            const nombre = document.getElementById('prod-nombre').value.trim();
-            const imagen = document.getElementById('prod-imagen').value.trim();
-
-            const rangos = [
-                { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
-                { min: parseInt(document.getElementById('min2').value), max: parseInt(document.getElementById('max2').value), precio: parseFloat(document.getElementById('precio2').value) },
-                { min: parseInt(document.getElementById('min3').value), max: parseInt(document.getElementById('max3').value), precio: parseFloat(document.getElementById('precio3').value) }
-            ];
-
-            const res = await fetch('/api/productos', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, nombre, imagen, tieneVariantes: false, rangos })
-            });
-            const data = await res.json();
-            if (data.exito) {
-                alert('¡Producto agregado con éxito!');
-                document.getElementById('form-producto').reset();
-                cargarProductos();
-            } else { alert('Error al guardar: ' + (data.error || 'Desconocido')); }
-        }
-
-        async function eliminar(id) {
-            if (!confirm(`¿Estás seguro de eliminar el producto ${id}?`)) return;
-            const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
-            const data = await res.json();
-            if (data.exito) { cargarProductos(); }
+            cargarPedidos();
         }
 
         cargarTodo();
