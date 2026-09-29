@@ -52,7 +52,18 @@
         .cart-total { font-size: 18px; font-weight: 700; color: #1e293b; margin: 15px 0; text-align: right; }
         
         .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
-        .info-pago-box { font-size: 11px; background: #f8fafc; padding: 8px; border-radius: 6px; border: 1px solid var(--border); color: #475569; display: none; }
+        
+        /* Caja de pago rediseñada y muy visible */
+        .info-pago-box { 
+            font-size: 11px; 
+            background: #eff6ff; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #bfdbfe; 
+            color: #1e3a8a; 
+            display: none; 
+            margin-top: 4px; 
+        }
         
         .btn-checkout { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
         .btn-checkout:hover { background: #15803d; }
@@ -108,10 +119,16 @@
                         <option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia Bancaria</option>
                     </select>
                 </div>
-                <!-- Cuadro de datos de pago -->
+
+                <!-- Cuadro de datos de pago rediseñado y claro -->
                 <div id="info-pago-div" class="info-pago-box">
-                    <b>Datos para transferencia:</b><br>
-                    <span id="texto-datos-cuenta"></span>
+                    <b style="color: #1e40af; display: block; margin-bottom: 4px; font-size: 12px;">💳 Datos para tu Transferencia:</b>
+                    <div style="background: white; padding: 8px; border-radius: 6px; border: 1px solid #93c5fd; font-family: monospace; font-size: 11px; color: #0f172a; line-height: 1.4;">
+                        <b>Banco:</b> BBVA<br>
+                        <b>Tarjeta:</b> 4152314063676335<br>
+                        <b>Titular:</b> Carolina Perez Mendez
+                    </div>
+                    <p style="margin: 6px 0 0 0; font-size: 10px; color: #1e3a8a;">* Al finalizar, envía tu comprobante por WhatsApp con tu número de folio.</p>
                 </div>
 
                 <button class="btn-checkout" onclick="enviarPedidoGeneral()">Finalizar y Enviar Pedido 🚀</button>
@@ -124,7 +141,6 @@
         // ⚙️ CONFIGURACIÓN DE TU NEGOCIO
         // ==========================================
         const WHATSAPP_NEGOCIO = '525514494333'; 
-        const DATOS_CUENTA_PAGO = 'Banco: BBVA | Tarjeta: 4152314063676335 | Titular: Carolina Perez Mendez';
         // ==========================================
 
         let carrito = [];
@@ -233,11 +249,9 @@
         function mostrarDatosPago() {
             const metodo = document.getElementById('cli-metodo-pago').value;
             const box = document.getElementById('info-pago-div');
-            const textoCuenta = document.getElementById('texto-datos-cuenta');
             
             if (metodo.includes('Tarjeta')) {
                 box.style.display = 'block';
-                textoCuenta.innerText = DATOS_CUENTA_PAGO;
             } else {
                 box.style.display = 'none';
             }
@@ -376,12 +390,12 @@
                     let textoWp = `Hola Kromantra, acabo de realizar mi pedido oficial.\n\n*Folio:* #${data.folio}\n*Cliente:* ${nombre}\n*Teléfono:* ${telefono}\n*Método de Pago:* ${metodoPago}\n\n*Productos:*\n${detalleProductos}\n\n*Total a pagar: $${totalGeneral.toFixed(2)}*`;
                     
                     if (metodoPago.includes('Tarjeta')) {
-                        textoWp += `\n\n*(El cliente eligió pago por transferencia/tarjeta)*`;
+                        textoWp += `\n\n💳 *Pago por transferencia/tarjeta seleccionado.*\n(Adjunto mi comprobante de pago a continuación).`;
                     }
 
                     const mensajeWa = encodeURIComponent(textoWp);
 
-                    if (confirm(`¡Pedido #${data.folio} guardado con éxito!\n\n¿Deseas abrir WhatsApp para enviar el detalle al taller?`)) {
+                    if (confirm(`¡Pedido #${data.folio} guardado con éxito!\n\n¿Deseas abrir WhatsApp para enviar el detalle al taller y adjuntar tu comprobante?`)) {
                         window.open(`https://wa.me/${WHATSAPP_NEGOCIO}?text=${mensajeWa}`, '_blank');
                     }
                     carrito = [];
