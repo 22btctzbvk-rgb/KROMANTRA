@@ -12,10 +12,6 @@ app.use(express.static(__dirname));
 // ==========================================
 const MONGO_URI = 'mongodb+srv://angelvalderrama944_db_user:UAT5y3u0Jqzbd1mQ@cluster0.xlybp0s.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'; 
 
-mongoose.connect(MONGO_URI)
-    .then(() => console.log('🟢 Conectado exitosamente a la base de datos de MongoDB'))
-    .catch(err => console.error('🔴 Error al conectar a MongoDB:', err));
-
 // ==========================================
 // 2. ESQUEMAS Y MODELOS
 // ==========================================
@@ -122,7 +118,6 @@ async function inicializarCatalogo() {
         console.error('Error al inicializar catálogo:', err);
     }
 }
-inicializarCatalogo();
 
 // ==========================================
 // 3. RUTAS API (PRODUCTOS Y PEDIDOS)
@@ -187,7 +182,23 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-app.listen(PORT, () => {
-    console.log(`🌟 Servidor Kromantra activo en http://localhost:${PORT}`);
-    console.log(`📊 Panel de administración: http://localhost:${PORT}/admin`);
-});
+// ==========================================
+// 5. INICIALIZACIÓN SEGURA DEL SERVIDOR
+// ==========================================
+async function iniciarServidor() {
+    try {
+        await mongoose.connect(MONGO_URI);
+        console.log('🟢 Conectado exitosamente a la base de datos de MongoDB');
+
+        await inicializarCatalogo();
+
+        app.listen(PORT, () => {
+            console.log(`🌟 Servidor Kromantra activo en http://localhost:${PORT}`);
+            console.log(`📊 Panel de administración: http://localhost:${PORT}/admin`);
+        });
+    } catch (err) {
+        console.error('🔴 Error al conectar a MongoDB:', err);
+    }
+}
+
+iniciarServidor();
