@@ -15,10 +15,8 @@
         header img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 6px; border-radius: 50%; background: white; padding: 4px; }
         h1 { margin: 0; font-size: 24px; } p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.9; }
 
-        /* Notificación flotante limpia */
         #toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 1000; transition: opacity 0.3s ease; }
 
-        /* Sección Izquierda: Catálogo y Rastreo */
         .main-content { display: flex; flex-direction: column; gap: 20px; }
         .rastreo-box { background: white; border: 1px solid var(--border); padding: 15px 20px; border-radius: 10px; display: flex; gap: 10px; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .rastreo-box input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
@@ -42,7 +40,6 @@
         .btn-agregar { background: var(--primary); color: white; border: none; padding: 9px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 13px; }
         .btn-agregar:hover { background: var(--primary-hover); }
 
-        /* Sección Derecha: Carrito y Checkout unificado */
         .sidebar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: fit-content; position: sticky; top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .sidebar h2 { font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: #1e293b; }
         
@@ -55,6 +52,8 @@
         .cart-total { font-size: 18px; font-weight: 700; color: #1e293b; margin: 15px 0; text-align: right; }
         
         .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
+        .info-pago-box { font-size: 11px; background: #f8fafc; padding: 8px; border-radius: 6px; border: 1px solid var(--border); color: #475569; display: none; }
+        
         .btn-checkout { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
         .btn-checkout:hover { background: #15803d; }
 
@@ -62,20 +61,16 @@
     </style>
 </head>
 <body>
-    <!-- Notificación flotante -->
     <div id="toast">¡Producto agregado al carrito!</div>
 
     <div class="container">
-        <!-- Encabezado -->
         <header>
             <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
             <h1>Kromantra</h1>
             <p>Regalos Personalizados y Mayoreo Inteligente</p>
         </header>
 
-        <!-- Columna Izquierda: Catálogo -->
         <div class="main-content">
-            <!-- Rastreo rápido -->
             <div class="rastreo-box">
                 <input type="text" id="inputRastreo" placeholder="🔍 Ingresa tu Folio o Teléfono para rastrear pedido...">
                 <button onclick="consultarPedido()">Buscar</button>
@@ -88,10 +83,9 @@
             </div>
         </div>
 
-        <!-- Columna Derecha: Carrito y Pago Unificado -->
         <div class="sidebar">
             <h2>🛒 Tu Carrito de Pedido</h2>
-            <div id="carrito-lista" style="max-height: 280px; overflow-y: auto;">
+            <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;">
                 <p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>
             </div>
             
@@ -109,17 +103,30 @@
                 </div>
                 <div>
                     <label>💳 Método de Pago General:</label>
-                    <select id="cli-metodo-pago">
+                    <select id="cli-metodo-pago" onchange="mostrarDatosPago()">
                         <option value="Efectivo / En Taller">💵 Efectivo / Pago al recoger en Taller</option>
-                        <option value="Tarjeta / En Línea">💳 Tarjeta / Pago en Línea</option>
+                        <option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia Bancaria</option>
                     </select>
                 </div>
+                <!-- Cuadro de datos de pago -->
+                <div id="info-pago-div" class="info-pago-box">
+                    <b>Datos para transferencia:</b><br>
+                    <span id="texto-datos-cuenta"></span>
+                </div>
+
                 <button class="btn-checkout" onclick="enviarPedidoGeneral()">Finalizar y Enviar Pedido 🚀</button>
             </div>
         </div>
     </div>
 
     <script>
+        // ==========================================
+        // ⚙️ CONFIGURACIÓN DE TU NEGOCIO (CONFIGURADO)
+        // ==========================================
+        const WHATSAPP_NEGOCIO = '5215514494333'; // Tu número de WhatsApp configurado
+        const DATOS_CUENTA_PAGO = 'CLABE: 123456789012345678 | Banco: BBVA | A nombre de: Kromantra'; // ⬅️ Puedes cambiar esto después por tu cuenta real
+        // ==========================================
+
         let carrito = [];
         let productosGlobal = [];
 
@@ -223,6 +230,19 @@
             }, 2000);
         }
 
+        function mostrarDatosPago() {
+            const metodo = document.getElementById('cli-metodo-pago').value;
+            const box = document.getElementById('info-pago-div');
+            const textoCuenta = document.getElementById('texto-datos-cuenta');
+            
+            if (metodo.includes('Tarjeta')) {
+                box.style.display = 'block';
+                textoCuenta.innerText = DATOS_CUENTA_PAGO;
+            } else {
+                box.style.display = 'none';
+            }
+        }
+
         function agregarAlCarrito(index) {
             const producto = productosGlobal[index];
             const cantidadAgregada = parseInt(document.getElementById(`cant-${index}`).value) || 1;
@@ -235,7 +255,6 @@
             if (estilo) especificaciones += `| Estilo: ${estilo}`;
             if (!especificaciones) especificaciones = 'Estándar';
 
-            // Buscar si ya existe un item idéntico en el carrito para agruparlo
             const indexExistente = carrito.findIndex(item => 
                 item.id === producto.id && item.personalizacion === especificaciones
             );
@@ -353,14 +372,23 @@
                 const data = await res.json();
 
                 if (data.exito) {
-                    const mensajeWa = encodeURIComponent(`Hola Kromantra, acabo de realizar mi pedido folio #${data.folio} a nombre de ${nombre}.`);
-                    if (confirm(`¡Pedido #${data.folio} realizado con éxito!\n\n¿Deseas enviar la confirmación por WhatsApp al taller?`)) {
-                        window.open(`https://wa.me/?text=${mensajeWa}`, '_blank');
+                    let detalleProductos = carrito.map(i => `• ${i.cantidad}x ${i.nombre} (${i.personalizacion}) - $${i.subtotal.toFixed(2)}`).join('\n');
+                    let textoWp = `Hola Kromantra, acabo de realizar mi pedido oficial.\n\n*Folio:* #${data.folio}\n*Cliente:* ${nombre}\n*Teléfono:* ${telefono}\n*Método de Pago:* ${metodoPago}\n\n*Productos:*\n${detalleProductos}\n\n*Total a pagar: $${totalGeneral.toFixed(2)}*`;
+                    
+                    if (metodoPago.includes('Tarjeta')) {
+                        textoWp += `\n\n*(El cliente eligió pago por transferencia/tarjeta)*`;
+                    }
+
+                    const mensajeWa = encodeURIComponent(textoWp);
+
+                    if (confirm(`¡Pedido #${data.folio} guardado con éxito!\n\n¿Deseas abrir WhatsApp para enviar el detalle al taller?`)) {
+                        window.open(`https://wa.me/${WHATSAPP_NEGOCIO}?text=${mensajeWa}`, '_blank');
                     }
                     carrito = [];
                     renderizarCarrito();
                     document.getElementById('cli-nombre').value = '';
                     document.getElementById('cli-telefono').value = '';
+                    document.getElementById('info-pago-div').style.display = 'none';
                 } else {
                     alert('Error al guardar el pedido.');
                 }
