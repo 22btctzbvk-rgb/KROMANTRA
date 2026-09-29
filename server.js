@@ -119,6 +119,7 @@ async function inicializarCatalogo() {
     }
 }
 
+
 // ==========================================
 // 3. RUTAS API (PRODUCTOS Y PEDIDOS)
 // ==========================================
@@ -135,6 +136,21 @@ app.post('/api/productos', async (req, res) => {
     try {
         const nuevo = new Producto(req.body);
         await nuevo.save();
+        res.json({ exito: true });
+    } catch (error) {
+        res.status(500).json({ exito: false, error: error.message });
+    }
+});
+
+// NUEVO: Editar producto existente
+app.put('/api/productos/:id', async (req, res) => {
+    try {
+        const { nombre, imagen, precio } = req.body;
+        await Producto.findOneAndUpdate({ id: req.params.id }, {
+            nombre,
+            imagen,
+            rangos: [{ min: 1, max: 1000, precio }]
+        });
         res.json({ exito: true });
     } catch (error) {
         res.status(500).json({ exito: false, error: error.message });
@@ -172,6 +188,17 @@ app.get('/api/pedidos', async (req, res) => {
         res.json(pedidos);
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener pedidos' });
+    }
+});
+
+// NUEVO: Actualizar estado del pedido (Pendiente, En proceso, Entregado)
+app.put('/api/pedidos/:folio', async (req, res) => {
+    try {
+        const { estado } = req.body;
+        await Pedido.findOneAndUpdate({ folio: req.params.folio }, { estado });
+        res.json({ exito: true });
+    } catch (error) {
+        res.status(500).json({ exito: false, error: error.message });
     }
 });
 
