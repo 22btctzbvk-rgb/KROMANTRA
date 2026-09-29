@@ -8,170 +8,181 @@
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 30px; text-align: center; border-radius: 12px; margin-bottom: 20px; }
-        header img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 8px; border-radius: 50%; background: white; padding: 5px; }
-        h1 { margin: 0; font-size: 26px; }
-        p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
-        .container { max-width: 1100px; margin: 0 auto; }
-        
-        /* Caja de Rastreo */
-        .rastreo-box { background: white; border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); }
-        .rastreo-box input { padding: 10px; width: 60%; max-width: 300px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
-        .rastreo-box button { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-        .rastreo-box button:hover { background: var(--primary-hover); }
+        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
 
-        .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #e2e8f0; }
-        .card h3 { margin: 0 0 10px 0; font-size: 18px; color: #1e293b; }
+        header { grid-column: 1 / -1; background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 10px; }
+        header img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 6px; border-radius: 50%; background: white; padding: 4px; }
+        h1 { margin: 0; font-size: 24px; } p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.9; }
+
+        /* Sección Izquierda: Catálogo y Rastreo */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+        .rastreo-box { background: white; border: 1px solid var(--border); padding: 15px 20px; border-radius: 10px; display: flex; gap: 10px; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .rastreo-box input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+        .rastreo-box button { padding: 8px 16px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .rastreo-box button:hover { background: #1e293b; }
+
+        .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.05); }
+        .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; background: #f1f5f9; }
+        .card h3 { margin: 0 0 8px 0; font-size: 16px; color: #1e293b; }
         
-        .rango-box { font-size: 12px; color: #64748b; background: #f1f5f9; padding: 8px; border-radius: 6px; margin-bottom: 12px; }
-        .rango-box ul { margin: 0; padding-left: 15px; }
+        .rango-box { font-size: 11px; color: #64748b; background: #f8fafc; padding: 6px 8px; border-radius: 6px; margin-bottom: 10px; border: 1px solid var(--border); }
+        .rango-box ul { margin: 0; padding-left: 12px; }
+
+        .form-mini { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+        label { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 2px; display: block; }
+        input, textarea, select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12px; background: white; box-sizing: border-box; }
         
-        .form-section { background: #f8fafc; border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-        .form-control { margin-bottom: 10px; }
-        .form-control:last-child { margin-bottom: 0; }
-        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
-        input, textarea, select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 13px; background: white; }
+        .precio-preview { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .btn-agregar { background: var(--primary); color: white; border: none; padding: 9px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 13px; }
+        .btn-agregar:hover { background: var(--primary-hover); }
+
+        /* Sección Derecha: Carrito y Checkout unificado */
+        .sidebar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: fit-content; position: sticky; top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .sidebar h2 { font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: #1e293b; }
         
-        .precio-actual { font-size: 18px; font-weight: 700; color: #4f46e5; margin: 10px 0; }
-        .aviso-descuento { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 8px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; display: none; }
+        .cart-item { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .cart-item-info { flex: 1; }
+        .cart-total { font-size: 18px; font-weight: 700; color: #1e293b; margin: 15px 0; text-align: right; }
         
-        button.btn-comprar { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
-        button.btn-comprar:hover { background: var(--primary-hover); }
-        
-        footer { text-align: center; padding: 20px; font-size: 13px; color: #64748b; margin-top: 40px; border-top: 1px solid var(--border); }
+        .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
+        .btn-checkout { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
+        .btn-checkout:hover { background: #15803d; }
+
+        #resultadoRastreo { margin-top: 8px; font-size: 12px; }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Encabezado -->
         <header>
-            <img src="logo.jpg" alt="Logo Kromantra" onerror="this.style.display='none'">
+            <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
             <h1>Kromantra</h1>
-            <p>Sistema Inteligente de Regalos Personalizados y Mayoreo</p>
+            <p>Regalos Personalizados y Mayoreo Inteligente</p>
         </header>
 
-        <!-- Rastreo de Pedido para Clientes -->
-        <div class="rastreo-box">
-            <h3 style="margin-top:0; font-size:16px; color:#1e293b;">🔍 Rastrea tu pedido</h3>
-            <p style="color:#64748b; font-size:12px; margin-bottom:10px;">Ingresa tu número de folio o teléfono para ver el estatus:</p>
-            <div style="display:flex; gap:10px; justify-content:center;">
-                <input type="text" id="inputRastreo" placeholder="Ej. 17749382910 o teléfono">
+        <!-- Columna Izquierda: Catálogo -->
+        <div class="main-content">
+            <!-- Rastreo rápido -->
+            <div class="rastreo-box">
+                <input type="text" id="inputRastreo" placeholder="🔍 Ingresa tu Folio o Teléfono para rastrear pedido...">
                 <button onclick="consultarPedido()">Buscar</button>
             </div>
-            <div id="resultadoRastreo" style="margin-top:12px; font-size:13px; text-align:left;"></div>
+            <div id="resultadoRastreo"></div>
+
+            <h2 style="font-size: 18px; margin: 0; color: #334155;">📦 Catálogo de Productos</h2>
+            <div id="catalogo" class="grid-productos">
+                <p>Cargando productos...</p>
+            </div>
         </div>
 
-        <h2 style="font-size: 20px; margin-bottom: 20px; color: #334155;">📦 Catálogo de Productos</h2>
-        <div id="catalogo" class="grid-productos">
-            <p>Cargando productos...</p>
-        </div>
+        <!-- Columna Derecha: Carrito y Pago Unificado -->
+        <div class="sidebar">
+            <h2>🛒 Tu Carrito de Pedido</h2>
+            <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;">
+                <p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>
+            </div>
+            
+            <div class="cart-total" id="cart-total-general">Total: $0.00</div>
 
-        <footer>
-            Kromantra © 2026 — Todos los derechos reservados.
-        </footer>
+            <div class="checkout-form">
+                <h3 style="margin: 0 0 5px 0; font-size: 13px; color: #334155;">👤 Datos de Contacto</h3>
+                <div>
+                    <label>Nombre completo:</label>
+                    <input type="text" id="cli-nombre" placeholder="Ej. Ana Pérez">
+                </div>
+                <div>
+                    <label>Teléfono:</label>
+                    <input type="text" id="cli-telefono" placeholder="Ej. 5512345678">
+                </div>
+                <div>
+                    <label>💳 Método de Pago General:</label>
+                    <select id="cli-metodo-pago">
+                        <option value="Efectivo / En Taller">💵 Efectivo / Pago al recoger en Taller</option>
+                        <option value="Tarjeta / En Línea">💳 Tarjeta / Pago en Línea</option>
+                    </select>
+                </div>
+                <button class="btn-checkout" onclick="enviarPedidoGeneral()">Finalizar y Enviar Pedido 🚀</button>
+            </div>
+        </div>
     </div>
 
     <script>
+        let carrito = [];
+        let productosGlobal = [];
+
         async function cargarCatalogo() {
             try {
                 const res = await fetch('/api/productos');
-                const productos = await res.json();
+                productosGlobal = await res.json();
                 const container = document.getElementById('catalogo');
 
-                if (productos.length === 0) {
-                    container.innerHTML = '<p>No hay productos disponibles por el momento.</p>';
+                if (productosGlobal.length === 0) {
+                    container.innerHTML = '<p>No hay productos disponibles.</p>';
                     return;
                 }
 
-                container.innerHTML = productos.map((p, index) => {
+                container.innerHTML = productosGlobal.map((p, index) => {
                     const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
                     return `
-                        <div class="card" id="card-${index}">
+                        <div class="card">
                             <div>
                                 <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Sin+Imagen'">
                                 <h3>${p.nombre}</h3>
                                 <div class="rango-box">
-                                    <b>Precios por volumen:</b>
+                                    <b>Mayoreo:</b>
                                     <ul>
-                                        ${(p.rangos || []).map(r => `<li>De ${r.min} a ${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('')}
+                                        ${(p.rangos || []).map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('')}
                                     </ul>
                                 </div>
                             </div>
                             <div>
-                                <div class="form-section">
-                                    <div class="form-control">
-                                        <label>Cantidad de piezas:</label>
-                                        <input type="number" id="cant-${index}" value="1" min="1" oninput="calcularPrecio(${index}, ${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                                <div class="form-mini">
+                                    <div>
+                                        <label>Cantidad:</label>
+                                        <input type="number" id="cant-${index}" value="1" min="1" oninput="actualizarPrecioCard(${index})">
                                     </div>
-                                    
-                                    <div class="form-control">
-                                        <label>✍️ Texto a grabar / imprimir:</label>
-                                        <input type="text" id="texto-${index}" placeholder="Ej. Carlos / 'Feliz Cumpleaños'">
+                                    <div>
+                                        <label>✍️ Texto / Frase:</label>
+                                        <input type="text" id="texto-${index}" placeholder="Ej. Nombre o dedicatoria">
                                     </div>
-
-                                    <div class="form-control">
-                                        <label>🎨 Estilo, Color o Variante:</label>
-                                        <input type="text" id="estilo-${index}" placeholder="Ej. Color negro mate">
+                                    <div>
+                                        <label>🎨 Estilo / Color:</label>
+                                        <input type="text" id="estilo-${index}" placeholder="Ej. Negro mate">
                                     </div>
-
-                                    <div class="form-control">
-                                        <label>🖼️ Sube tu diseño o logo (Opcional):</label>
-                                        <input type="file" id="archivo-${index}" accept="image/*" onchange="convertirDisenoCliente(event, ${index})">
-                                        <input type="hidden" id="diseno-base64-${index}">
-                                    </div>
-
-                                    <div class="form-control">
-                                        <label>💳 Método de Pago:</label>
-                                        <select id="pago-${index}">
-                                            <option value="Efectivo / En Taller">💵 Efectivo / Pago al recoger</option>
-                                            <option value="Tarjeta / En Línea">💳 Tarjeta / Pago en Línea</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-control">
-                                        <label>💬 Notas especiales para el taller:</label>
-                                        <textarea id="nota-${index}" rows="2" placeholder="Instrucciones adicionales"></textarea>
+                                    <div>
+                                        <label>🖼️ Logo o Diseño (Opcional):</label>
+                                        <input type="file" id="archivo-${index}" accept="image/*" onchange="convertirArchivo(event, ${index})">
+                                        <input type="hidden" id="base64-${index}">
                                     </div>
                                 </div>
-
-                                <div class="precio-actual" id="precio-total-${index}">Total: $${precioBase.toFixed(2)}</div>
-                                <div class="aviso-descuento" id="aviso-${index}"></div>
-                                <button class="btn-comprar" onclick="realizarPedido(${index}, ${JSON.stringify(p).replace(/"/g, '&quot;')})">Ordenar Pedido 🚀</button>
+                                <div class="precio-preview" id="preview-precio-${index}">$${precioBase.toFixed(2)}</div>
+                                <button class="btn-agregar" onclick="agregarAlCarrito(${index})">+ Agregar al Carrito</button>
                             </div>
                         </div>
                     `;
                 }).join('');
-
-                productos.forEach((p, index) => calcularPrecio(index, p));
-
             } catch (err) {
-                console.error(err);
-                document.getElementById('catalogo').innerHTML = '<p style="color: red;">Error al cargar el catálogo de la tienda.</p>';
+                document.getElementById('catalogo').innerHTML = '<p style="color:red;">Error al cargar tienda.</p>';
             }
         }
 
-        function convertirDisenoCliente(event, index) {
+        function convertirArchivo(event, index) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById(`diseno-base64-${index}`).value = e.target.result;
+                    document.getElementById(`base64-${index}`).value = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        function calcularPrecio(index, producto) {
-            const cantidadInput = document.getElementById(`cant-${index}`);
-            const cantidad = parseInt(cantidadInput.value) || 1;
-            const precioTotalDiv = document.getElementById(`precio-total-${index}`);
-            const avisoDiv = document.getElementById(`aviso-${index}`);
-
-            if (!producto.rangos || producto.rangos.length === 0) return;
-
+        function calcularSubtotalProducto(producto, cantidad) {
+            if (!producto.rangos || producto.rangos.length === 0) return 0;
             const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
-
             let rangoAplicable = rangos[0];
             for (let r of rangos) {
                 if (cantidad >= r.min && cantidad <= r.max) {
@@ -181,66 +192,97 @@
                     rangoAplicable = r;
                 }
             }
-
-            const precioUnitario = rangoAplicable.precio;
-            const total = cantidad * precioUnitario;
-            precioTotalDiv.innerHTML = `Total: $${total.toFixed(2)} <span style="font-size:12px; color:#64748b; font-weight:normal;">($${precioUnitario} c/u)</span>`;
-
-            let siguienteRango = rangos.find(r => r.min > cantidad);
-            if (siguienteRango) {
-                let piezasFaltantes = siguienteRango.min - cantidad;
-                avisoDiv.innerHTML = `💡 ¡Te faltan <b>${piezasFaltantes} pieza(s) más</b> para activar el precio de <b>$${siguienteRango.precio} c/u</b>!`;
-                avisoDiv.style.display = 'block';
-            } else {
-                avisoDiv.innerHTML = `🎉 ¡Felicidades! Tienes el precio máximo de mayoreo aplicado.`;
-                avisoDiv.style.display = 'block';
-            }
+            return { precioUnitario: rangoAplicable.precio, total: cantidad * rangoAplicable.precio };
         }
 
-        async function realizarPedido(index, producto) {
+        function actualizarPrecioCard(index) {
+            const producto = productosGlobal[index];
             const cantidad = parseInt(document.getElementById(`cant-${index}`).value) || 1;
-            const textoPersonalizado = document.getElementById(`texto-${index}`).value.trim();
+            const calculo = calcularSubtotalProducto(producto, cantidad);
+            document.getElementById(`preview-precio-${index}`).innerText = `$${calculo.total.toFixed(2)} ($${calculo.precioUnitario} c/u)`;
+        }
+
+        function agregarAlCarrito(index) {
+            const producto = productosGlobal[index];
+            const cantidad = parseInt(document.getElementById(`cant-${index}`).value) || 1;
+            const texto = document.getElementById(`texto-${index}`).value.trim();
             const estilo = document.getElementById(`estilo-${index}`).value.trim();
-            const notaTaller = document.getElementById(`nota-${index}`).value.trim();
-            const disenoCliente = document.getElementById(`diseno-base64-${index}`).value;
-            const metodoPago = document.getElementById(`pago-${index}`).value;
+            const diseno = document.getElementById(`base64-${index}`).value;
 
-            let personalizacionCompleta = '';
-            if (textoPersonalizado) personalizacionCompleta += `Texto: "${textoPersonalizado}" `;
-            if (estilo) personalizacionCompleta += `| Estilo/Color: ${estilo} `;
-            if (notaTaller) personalizacionCompleta += `| Notas: ${notaTaller}`;
-            if (!personalizacionCompleta) personalizacionCompleta = 'Sin especificaciones adicionales';
+            let especificaciones = '';
+            if (texto) especificaciones += `Texto: "${texto}" `;
+            if (estilo) especificaciones += `| Estilo: ${estilo}`;
+            if (!especificaciones) especificaciones = 'Estándar';
 
-            const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
-            let rangoAplicable = rangos[0];
-            for (let r of rangos) {
-                if (cantidad >= r.min && cantidad <= r.max) {
-                    rangoAplicable = r;
-                    break;
-                } else if (cantidad > r.max) {
-                    rangoAplicable = r;
-                }
+            const calculo = calcularSubtotalProducto(producto, cantidad);
+
+            carrito.push({
+                id: producto.id,
+                nombre: producto.nombre,
+                cantidad: cantidad,
+                variante: estilo || 'Estándar',
+                personalizacion: especificaciones,
+                diseno: diseno,
+                subtotal: calculo.total
+            });
+
+            renderizarCarrito();
+            alert(`¡"${producto.nombre}" agregado al carrito!`);
+        }
+
+        function renderizarCarrito() {
+            const lista = document.getElementById('carrito-lista');
+            if (carrito.length === 0) {
+                lista.innerHTML = '<p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>';
+                document.getElementById('cart-total-general').innerText = 'Total: $0.00';
+                return;
             }
-            const precioUnitario = rangoAplicable.precio;
-            const total = cantidad * precioUnitario;
 
-            const nombreCliente = prompt("Ingresa tu Nombre completo para el pedido:");
-            if (!nombreCliente) return;
-            const telefonoCliente = prompt("Ingresa tu Teléfono de contacto:");
-            if (!telefonoCliente) return;
+            let totalGeneral = 0;
+            lista.innerHTML = carrito.map((item, idx) => {
+                totalGeneral += item.subtotal;
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <b>${item.cantidad}x ${item.nombre}</b><br>
+                            <span style="color:#64748b; font-size:11px;">${item.personalizacion}</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <b>$${item.subtotal.toFixed(2)}</b><br>
+                            <button onclick="eliminarDelCarrito(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:11px; padding:0;">Eliminar</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('cart-total-general').innerText = `Total: $${totalGeneral.toFixed(2)}`;
+        }
+
+        function eliminarDelCarrito(idx) {
+            carrito.splice(idx, 1);
+            renderizarCarrito();
+        }
+
+        async function enviarPedidoGeneral() {
+            if (carrito.length === 0) {
+                alert('Tu carrito está vacío. Agrega al menos un producto.');
+                return;
+            }
+            const nombre = document.getElementById('cli-nombre').value.trim();
+            const telefono = document.getElementById('cli-telefono').value.trim();
+            const metodoPago = document.getElementById('cli-metodo-pago').value;
+
+            if (!nombre || !telefono) {
+                alert('Por favor ingresa tu Nombre y Teléfono.');
+                return;
+            }
+
+            const totalGeneral = carrito.reduce((acc, item) => acc + item.subtotal, 0);
 
             const datosPedido = {
-                cliente: { nombre: nombreCliente, telefono: telefonoCliente },
-                productos: [{
-                    id: producto.id,
-                    nombre: producto.nombre,
-                    cantidad: cantidad,
-                    variante: estilo || 'Estándar',
-                    personalizacion: personalizacionCompleta,
-                    diseno: disenoCliente,
-                    subtotal: total
-                }],
-                total: total,
+                cliente: { nombre, telefono },
+                productos: carrito,
+                total: totalGeneral,
                 metodoPago: metodoPago
             };
 
@@ -251,51 +293,40 @@
                     body: JSON.stringify(datosPedido)
                 });
                 const data = await res.json();
+
                 if (data.exito) {
-                    const mensajeWa = encodeURIComponent(`Hola Kromantra, acabo de realizar un pedido. Mi folio es #${data.folio} a nombre de ${nombreCliente}.`);
-                    if(confirm(`¡Pedido realizado con éxito! Folio #${data.folio}.\n\n¿Deseas enviar los detalles por WhatsApp al taller?`)) {
+                    const mensajeWa = encodeURIComponent(`Hola Kromantra, acabo de realizar mi pedido folio #${data.folio} a nombre de ${nombre}.`);
+                    if (confirm(`¡Pedido #${data.folio} realizado con éxito!\n\n¿Deseas enviar la confirmación por WhatsApp al taller?`)) {
                         window.open(`https://wa.me/?text=${mensajeWa}`, '_blank');
                     }
-                    document.getElementById(`texto-${index}`).value = '';
-                    document.getElementById(`estilo-${index}`).value = '';
-                    document.getElementById(`nota-${index}`).value = '';
-                    document.getElementById(`archivo-${index}`).value = '';
-                    document.getElementById(`diseno-base64-${index}`).value = '';
-                    document.getElementById(`cant-${index}`).value = 1;
-                    calcularPrecio(index, producto);
+                    carrito = [];
+                    renderizarCarrito();
+                    document.getElementById('cli-nombre').value = '';
+                    document.getElementById('cli-telefono').value = '';
                 } else {
-                    alert('Error al procesar el pedido.');
+                    alert('Error al guardar el pedido.');
                 }
-            } catch (err) {
-                console.error(err);
+            } catch (e) {
                 alert('Error de conexión con el servidor.');
             }
         }
 
         async function consultarPedido() {
             const q = document.getElementById('inputRastreo').value.trim();
-            const contenedor = document.getElementById('resultadoRastreo');
-            if (!q) {
-                contenedor.innerHTML = "<span style='color:red;'>Escribe un folio o teléfono.</span>";
+            const resDiv = document.getElementById('resultadoRastreo');
+            if (!q) { resDiv.innerHTML = "<span style='color:red;'>Escribe folio o teléfono.</span>"; return; }
+
+            const res = await fetch(`/api/rastreo?q=${q}`);
+            const data = await res.json();
+            if (data.length === 0) {
+                resDiv.innerHTML = "<span style='color:#d97706;'>No se encontró el pedido.</span>";
                 return;
             }
-            try {
-                const res = await fetch(`/api/rastreo?q=${q}`);
-                const data = await res.json();
-                if (data.length === 0) {
-                    contenedor.innerHTML = "<span style='color:#d97706;'>No se encontraron pedidos con ese dato.</span>";
-                    return;
-                }
-                contenedor.innerHTML = data.map(p => `
-                    <div style="background:#f8fafc; padding:10px; border-radius:6px; margin-top:6px; border:1px solid #cbd5e1;">
-                        <b>Folio:</b> #${p.folio} | <b>Cliente:</b> ${p.cliente.nombre}<br>
-                        <b>Estatus Taller:</b> <span style="color:var(--primary); font-weight:bold;">${p.estado}</span><br>
-                        <b>Pago:</b> ${p.estadoPago} (${p.metodoPago})
-                    </div>
-                `).join('');
-            } catch (e) {
-                contenedor.innerHTML = "<span style='color:red;'>Error al consultar.</span>";
-            }
+            resDiv.innerHTML = data.map(p => `
+                <div style="background:#f1f5f9; padding:8px; border-radius:6px; margin-top:5px; border:1px solid #cbd5e1;">
+                    <b>Folio #${p.folio}</b> | Estatus: <span style="color:var(--primary); font-weight:bold;">${p.estado}</span> | Pago: ${p.estadoPago}
+                </div>
+            `).join('');
         }
 
         cargarCatalogo();
