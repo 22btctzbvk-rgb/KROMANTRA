@@ -4,11 +4,14 @@ const path = require('path');
 
 const app = express();
 
-// IMPORTANTE: Aumentar el límite de tamaño para permitir subir imágenes (diseños y fotos de productos)
+// IMPORTANTE: Permitir que Express lea y sirva los archivos de la carpeta raíz (imágenes, logo, etc.)
+app.use(express.static(__dirname));
+
+// Aumentar el límite de tamaño para permitir subir imágenes en Base64
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Conexión a MongoDB Atlas (Reemplaza con tu cadena de conexión si manejas variables de entorno o déjala así si ya funciona)
+// Conexión a MongoDB Atlas
 const MONGO_URI = process.env.MONGO_URI || 'TU_CONEXION_MONGODB_ATLAS'; 
 
 mongoose.connect(MONGO_URI)
@@ -43,7 +46,7 @@ const pedidoSchema = new mongoose.Schema({
         cantidad: Number,
         variante: String,
         personalizacion: String,
-        diseno: String, // <--- Imagen o logotipo adjuntado por el cliente
+        diseno: String,
         subtotal: Number
     }],
     total: Number,
