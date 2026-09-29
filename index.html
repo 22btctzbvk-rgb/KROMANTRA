@@ -13,21 +13,27 @@
         h1 { margin: 0; font-size: 26px; }
         p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
         .container { max-width: 1100px; margin: 0 auto; }
-        .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
         .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; }
         .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #e2e8f0; }
         .card h3 { margin: 0 0 10px 0; font-size: 18px; color: #1e293b; }
+        
         .rango-box { font-size: 12px; color: #64748b; background: #f1f5f9; padding: 8px; border-radius: 6px; margin-bottom: 12px; }
         .rango-box ul { margin: 0; padding-left: 15px; }
-        .form-control { margin-bottom: 12px; }
+        
+        .form-section { background: #f8fafc; border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+        .form-control { margin-bottom: 10px; }
+        .form-control:last-child { margin-bottom: 0; }
         label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
-        input, textarea { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 13px; }
+        input, textarea, select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 13px; background: white; }
+        
         .precio-actual { font-size: 18px; font-weight: 700; color: #4f46e5; margin: 10px 0; }
         .aviso-descuento { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 8px; border-radius: 6px; font-size: 12px; margin-bottom: 12px; display: none; }
-        button.btn-comprar { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
+        
+        button.btn-comprar { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
         button.btn-comprar:hover { background: var(--primary-hover); }
+        
         footer { text-align: center; padding: 20px; font-size: 13px; color: #64748b; margin-top: 40px; border-top: 1px solid #e2e8f0; }
-        footer a { color: #6366f1; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -44,8 +50,7 @@
         </div>
 
         <footer>
-            Kromantra © 2026 — 
-            <a href="/admin">Panel de Administración</a>
+            Kromantra © 2026 — Todos los derechos reservados.
         </footer>
     </div>
 
@@ -76,14 +81,34 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="form-control">
-                                    <label>Cantidad:</label>
-                                    <input type="number" id="cant-${index}" value="1" min="1" oninput="calcularPrecio(${index}, ${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                                <div class="form-section">
+                                    <div class="form-control">
+                                        <label>Cantidad de piezas:</label>
+                                        <input type="number" id="cant-${index}" value="1" min="1" oninput="calcularPrecio(${index}, ${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                                    </div>
+                                    
+                                    <div class="form-control" style="margin-top: 8px;">
+                                        <label>✍️ Texto a grabar / imprimir (Nombre o Frase):</label>
+                                        <input type="text" id="texto-${index}" placeholder="Ej. Carlos / 'Feliz Cumpleaños'">
+                                    </div>
+
+                                    <div class="form-control" style="margin-top: 8px;">
+                                        <label>🎨 Estilo, Color o Variante:</label>
+                                        <input type="text" id="estilo-${index}" placeholder="Ej. Color negro mate / Letra cursiva">
+                                    </div>
+
+                                    <div class="form-control" style="margin-top: 8px;">
+                                        <label>🖼️ Sube tu diseño o logo (Opcional):</label>
+                                        <input type="file" id="archivo-${index}" accept="image/*" onchange="convertirDisenoCliente(event, ${index})">
+                                        <input type="hidden" id="diseno-base64-${index}">
+                                    </div>
+
+                                    <div class="form-control" style="margin-top: 8px;">
+                                        <label>💬 Instrucciones especiales para el taller:</label>
+                                        <textarea id="nota-${index}" rows="2" placeholder="Ej. Centrar el texto, etc."></textarea>
+                                    </div>
                                 </div>
-                                <div class="form-control">
-                                    <label>Notas de Personalización:</label>
-                                    <textarea id="nota-${index}" placeholder="Ej. Nombre a grabar, diseño, etc."></textarea>
-                                </div>
+
                                 <div class="precio-actual" id="precio-total-${index}">Total: $${precioBase.toFixed(2)}</div>
                                 <div class="aviso-descuento" id="aviso-${index}"></div>
                                 <button class="btn-comprar" onclick="realizarPedido(${index}, ${JSON.stringify(p).replace(/"/g, '&quot;')})">Ordenar Pedido 🚀</button>
@@ -97,6 +122,17 @@
             } catch (err) {
                 console.error(err);
                 document.getElementById('catalogo').innerHTML = '<p style="color: red;">Error al cargar el catálogo de la tienda.</p>';
+            }
+        }
+
+        function convertirDisenoCliente(event, index) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(`diseno-base64-${index}`).value = e.target.result;
+                };
+                reader.readAsDataURL(file);
             }
         }
 
@@ -137,7 +173,16 @@
 
         async function realizarPedido(index, producto) {
             const cantidad = parseInt(document.getElementById(`cant-${index}`).value) || 1;
-            const personalizacion = document.getElementById(`nota-${index}`).value.trim();
+            const textoPersonalizado = document.getElementById(`texto-${index}`).value.trim();
+            const estilo = document.getElementById(`estilo-${index}`).value.trim();
+            const notaTaller = document.getElementById(`nota-${index}`).value.trim();
+            const disenoCliente = document.getElementById(`diseno-base64-${index}`).value;
+
+            let personalizacionCompleta = '';
+            if (textoPersonalizado) personalizacionCompleta += `Texto: "${textoPersonalizado}" `;
+            if (estilo) personalizacionCompleta += `| Estilo/Color: ${estilo} `;
+            if (notaTaller) personalizacionCompleta += `| Notas: ${notaTaller}`;
+            if (!personalizacionCompleta) personalizacionCompleta = 'Sin especificaciones adicionales';
 
             const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
             let rangoAplicable = rangos[0];
@@ -167,8 +212,9 @@
                         id: producto.id,
                         nombre: producto.nombre,
                         cantidad: cantidad,
-                        variante: 'Estándar',
-                        personalizacion: personalizacion,
+                        variante: estilo || 'Estándar',
+                        personalizacion: personalizacionCompleta,
+                        diseno: disenoCliente, // <--- Se envía el diseño adjunto
                         subtotal: total
                     }
                 ],
@@ -183,8 +229,12 @@
                 });
                 const data = await res.json();
                 if (data.exito) {
-                    alert(`¡Pedido realizado con éxito! Tu número de folio es #${data.folio}. Nos pondremos en contacto contigo.`);
+                    alert(`¡Pedido realizado con éxito! Tu número de folio es #${data.folio}.`);
+                    document.getElementById(`texto-${index}`).value = '';
+                    document.getElementById(`estilo-${index}`).value = '';
                     document.getElementById(`nota-${index}`).value = '';
+                    document.getElementById(`archivo-${index}`).value = '';
+                    document.getElementById(`diseno-base64-${index}`).value = '';
                     document.getElementById(`cant-${index}`).value = 1;
                     calcularPrecio(index, producto);
                 } else {
