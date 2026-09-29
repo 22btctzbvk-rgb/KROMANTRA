@@ -54,23 +54,6 @@
     </style>
 </head>
 <body>
-    <script>
-        // Sistema de seguridad por PIN para el panel (PIN por defecto: 4321, puedes cambiarlo aquí)
-        (function verificarAccesoAdmin() {
-            const PIN_SECRETO = '4321'; 
-            const pinActual = sessionStorage.getItem('kromantra_admin_ok');
-            if (pinActual !== PIN_SECRETO) {
-                const ingreso = prompt('🔒 Ingresa el PIN de acceso al taller de Kromantra:');
-                if (ingreso === PIN_SECRETO) {
-                    sessionStorage.setItem('kromantra_admin_ok', PIN_SECRETO);
-                } else {
-                    alert('PIN incorrecto. Acceso denegado.');
-                    window.location.href = '/';
-                }
-            }
-        })();
-    </script>
-
     <div class="container">
         <a href="/" class="btn-volver">← Ir a la Tienda</a>
         <header>
@@ -174,19 +157,38 @@
             setInterval(cargarPedidosSilencioso, 15000);
         }
 
+        // Alerta sonora mejorada (Doble tono / Beep-Beep)
         function reproducirAlertaSonora() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscilador = audioCtx.createOscillator();
-                const ganancia = audioCtx.createGain();
-                oscilador.type = 'sine';
-                oscilador.frequency.setValueAtTime(659.25, audioCtx.currentTime);
-                ganancia.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                oscilador.connect(ganancia);
-                ganancia.connect(audioCtx.destination);
-                oscilador.start();
-                oscilador.stop(audioCtx.currentTime + 0.25);
-            } catch (e) {}
+                
+                // Primer tono
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                gain1.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start();
+                osc1.stop(audioCtx.currentTime + 0.15);
+
+                // Segundo tono más agudo
+                setTimeout(() => {
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+                    gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+                    osc2.start();
+                    osc2.stop(audioCtx.currentTime + 0.25);
+                }, 180);
+
+            } catch (e) {
+                console.log("Audio no soportado o bloqueado por el navegador", e);
+            }
         }
 
         function convertirImagen(event) {
@@ -347,8 +349,8 @@
             const texto = document.getElementById('buscador').value.toLowerCase();
             let filtrados = globalPedidos.filter(p => {
                 const coincideTexto = p.cliente.nombre.toLowerCase().includes(texto) || 
-                                      p.cliente.telefono.toLowerCase().includes(texto) ||
-                                      String(p.folio).includes(texto);
+                                    p.cliente.telefono.toLowerCase().includes(texto) ||
+                                    String(p.folio).includes(texto);
                 const coincideEstado = (filtroActual === 'todos' || p.estado === filtroActual);
                 return coincideTexto && coincideEstado;
             });
