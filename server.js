@@ -142,14 +142,14 @@ app.post('/api/productos', async (req, res) => {
     }
 });
 
-// NUEVO: Editar producto existente
+// Actualizar producto existente
 app.put('/api/productos/:id', async (req, res) => {
     try {
-        const { nombre, imagen, precio } = req.body;
+        const { nombre, imagen, rangos } = req.body;
         await Producto.findOneAndUpdate({ id: req.params.id }, {
             nombre,
             imagen,
-            rangos: [{ min: 1, max: 1000, precio }]
+            rangos
         });
         res.json({ exito: true });
     } catch (error) {
