@@ -8,7 +8,7 @@ app.use(express.static(path.join(__dirname)));
 
 // Configura tu conexión a MongoDB Atlas
 const mongoUrl = process.env.MONGO_URI || "mongodb+srv://angelvalderrama944_db_user:UAT5y3u0Jqzbd1mQ@cluster0.xlybp0s.mongodb.net";
-const dbName = "Prueba"; // Apunta a la base de datos donde tienes tus productos y pedidos reales
+const dbName = "kromantra"; // Apunta a la base de datos donde tienes tus productos y pedidos reales
 let db;
 
 MongoClient.connect(mongoUrl)
