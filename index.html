@@ -9,27 +9,18 @@
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; scroll-behavior: smooth; }
         
-        /* 1. BARRA DE AVISOS SUPERIOR */
-        .announcement-bar {
-            background: #1e293b; color: #f8fafc; font-size: 12px; text-align: center; padding: 8px 15px; font-weight: 500; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
-        }
-
+        .announcement-bar { background: #1e293b; color: #f8fafc; font-size: 12px; text-align: center; padding: 8px 15px; font-weight: 500; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         #vista-inicio { display: block; }
         
-        .hero-section {
-            background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid #3b82f6;
-        }
+        .hero-section { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid #3b82f6; }
         .hero-content { max-width: 800px; margin: 0 auto; }
         .hero-section img { width: 90px; height: 90px; object-fit: contain; margin-bottom: 12px; border-radius: 50%; background: white; padding: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .hero-section h1 { font-size: 34px; font-weight: 800; margin: 0 0 8px 0; }
         .hero-section p.subtitle { font-size: 17px; margin: 0 0 25px 0; opacity: 0.9; }
         
-        .btn-grande {
-            display: inline-block; background: white; color: var(--primary); padding: 14px 35px; border-radius: 30px; font-weight: 800; font-size: 17px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; border: none; transition: transform 0.2s;
-        }
+        .btn-grande { display: inline-block; background: white; color: var(--primary); padding: 14px 35px; border-radius: 30px; font-weight: 800; font-size: 17px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; border: none; transition: transform 0.2s; }
         .btn-grande:hover { transform: translateY(-3px); }
 
-        /* Buscador en Portada */
         .rastreo-portada-box { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 12px 15px; border-radius: 10px; display: flex; gap: 10px; max-width: 500px; margin: 25px auto 0 auto; }
         .rastreo-portada-box input { flex: 1; padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; }
         .rastreo-portada-box button { padding: 8px 15px; background: #1e293b; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
@@ -38,32 +29,26 @@
         .info-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); }
         .info-card h2 { color: #1e3a8a; margin-top: 0; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
         
-        /* Materiales y Técnicas */
         .materiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; text-align: center; }
         .material-item { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
         .material-item b { display: block; font-size: 14px; color: #334155; margin-bottom: 4px; }
         .material-item span { font-size: 12px; color: #64748b; }
 
-        /* Galería */
         .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .galeria-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: #e2e8f0; }
 
-        /* Horarios y Ubicación */
         .horarios-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; font-size: 14px; color: #475569; }
         .horarios-box b { color: #1e3a8a; display: block; margin-bottom: 5px; }
 
-        /* Acordeón FAQ */
         .faq-item { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 12px; cursor: pointer; }
         .faq-pregunta { display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #334155; font-size: 15px; }
         .faq-respuesta { font-size: 13px; color: #64748b; margin-top: 8px; display: none; line-height: 1.5; }
         .faq-item.activo .faq-respuesta { display: block; }
 
-        /* Redes Sociales */
         .social-links { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
         .btn-social { background: #f1f5f9; color: #334155; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; border: 1px solid var(--border); transition: background 0.2s; }
         .btn-social:hover { background: #e2e8f0; }
 
-        /* VISTA 2: CATÁLOGO */
         #vista-catalogo { display: none; max-width: 1200px; margin: 20px auto 40px auto; padding: 0 20px; gap: 30px; }
         .catalogo-activo { display: grid !important; grid-template-columns: 1fr 380px; }
         @media (max-width: 900px) { .catalogo-activo { grid-template-columns: 1fr; } }
@@ -107,23 +92,18 @@
 <body>
     <div id="toast">¡Producto agregado al carrito!</div>
 
-    <!-- 1. BARRA DE AVISOS SUPERIOR -->
     <div class="announcement-bar">
         <span id="lbl-tiempo">⏱️ Tiempo de elaboración: 3 a 4 días hábiles</span>
         <span id="lbl-ubicacion">📍 Recogida directa en Taller (Zona Tlalnepantla)</span>
     </div>
 
-    <!-- VISTA 1: PORTADA -->
     <div id="vista-inicio">
         <section class="hero-section">
             <div class="hero-content">
                 <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
                 <h1 id="lbl-titulo">Kromantra</h1>
                 <p class="subtitle" id="lbl-subtitulo">Regalos Personalizados y Mayoreo Inteligente</p>
-                
                 <button class="btn-grande" onclick="abrirCatalogo()">Ir a la Tienda y Comprar 🛍️</button>
-
-                <!-- Buscador rápido en portada -->
                 <div class="rastreo-portada-box">
                     <input type="text" id="inputRastreoInicio" placeholder="🔍 Rastrear pedido por Folio o Teléfono...">
                     <button onclick="consultarPedidoInicio()">Buscar</button>
@@ -133,71 +113,53 @@
         </section>
 
         <div class="info-container">
-            <!-- Esencia -->
             <div class="info-card">
                 <h2>👋 Nuestra Esencia</h2>
-                <p id="lbl-quienes" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">
-                    Somos un taller dedicado a crear piezas con alta precisión y detalle. Ya sea que busques un regalo único y personalizado para una ocasión especial, o necesites producción de mayoreo inteligente para hacer crecer tu marca, ponemos pasión y cuidado en cada trabajo que fabricamos.
-                </p>
+                <p id="lbl-quienes" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Somos un taller dedicado a crear piezas con alta precisión y detalle.</p>
             </div>
 
-            <!-- Materiales y Técnicas -->
+            <!-- Materiales y Precisión Dinámicos -->
             <div class="info-card">
                 <h2>🛠️ Materiales y Precisión</h2>
-                <div class="materiales-grid">
-                    <div class="material-item"><b>Grabado Láser</b><span>Alta definición en madera y metales</span></div>
-                    <div class="material-item"><b>Acrílico Premium</b><span>Cortes limpios y acabados modernos</span></div>
-                    <div class="material-item"><b>Impresión UV</b><span>Colores vivos y duraderos</span></div>
-                    <div class="material-item"><b>Bases Especiales</b><span>Selección de materiales resistentes</span></div>
+                <div class="materiales-grid" id="materiales-container">
+                    <div class="material-item"><b>Cargando...</b></div>
                 </div>
             </div>
 
-            <!-- Galería de Trabajos -->
+            <!-- Galería de Trabajos Dinámica -->
             <div class="info-card">
                 <h2>✨ Galería de Trabajos</h2>
-                <div class="galeria-grid">
-                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400" alt="Trabajo 1" class="galeria-img">
-                    <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=400" alt="Trabajo 2" class="galeria-img">
-                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400" alt="Trabajo 3" class="galeria-img">
+                <div class="galeria-grid" id="galeria-container">
+                    <p style="color:#64748b; font-size:13px;">Cargando galería...</p>
                 </div>
             </div>
 
-            <!-- Horarios y Ubicación -->
             <div class="info-card">
                 <h2>📍 Ubicación y Horarios de Taller</h2>
                 <div class="horarios-box">
-                    <div>
-                        <b>🕒 Horarios de Atención:</b>
-                        <span id="lbl-horarios">Lunes a Sábado: 10:00 am - 7:00 pm<br>Domingos: Cerrado</span>
-                    </div>
-                    <div>
-                        <b>📍 Recogida en Taller:</b>
-                        <span id="lbl-ubicacion-texto">Ubicados en Tlalnepantla, Estado de México. Te notificaremos por WhatsApp en cuanto tu pedido esté listo para pasar a recogerlo sin costo extra.</span>
-                    </div>
+                    <div><b>🕒 Horarios de Atención:</b><span id="lbl-horarios">Lunes a Sábado: 10:00 am - 7:00 pm</span></div>
+                    <div><b>📍 Recogida en Taller:</b><span id="lbl-ubicacion-texto">Ubicados en Tlalnepantla, Estado de México.</span></div>
                 </div>
             </div>
 
-            <!-- Preguntas Frecuentes (Acordeón) -->
             <div class="info-card">
                 <h2>❓ Preguntas Frecuentes</h2>
                 <div class="faq-item" onclick="toggleFaq(this)">
                     <div class="faq-pregunta"><span>¿Cómo funciona el descuento de mayoreo?</span> <span>+</span></div>
-                    <div class="faq-respuesta">El sistema de la tienda calcula el descuento de forma automática. Entre más piezas de un mismo producto agregues a tu carrito, menor será el costo unitario de cada una.</div>
+                    <div class="faq-respuesta">El sistema de la tienda calcula el descuento de forma automática. Entre más piezas, menor costo unitario.</div>
                 </div>
                 <div class="faq-item" onclick="toggleFaq(this)">
                     <div class="faq-pregunta"><span>¿Cuáles son los métodos de pago?</span> <span>+</span></div>
-                    <div class="faq-respuesta">Puedes pagar en efectivo al recoger directamente en nuestro taller, o bien mediante Tarjeta / Transferencia bancaria (BBVA) enviando tu comprobante por WhatsApp.</div>
+                    <div class="faq-respuesta">Efectivo en taller o tarjeta/transferencia BBVA.</div>
                 </div>
                 <div class="faq-item" onclick="toggleFaq(this)">
                     <div class="faq-pregunta"><span>¿Cómo subo mi diseño o logotipo personalizado?</span> <span>+</span></div>
-                    <div class="faq-respuesta">Al agregar cualquier producto al carrito, verás un campo para adjuntar tu archivo en imagen (JPG, PNG) o escribir el texto exacto que deseas plasmar en tu pieza.</div>
+                    <div class="faq-respuesta">Adjuntando tu archivo de imagen al agregar el producto al carrito.</div>
                 </div>
             </div>
 
-            <!-- Redes Sociales -->
             <div class="info-card" style="text-align: center; padding: 20px;">
                 <h2 style="border: none; margin-bottom: 10px;">¡Síguenos en Redes!</h2>
-                <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Conoce más de nuestros trabajos diarios y entregas especiales.</p>
                 <div class="social-links">
                     <a id="link-instagram" href="https://instagram.com" target="_blank" class="btn-social">📸 Instagram</a>
                     <a id="link-tiktok" href="https://tiktok.com" target="_blank" class="btn-social">🎵 TikTok</a>
@@ -206,141 +168,95 @@
         </div>
     </div>
 
-    <!-- VISTA 2: CATÁLOGO -->
     <div id="vista-catalogo">
         <div class="main-content">
             <div><button class="btn-volver" onclick="cerrarCatalogo()">← Volver al Inicio</button></div>
-            <div class="rastreo-box">
-                <input type="text" id="inputRastreo" placeholder="🔍 Ingresa tu Folio o Teléfono para rastrear pedido...">
-                <button onclick="consultarPedido()">Buscar</button>
-            </div>
+            <div class="rastreo-box"><input type="text" id="inputRastreo" placeholder="🔍 Folio o Teléfono..."><button onclick="consultarPedido()">Buscar</button></div>
             <div id="resultadoRastreo"></div>
-
-            <h2 style="font-size: 18px; margin: 0; color: #334155; padding-top: 10px;">📦 Catálogo Oficial</h2>
+            <h2 style="font-size: 18px; margin: 0; color: #334155;">📦 Catálogo Oficial</h2>
             <div id="catalogo" class="grid-productos"><p>Cargando productos...</p></div>
         </div>
-
         <div class="sidebar">
-            <h2>🛒 Tu Carrito de Pedido</h2>
-            <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;">
-                <p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>
-            </div>
-            
+            <h2>🛒 Tu Carrito</h2>
+            <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;"><p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p></div>
             <div class="cart-total" id="cart-total-general">Total: $0.00</div>
-
             <div class="checkout-form">
-                <h3 style="margin: 0 0 5px 0; font-size: 13px; color: #334155;">👤 Datos de Contacto</h3>
-                <div><label>Nombre completo:</label><input type="text" id="cli-nombre" placeholder="Ej. Ana Pérez"></div>
-                <div><label>Teléfono:</label><input type="text" id="cli-telefono" placeholder="Ej. 5512345678"></div>
-                <div>
-                    <label>💳 Método de Pago General:</label>
-                    <select id="cli-metodo-pago" onchange="mostrarDatosPago()">
-                        <option value="Efectivo / En Taller">💵 Efectivo / Pago al recoger en Taller</option>
-                        <option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia Bancaria</option>
-                    </select>
-                </div>
-
+                <h3 style="margin: 0 0 5px 0; font-size: 13px;">👤 Datos de Contacto</h3>
+                <div><label>Nombre:</label><input type="text" id="cli-nombre"></div>
+                <div><label>Teléfono:</label><input type="text" id="cli-telefono"></div>
+                <div><label>Método de Pago:</label><select id="cli-metodo-pago" onchange="mostrarDatosPago()"><option value="Efectivo / En Taller">💵 Efectivo / En Taller</option><option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia</option></select></div>
                 <div id="info-pago-div" class="info-pago-box">
-                    <b style="color: #1e40af; display: block; margin-bottom: 4px; font-size: 12px;">💳 Datos para tu Transferencia:</b>
-                    <div style="background: white; padding: 8px; border-radius: 6px; border: 1px solid #93c5fd; font-family: monospace; font-size: 11px; color: #0f172a; line-height: 1.4;">
+                    <div style="background: white; padding: 8px; border-radius: 6px; border: 1px solid #93c5fd; font-family: monospace; font-size: 11px;">
                         <b>Banco:</b> <span id="banco-txt">BBVA</span><br>
                         <b>Tarjeta:</b> <span id="tarjeta-txt">4152314063676335</span><br>
                         <b>Titular:</b> <span id="titular-txt">Carolina Perez Mendez</span>
                     </div>
-                    <p style="margin: 6px 0 0 0; font-size: 10px; color: #1e3a8a;">* Al finalizar, envía tu comprobante por WhatsApp con tu número de folio.</p>
                 </div>
-
                 <button class="btn-checkout" onclick="enviarPedidoGeneral()">Finalizar y Enviar Pedido 🚀</button>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT COMPLETO DE FUNCIONALIDAD -->
     <script>
         let configGlobal = { whatsapp: '525514494333', tarjeta: '4152314063676335', titular: 'Carolina Perez Mendez', banco: 'BBVA' };
+        let carrito = [], productosGlobal = [];
 
-        // Cargar configuración dinámica al iniciar la página
         async function cargarConfiguracion() {
             try {
                 const res = await fetch('/api/config');
                 const data = await res.json();
                 if(data && Object.keys(data).length > 0) {
                     configGlobal = data;
-                    if(data.titulo) {
-                        document.getElementById('page-title').innerText = `${data.titulo} | Regalos y Mayoreo`;
-                        document.getElementById('lbl-titulo').innerText = data.titulo;
-                    }
+                    if(data.titulo) { document.getElementById('page-title').innerText = `${data.titulo} | Regalos y Mayoreo`; document.getElementById('lbl-titulo').innerText = data.titulo; }
                     if(data.subtitulo) document.getElementById('lbl-subtitulo').innerText = data.subtitulo;
                     if(data.quienesSomos) document.getElementById('lbl-quienes').innerText = data.quienesSomos;
                     if(data.banco) document.getElementById('banco-txt').innerText = data.banco;
                     if(data.tarjeta) document.getElementById('tarjeta-txt').innerText = data.tarjeta;
                     if(data.titular) document.getElementById('titular-txt').innerText = data.titular;
-                    
-                    // Nuevos campos dinámicos editables desde el admin
-                    if(data.tiempoElaboracion) {
-                        document.getElementById('lbl-tiempo').innerText = `⏱️ Tiempo de elaboración: ${data.tiempoElaboracion}`;
+                    if(data.tiempoElaboracion) document.getElementById('lbl-tiempo').innerText = `⏱️️ Tiempo de elaboración: ${data.tiempoElaboracion}`;
+                    if(data.ubicacionTexto) { document.getElementById('lbl-ubicacion').innerText = `📍 ${data.ubicacionTexto}`; document.getElementById('lbl-ubicacion-texto').innerText = data.ubicacionTexto; }
+                    if(data.horarios) document.getElementById('lbl-horarios').innerHTML = data.horarios;
+                    if(data.instagram) document.getElementById('link-instagram').href = data.instagram;
+                    if(data.tiktok) document.getElementById('link-tiktok').href = data.tiktok;
+
+                    // Renderizar Materiales Dinámicos
+                    if (data.materiales && data.materiales.length > 0) {
+                        document.getElementById('materiales-container').innerHTML = data.materiales.map(m => `
+                            <div class="material-item"><b>${m.titulo || ''}</b><span>${m.descripcion || ''}</span></div>
+                        `).join('');
                     }
-                    if(data.ubicacionTexto) {
-                        document.getElementById('lbl-ubicacion').innerText = `📍 ${data.ubicacionTexto}`;
-                        document.getElementById('lbl-ubicacion-texto').innerText = data.ubicacionTexto;
-                    }
-                    if(data.horarios) {
-                        document.getElementById('lbl-horarios').innerHTML = data.horarios;
-                    }
-                    if(data.instagram) {
-                        document.getElementById('link-instagram').href = data.instagram;
-                    }
-                    if(data.tiktok) {
-                        document.getElementById('link-tiktok').href = data.tiktok;
+
+                    // Renderizar Galería Dinámica
+                    if (data.galeria && data.galeria.length > 0) {
+                        document.getElementById('galeria-container').innerHTML = data.galeria.map(url => `
+                            <img src="${url || 'https://via.placeholder.com/400'}" alt="Trabajo Galería" class="galeria-img" onerror="this.src='https://via.placeholder.com/400?text=Sin+Imagen'">
+                        `).join('');
                     }
                 }
-            } catch (e) {
-                console.log("Usando datos locales predeterminados");
-            }
+            } catch (e) { console.log("Usando datos locales predeterminados"); }
         }
 
-        // Acordeón FAQ
         function toggleFaq(element) {
             element.classList.toggle('activo');
             const span = element.querySelector('.faq-pregunta span:last-child');
             span.innerText = element.classList.contains('activo') ? '-' : '+';
         }
 
-        function abrirCatalogo() {
-            document.getElementById('vista-inicio').style.display = 'none';
-            document.getElementById('vista-catalogo').classList.add('catalogo-activo');
-            window.scrollTo(0, 0);
-        }
-
-        function cerrarCatalogo() {
-            document.getElementById('vista-catalogo').classList.remove('catalogo-activo');
-            document.getElementById('vista-inicio').style.display = 'block';
-            window.scrollTo(0, 0);
-        }
-
-        let carrito = [];
-        let productosGlobal = [];
+        function abrirCatalogo() { document.getElementById('vista-inicio').style.display = 'none'; document.getElementById('vista-catalogo').classList.add('catalogo-activo'); window.scrollTo(0, 0); }
+        function cerrarCatalogo() { document.getElementById('vista-catalogo').classList.remove('catalogo-activo'); document.getElementById('vista-inicio').style.display = 'block'; window.scrollTo(0, 0); }
 
         async function cargarCatalogo() {
             try {
-                const res = await fetch('/api/productos');
-                productosGlobal = await res.json();
+                const res = await fetch('/api/productos'); productosGlobal = await res.json();
                 const container = document.getElementById('catalogo');
-
-                if (productosGlobal.length === 0) {
-                    container.innerHTML = '<p>No hay productos disponibles.</p>'; return;
-                }
-
+                if (productosGlobal.length === 0) { container.innerHTML = '<p>No hay productos disponibles.</p>'; return; }
                 container.innerHTML = productosGlobal.map((p, index) => {
-                    const precioBase = p.precio || (p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0);
-                    const rangosHTML = p.rangos && p.rangos.length > 0 ? 
-                        p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') :
-                        `<li>Precio estándar: <b>$${p.precio || 0} c/u</b></li>`;
-
+                    const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : (p.precio || 0);
+                    const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') : `<li>Precio: <b>$${precioBase} c/u</b></li>`;
                     return `
                         <div class="card">
                             <div>
-                                <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Sin+Imagen'">
+                                <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
                                 <h3>${p.nombre}</h3>
                                 <p style="font-size: 12px; color: #64748b; margin: 4px 0 8px 0;">${p.descripcion || ''}</p>
                                 <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
@@ -348,9 +264,9 @@
                             <div>
                                 <div class="form-mini">
                                     <div><label>Cantidad:</label><input type="number" id="cant-${index}" value="1" min="1" oninput="actualizarPrecioCard(${index})"></div>
-                                    <div><label>✍️ Texto / Frase:</label><input type="text" id="texto-${index}" placeholder="Ej. Nombre o dedicatoria"></div>
-                                    <div><label>🎨 Estilo / Color:</label><input type="text" id="estilo-${index}" placeholder="Ej. Negro mate"></div>
-                                    <div><label>🖼️ Logo o Diseño:</label><input type="file" id="archivo-${index}" accept="image/*" onchange="convertirArchivo(event, ${index})"><input type="hidden" id="base64-${index}"></div>
+                                    <div><label>✍️ Texto:</label><input type="text" id="texto-${index}" placeholder="Ej. Nombre"></div>
+                                    <div><label>🎨 Estilo:</label><input type="text" id="estilo-${index}" placeholder="Ej. Mate"></div>
+                                    <div><label>🖼️ Logo:</label><input type="file" id="archivo-${index}" accept="image/*" onchange="convertirArchivo(event, ${index})"><input type="hidden" id="base64-${index}"></div>
                                 </div>
                                 <div class="precio-preview" id="preview-precio-${index}">$${precioBase.toFixed(2)}</div>
                                 <button class="btn-agregar" onclick="agregarAlCarrito(${index})">+ Agregar al Carrito</button>
@@ -358,9 +274,7 @@
                         </div>
                     `;
                 }).join('');
-            } catch (err) {
-                document.getElementById('catalogo').innerHTML = '<p style="color:red;">Error al cargar tienda.</p>';
-            }
+            } catch (err) { document.getElementById('catalogo').innerHTML = '<p style="color:red;">Error al cargar tienda.</p>'; }
         }
 
         function convertirArchivo(event, index) {
@@ -376,15 +290,11 @@
             if (producto.rangos && producto.rangos.length > 0) {
                 const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
                 let rangoAplicable = rangos[0];
-                for (let r of rangos) {
-                    if (cantidad >= r.min && cantidad <= r.max) { rangoAplicable = r; break; } 
-                    else if (cantidad > r.max) { rangoAplicable = r; }
-                }
+                for (let r of rangos) { if (cantidad >= r.min && cantidad <= r.max) { rangoAplicable = r; break; } else if (cantidad > r.max) { rangoAplicable = r; } }
                 return { precioUnitario: rangoAplicable.precio, total: cantidad * rangoAplicable.precio };
-            } else {
-                const precio = producto.precio || 0;
-                return { precioUnitario: precio, total: cantidad * precio };
             }
+            const precio = producto.precio || 0;
+            return { precioUnitario: precio, total: cantidad * precio };
         }
 
         function actualizarPrecioCard(index) {
@@ -395,15 +305,13 @@
         }
 
         function mostrarToast(mensaje) {
-            const toast = document.getElementById('toast');
-            toast.innerText = mensaje; toast.style.display = 'block'; toast.style.opacity = '1';
+            const toast = document.getElementById('toast'); toast.innerText = mensaje; toast.style.display = 'block'; toast.style.opacity = '1';
             setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => { toast.style.display = 'none'; }, 300); }, 2000);
         }
 
         function mostrarDatosPago() {
             const metodo = document.getElementById('cli-metodo-pago').value;
-            const box = document.getElementById('info-pago-div');
-            if (metodo.includes('Tarjeta')) { box.style.display = 'block'; } else { box.style.display = 'none'; }
+            document.getElementById('info-pago-div').style.display = metodo.includes('Tarjeta') ? 'block' : 'none';
         }
 
         function agregarAlCarrito(index) {
@@ -412,28 +320,23 @@
             const texto = document.getElementById(`texto-${index}`).value.trim();
             const estilo = document.getElementById(`estilo-${index}`).value.trim();
             const diseno = document.getElementById(`base64-${index}`).value;
-
             let especificaciones = '';
             if (texto) especificaciones += `Texto: "${texto}" `;
             if (estilo) especificaciones += `| Estilo: ${estilo}`;
             if (!especificaciones) especificaciones = 'Estándar';
 
-            const indexExistente = carrito.findIndex(item => item.id === producto.id && item.personalizacion === especificaciones);
+            const indexExistente = carrito.findIndex(item => item.id === (producto.id || producto._id) && item.personalizacion === especificaciones);
             let nuevaCantidadTotal = cantidadAgregada;
-            if (indexExistente !== -1) { nuevaCantidadTotal += carrito[indexExistente].cantidad; }
+            if (indexExistente !== -1) nuevaCantidadTotal += carrito[indexExistente].cantidad;
 
             const calculo = calcularSubtotalProducto(producto, nuevaCantidadTotal);
-
             if (indexExistente !== -1) {
                 carrito[indexExistente].cantidad = nuevaCantidadTotal;
                 carrito[indexExistente].subtotal = calculo.total;
             } else {
-                carrito.push({
-                    id: producto.id || producto._id, nombre: producto.nombre, cantidad: cantidadAgregada, variante: estilo || 'Estándar', personalizacion: especificaciones, diseno: diseno, subtotal: calculo.total
-                });
+                carrito.push({ id: producto.id || producto._id, nombre: producto.nombre, cantidad: cantidadAgregada, variante: estilo || 'Estándar', personalizacion: especificaciones, diseno: diseno, subtotal: calculo.total });
             }
-            renderizarCarrito();
-            mostrarToast(`¡${producto.nombre} agregado!`);
+            renderizarCarrito(); mostrarToast(`¡${producto.nombre} agregado!`);
         }
 
         function cambiarCantidad(idx, delta) {
@@ -442,17 +345,13 @@
             if (!producto) return;
             const nuevaCantidad = item.cantidad + delta;
             if (nuevaCantidad <= 0) { eliminarDelCarrito(idx); return; }
-            const calculo = calcularSubtotalProducto(producto, nuevaCantidad);
-            item.cantidad = nuevaCantidad; item.subtotal = calculo.total;
+            item.cantidad = nuevaCantidad; item.subtotal = calcularSubtotalProducto(producto, nuevaCantidad).total;
             renderizarCarrito();
         }
 
         function renderizarCarrito() {
             const lista = document.getElementById('carrito-lista');
-            if (carrito.length === 0) {
-                lista.innerHTML = '<p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>';
-                document.getElementById('cart-total-general').innerText = 'Total: $0.00'; return;
-            }
+            if (carrito.length === 0) { lista.innerHTML = '<p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>'; document.getElementById('cart-total-general').innerText = 'Total: $0.00'; return; }
             let totalGeneral = 0;
             lista.innerHTML = carrito.map((item, idx) => {
                 totalGeneral += item.subtotal;
@@ -460,13 +359,9 @@
                     <div class="cart-item">
                         <div class="cart-item-info">
                             <b>${item.nombre}</b><br><span style="color:#64748b; font-size:11px;">${item.personalizacion}</span>
-                            <div class="cart-controls">
-                                <button onclick="cambiarCantidad(${idx}, -1)">-</button><span style="font-weight:600;">${item.cantidad} pzas</span><button onclick="cambiarCantidad(${idx}, 1)">+</button>
-                            </div>
+                            <div class="cart-controls"><button onclick="cambiarCantidad(${idx}, -1)">-</button><span style="font-weight:600;">${item.cantidad} pzas</span><button onclick="cambiarCantidad(${idx}, 1)">+</button></div>
                         </div>
-                        <div style="text-align: right;">
-                            <b>$${item.subtotal.toFixed(2)}</b><br><button onclick="eliminarDelCarrito(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:11px; padding:0; margin-top:4px;">Eliminar</button>
-                        </div>
+                        <div style="text-align: right;"><b>$${item.subtotal.toFixed(2)}</b><br><button onclick="eliminarDelCarrito(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:11px; padding:0; margin-top:4px;">Eliminar</button></div>
                     </div>`;
             }).join('');
             document.getElementById('cart-total-general').innerText = `Total: $${totalGeneral.toFixed(2)}`;
@@ -479,71 +374,44 @@
             const nombre = document.getElementById('cli-nombre').value.trim();
             const telefono = document.getElementById('cli-telefono').value.trim();
             const metodoPago = document.getElementById('cli-metodo-pago').value;
-
             if (!nombre || !telefono) { alert('Ingresa tu Nombre y Teléfono.'); return; }
             const totalGeneral = carrito.reduce((acc, item) => acc + item.subtotal, 0);
 
-            const datosPedido = { cliente: { nombre, telefono }, productos: carrito, total: totalGeneral, metodoPago: metodoPago };
-
             try {
-                const res = await fetch('/api/pedido', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datosPedido) });
+                const res = await fetch('/api/pedido', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cliente: { nombre, telefono }, productos: carrito, total: totalGeneral, metodoPago: metodoPago }) });
                 const data = await res.json();
-
                 if (data.exito) {
-                    let detalleProductos = carrito.map(i => `• ${i.cantidad}x ${i.nombre} (${i.personalizacion}) - $${i.subtotal.toFixed(2)}`).join('\n');
-                    let textoWp = `Hola Kromantra, acabo de realizar mi pedido oficial.\n\n*Folio:* #${data.folio}\n*Cliente:* ${nombre}\n*Teléfono:* ${telefono}\n*Método de Pago:* ${metodoPago}\n\n*Productos:*\n${detalleProductos}\n\n*Total a pagar: $${totalGeneral.toFixed(2)}*`;
-                    
-                    if (metodoPago.includes('Tarjeta')) { textoWp += `\n\n💳 *Pago por transferencia/tarjeta seleccionado.*\n(Adjunto mi comprobante de pago).`; }
-
-                    const mensajeWa = encodeURIComponent(textoWp);
-                    if (confirm(`¡Pedido #${data.folio} guardado!\n\n¿Deseas abrir WhatsApp para enviar el detalle al taller?`)) {
-                        window.open(`https://wa.me/${configGlobal.whatsapp}?text=${mensajeWa}`, '_blank');
+                    let detalle = carrito.map(i => `• ${i.cantidad}x ${i.nombre} (${i.personalizacion}) - $${i.subtotal.toFixed(2)}`).join('\n');
+                    let textoWp = `Hola Kromantra, acabo de realizar mi pedido.\n\n*Folio:* #${data.folio}\n*Cliente:* ${nombre}\n*Teléfono:* ${telefono}\n*Método de Pago:* ${metodoPago}\n\n*Productos:*\n${detalle}\n\n*Total:* $${totalGeneral.toFixed(2)}`;
+                    if (metodoPago.includes('Tarjeta')) textoWp += `\n\n💳 *Pago por transferencia seleccionado.*`;
+                    if (confirm(`¡Pedido #${data.folio} guardado!\n¿Deseas abrir WhatsApp para enviarlo al taller?`)) {
+                        window.open(`https://wa.me/${configGlobal.whatsapp}?text=${encodeURIComponent(textoWp)}`, '_blank');
                     }
                     carrito = []; renderizarCarrito();
                     document.getElementById('cli-nombre').value = ''; document.getElementById('cli-telefono').value = '';
-                    document.getElementById('info-pago-div').style.display = 'none';
-                } else { alert('Error al guardar el pedido.'); }
-            } catch (e) { alert('Error de conexión con el servidor.'); }
+                } else { alert('Error al guardar pedido.'); }
+            } catch (e) { alert('Error de conexión.'); }
         }
 
-        // Consultar pedido desde la portada
         async function consultarPedidoInicio() {
             const q = document.getElementById('inputRastreoInicio').value.trim();
             const resDiv = document.getElementById('resultadoRastreoInicio');
             if (!q) { resDiv.innerHTML = "<span style='color:#fca5a5;'>Escribe tu folio o teléfono.</span>"; return; }
-
-            const res = await fetch(`/api/rastreo?q=${q}`);
-            const data = await res.json();
-            if (data.length === 0) { resDiv.innerHTML = "<span style='color:#fca5a5;'>No se encontró ningún pedido.</span>"; return; }
-            resDiv.innerHTML = data.map(p => `
-                <div style="background:rgba(255,255,255,0.2); padding:8px; border-radius:6px; margin-top:5px; border:1px solid rgba(255,255,255,0.4); text-align:left;">
-                    <b>Folio #${p.folio}</b> | Estatus: <b style="color:#fde047;">${p.estado}</b> | Pago: ${p.estadoPago}
-                </div>
-            `).join('');
+            const res = await fetch(`/api/rastreo?q=${q}`); const data = await res.json();
+            if (data.length === 0) { resDiv.innerHTML = "<span style='color:#fca5a5;'>No se encontró el pedido.</span>"; return; }
+            resDiv.innerHTML = data.map(p => `<div style="background:rgba(255,255,255,0.2); padding:8px; border-radius:6px; margin-top:5px; text-align:left;"><b>Folio #${p.folio}</b> | Estatus: <b style="color:#fde047;">${p.estado}</b></div>`).join('');
         }
 
-        // Consultar pedido desde la sección de catálogo
         async function consultarPedido() {
             const q = document.getElementById('inputRastreo').value.trim();
             const resDiv = document.getElementById('resultadoRastreo');
             if (!q) { resDiv.innerHTML = "<p style='color:red;'>Escribe tu folio o teléfono.</p>"; return; }
-
-            const res = await fetch(`/api/rastreo?q=${q}`);
-            const data = await res.json();
-            if (data.length === 0) { resDiv.innerHTML = "<p style='color:red;'>No se encontró ningún pedido.</p>"; return; }
-            resDiv.innerHTML = data.map(p => `
-                <div style="background:#f1f5f9; padding:10px; border-radius:6px; margin-top:10px; border:1px solid #cbd5e1; font-size:13px;">
-                    <b>Folio #${p.folio}</b> - Cliente: ${p.cliente.nombre}<br>
-                    Estatus: <b style="color:#2563eb;">${p.estado}</b> | Pago: ${p.estadoPago}
-                </div>
-            `).join('');
+            const res = await fetch(`/api/rastreo?q=${q}`); const data = await res.json();
+            if (data.length === 0) { resDiv.innerHTML = "<p style='color:red;'>No se encontró el pedido.</p>"; return; }
+            resDiv.innerHTML = data.map(p => `<div style="background:#f1f5f9; padding:10px; border-radius:6px; margin-top:10px; font-size:13px;"><b>Folio #${p.folio}</b> - Estatus: <b style="color:#2563eb;">${p.estado}</b></div>`).join('');
         }
 
-        // Inicializar al cargar la página
-        window.addEventListener('DOMContentLoaded', () => {
-            cargarConfiguracion();
-            cargarCatalogo();
-        });
+        window.addEventListener('DOMContentLoaded', () => { cargarConfiguracion(); cargarCatalogo(); });
     </script>
 </body>
 </html>
