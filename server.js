@@ -148,15 +148,23 @@ app.delete('/api/pedidos/:folio', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// 4. Rastreo
+// 4. Rastreo inteligente (Busca por folio, teléfono o nombre)
 app.get('/api/rastreo', async (req, res) => {
     try {
         const q = req.query.q;
-        const query = isNaN(q) ? { "cliente.telefono": new RegExp(q, 'i') } : { folio: Number(q) };
-        const pedidos = await Pedido.find(query);
+        if (!q) return res.json([]);
+        
+        const numQ = Number(q);
+        let condiciones = [
+            { "cliente.telefono": new RegExp(q, 'i') },
+            { "cliente.nombre": new RegExp(q, 'i') }
+        ];
+        
+        if (!isNaN(numQ)) {
+            condiciones.push({ folio: numQ });
+        }
+        
+        const pedidos = await Pedido.find({ $or: condiciones });
         res.json(pedidos);
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
