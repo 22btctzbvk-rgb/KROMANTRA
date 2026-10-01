@@ -4,18 +4,18 @@ const path = require('path');
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname)));
 
 // Configura tu conexión a MongoDB Atlas
 const mongoUrl = process.env.MONGO_URI || "mongodb+srv://angelvalderrama944_db_user:UAT5y3u0Jqzbd1mQ@cluster0.xlybp0s.mongodb.net";
-const dbName = "kromantra";
+const dbName = "Prueba"; // Apunta a la base de datos donde tienes tus productos y pedidos reales
 let db;
 
 MongoClient.connect(mongoUrl)
     .then(client => {
         db = client.db(dbName);
         console.log("Conectado exitosamente a MongoDB Atlas");
-        const PORT = process.env.PORT || 3000;
+        const PORT = process.env.PORT || 10000;
         app.listen(PORT, () => {
             console.log(`Servidor corriendo en el puerto ${PORT}`);
         });
