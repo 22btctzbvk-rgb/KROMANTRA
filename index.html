@@ -94,7 +94,7 @@
 
     <div class="announcement-bar">
         <span id="lbl-tiempo">⏱️ Tiempo de elaboración: 3 a 4 días hábiles</span>
-        <span id="lbl-ubicacion">📍 Recogida directa en Taller (Zona Tlalnepantla)</span>
+        <span id="lbl-ubicacion">📍 Recogida directa en Zona Tlalnepantla</span>
     </div>
 
     <div id="vista-inicio">
@@ -115,7 +115,7 @@
         <div class="info-container">
             <div class="info-card">
                 <h2>👋 Nuestra Esencia</h2>
-                <p id="lbl-quienes" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Somos un taller dedicado a crear piezas con alta precisión y detalle.</p>
+                <p id="lbl-quienes" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Somos un negocio dedicado a crear piezas personalizadas con alta precisión y detalle.</p>
             </div>
 
             <!-- Materiales y Precisión Dinámicos -->
@@ -135,10 +135,10 @@
             </div>
 
             <div class="info-card">
-                <h2>📍 Ubicación y Horarios de Taller</h2>
+                <h2>📍 Ubicación y Horarios de Atención</h2>
                 <div class="horarios-box">
                     <div><b>🕒 Horarios de Atención:</b><span id="lbl-horarios">Lunes a Sábado: 10:00 am - 7:00 pm</span></div>
-                    <div><b>📍 Recogida en Taller:</b><span id="lbl-ubicacion-texto">Ubicados en Tlalnepantla, Estado de México.</span></div>
+                    <div><b>📍 Recogida de Pedidos:</b><span id="lbl-ubicacion-texto">Ubicados en Zona Tlalnepantla, Estado de México. Te notificaremos en cuanto tu pedido esté listo.</span></div>
                 </div>
             </div>
 
@@ -150,7 +150,7 @@
                 </div>
                 <div class="faq-item" onclick="toggleFaq(this)">
                     <div class="faq-pregunta"><span>¿Cuáles son los métodos de pago?</span> <span>+</span></div>
-                    <div class="faq-respuesta">Efectivo en taller o tarjeta/transferencia BBVA.</div>
+                    <div class="faq-respuesta">Efectivo al recoger o tarjeta/transferencia BBVA.</div>
                 </div>
                 <div class="faq-item" onclick="toggleFaq(this)">
                     <div class="faq-pregunta"><span>¿Cómo subo mi diseño o logotipo personalizado?</span> <span>+</span></div>
@@ -184,7 +184,7 @@
                 <h3 style="margin: 0 0 5px 0; font-size: 13px;">👤 Datos de Contacto</h3>
                 <div><label>Nombre:</label><input type="text" id="cli-nombre"></div>
                 <div><label>Teléfono:</label><input type="text" id="cli-telefono"></div>
-                <div><label>Método de Pago:</label><select id="cli-metodo-pago" onchange="mostrarDatosPago()"><option value="Efectivo / En Taller">💵 Efectivo / En Taller</option><option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia</option></select></div>
+                <div><label>Método de Pago:</label><select id="cli-metodo-pago" onchange="mostrarDatosPago()"><option value="Efectivo / Al Recoger">💵 Efectivo / Al Recoger</option><option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia</option></select></div>
                 <div id="info-pago-div" class="info-pago-box">
                     <div style="background: white; padding: 8px; border-radius: 6px; border: 1px solid #93c5fd; font-family: monospace; font-size: 11px;">
                         <b>Banco:</b> <span id="banco-txt">BBVA</span><br>
@@ -213,20 +213,18 @@
                     if(data.banco) document.getElementById('banco-txt').innerText = data.banco;
                     if(data.tarjeta) document.getElementById('tarjeta-txt').innerText = data.tarjeta;
                     if(data.titular) document.getElementById('titular-txt').innerText = data.titular;
-                    if(data.tiempoElaboracion) document.getElementById('lbl-tiempo').innerText = `⏱️️ Tiempo de elaboración: ${data.tiempoElaboracion}`;
+                    if(data.tiempoElaboracion) document.getElementById('lbl-tiempo').innerText = `⏱ Tiempo de elaboración: ${data.tiempoElaboracion}`;
                     if(data.ubicacionTexto) { document.getElementById('lbl-ubicacion').innerText = `📍 ${data.ubicacionTexto}`; document.getElementById('lbl-ubicacion-texto').innerText = data.ubicacionTexto; }
                     if(data.horarios) document.getElementById('lbl-horarios').innerHTML = data.horarios;
                     if(data.instagram) document.getElementById('link-instagram').href = data.instagram;
                     if(data.tiktok) document.getElementById('link-tiktok').href = data.tiktok;
 
-                    // Renderizar Materiales Dinámicos
                     if (data.materiales && data.materiales.length > 0) {
                         document.getElementById('materiales-container').innerHTML = data.materiales.map(m => `
                             <div class="material-item"><b>${m.titulo || ''}</b><span>${m.descripcion || ''}</span></div>
                         `).join('');
                     }
 
-                    // Renderizar Galería Dinámica
                     if (data.galeria && data.galeria.length > 0) {
                         document.getElementById('galeria-container').innerHTML = data.galeria.map(url => `
                             <img src="${url || 'https://via.placeholder.com/400'}" alt="Trabajo Galería" class="galeria-img" onerror="this.src='https://via.placeholder.com/400?text=Sin+Imagen'">
@@ -384,7 +382,7 @@
                     let detalle = carrito.map(i => `• ${i.cantidad}x ${i.nombre} (${i.personalizacion}) - $${i.subtotal.toFixed(2)}`).join('\n');
                     let textoWp = `Hola Kromantra, acabo de realizar mi pedido.\n\n*Folio:* #${data.folio}\n*Cliente:* ${nombre}\n*Teléfono:* ${telefono}\n*Método de Pago:* ${metodoPago}\n\n*Productos:*\n${detalle}\n\n*Total:* $${totalGeneral.toFixed(2)}`;
                     if (metodoPago.includes('Tarjeta')) textoWp += `\n\n💳 *Pago por transferencia seleccionado.*`;
-                    if (confirm(`¡Pedido #${data.folio} guardado!\n¿Deseas abrir WhatsApp para enviarlo al taller?`)) {
+                    if (confirm(`¡Pedido #${data.folio} guardado!\n¿Deseas abrir WhatsApp para enviarlo?`)) {
                         window.open(`https://wa.me/${configGlobal.whatsapp}?text=${encodeURIComponent(textoWp)}`, '_blank');
                     }
                     carrito = []; renderizarCarrito();
