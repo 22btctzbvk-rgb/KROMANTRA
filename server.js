@@ -7,11 +7,11 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.static(__dirname));
 
 // Configura tu conexión a MongoDB Atlas
-const mongoUrl = process.env.MONGO_URI || "tu_cadena_de_conexion_mongodb";
+const mongoUrl = process.env.MONGO_URI || "mongodb+srv://angelvalderrama944_db_user:UAT5y3u0Jqzbd1mQ@cluster0.xlybp0s.mongodb.net";
 const dbName = "kromantra";
 let db;
 
-MongoClient.connect(mongoUrl, { useUnifiedTopology: true })
+MongoClient.connect(mongoUrl)
     .then(client => {
         db = client.db(dbName);
         console.log("Conectado exitosamente a MongoDB Atlas");
