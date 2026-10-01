@@ -109,8 +109,8 @@
 
     <!-- 1. BARRA DE AVISOS SUPERIOR -->
     <div class="announcement-bar">
-        <span>⏱️ Tiempo de elaboración: 3 a 4 días hábiles</span>
-        <span>📍 Recogida directa en Taller (Zona Tlalnepantla)</span>
+        <span id="lbl-tiempo">⏱️ Tiempo de elaboración: 3 a 4 días hábiles</span>
+        <span id="lbl-ubicacion">📍 Recogida directa en Taller (Zona Tlalnepantla)</span>
     </div>
 
     <!-- VISTA 1: PORTADA -->
@@ -168,11 +168,11 @@
                 <div class="horarios-box">
                     <div>
                         <b>🕒 Horarios de Atención:</b>
-                        Lunes a Sábado: 10:00 am - 7:00 pm<br>Domingos: Cerrado
+                        <span id="lbl-horarios">Lunes a Sábado: 10:00 am - 7:00 pm<br>Domingos: Cerrado</span>
                     </div>
                     <div>
                         <b>📍 Recogida en Taller:</b>
-                        Ubicados en Tlalnepantla, Estado de México. Te notificaremos por WhatsApp en cuanto tu pedido esté listo para pasar a recogerlo sin costo extra.
+                        <span id="lbl-ubicacion-texto">Ubicados en Tlalnepantla, Estado de México. Te notificaremos por WhatsApp en cuanto tu pedido esté listo para pasar a recogerlo sin costo extra.</span>
                     </div>
                 </div>
             </div>
@@ -199,8 +199,8 @@
                 <h2 style="border: none; margin-bottom: 10px;">¡Síguenos en Redes!</h2>
                 <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Conoce más de nuestros trabajos diarios y entregas especiales.</p>
                 <div class="social-links">
-                    <a href="https://instagram.com" target="_blank" class="btn-social">📸 Instagram</a>
-                    <a href="https://tiktok.com" target="_blank" class="btn-social">🎵 TikTok</a>
+                    <a id="link-instagram" href="https://instagram.com" target="_blank" class="btn-social">📸 Instagram</a>
+                    <a id="link-tiktok" href="https://tiktok.com" target="_blank" class="btn-social">🎵 TikTok</a>
                 </div>
             </div>
         </div>
@@ -255,10 +255,11 @@
         </div>
     </div>
 
+    <!-- SCRIPT COMPLETO DE FUNCIONALIDAD -->
     <script>
         let configGlobal = { whatsapp: '525514494333', tarjeta: '4152314063676335', titular: 'Carolina Perez Mendez', banco: 'BBVA' };
 
-        // Cargar configuración dinámica (si el admin la modificó)
+        // Cargar configuración dinámica al iniciar la página
         async function cargarConfiguracion() {
             try {
                 const res = await fetch('/api/config');
@@ -274,6 +275,24 @@
                     if(data.banco) document.getElementById('banco-txt').innerText = data.banco;
                     if(data.tarjeta) document.getElementById('tarjeta-txt').innerText = data.tarjeta;
                     if(data.titular) document.getElementById('titular-txt').innerText = data.titular;
+                    
+                    // Nuevos campos dinámicos editables desde el admin
+                    if(data.tiempoElaboracion) {
+                        document.getElementById('lbl-tiempo').innerText = `⏱️ Tiempo de elaboración: ${data.tiempoElaboracion}`;
+                    }
+                    if(data.ubicacionTexto) {
+                        document.getElementById('lbl-ubicacion').innerText = `📍 ${data.ubicacionTexto}`;
+                        document.getElementById('lbl-ubicacion-texto').innerText = data.ubicacionTexto;
+                    }
+                    if(data.horarios) {
+                        document.getElementById('lbl-horarios').innerHTML = data.horarios;
+                    }
+                    if(data.instagram) {
+                        document.getElementById('link-instagram').href = data.instagram;
+                    }
+                    if(data.tiktok) {
+                        document.getElementById('link-tiktok').href = data.tiktok;
+                    }
                 }
             } catch (e) {
                 console.log("Usando datos locales predeterminados");
@@ -313,15 +332,18 @@
                 }
 
                 container.innerHTML = productosGlobal.map((p, index) => {
-                    const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
+                    const precioBase = p.precio || (p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0);
+                    const rangosHTML = p.rangos && p.rangos.length > 0 ? 
+                        p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') :
+                        `<li>Precio estándar: <b>$${p.precio || 0} c/u</b></li>`;
+
                     return `
                         <div class="card">
                             <div>
                                 <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/300?text=Sin+Imagen'">
                                 <h3>${p.nombre}</h3>
-                                <div class="rango-box"><b>Mayoreo:</b><ul>
-                                    ${(p.rangos || []).map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('')}
-                                </ul></div>
+                                <p style="font-size: 12px; color: #64748b; margin: 4px 0 8px 0;">${p.descripcion || ''}</p>
+                                <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
                             </div>
                             <div>
                                 <div class="form-mini">
@@ -351,14 +373,18 @@
         }
 
         function calcularSubtotalProducto(producto, cantidad) {
-            if (!producto.rangos || producto.rangos.length === 0) return { precioUnitario: 0, total: 0 };
-            const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
-            let rangoAplicable = rangos[0];
-            for (let r of rangos) {
-                if (cantidad >= r.min && cantidad <= r.max) { rangoAplicable = r; break; } 
-                else if (cantidad > r.max) { rangoAplicable = r; }
+            if (producto.rangos && producto.rangos.length > 0) {
+                const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
+                let rangoAplicable = rangos[0];
+                for (let r of rangos) {
+                    if (cantidad >= r.min && cantidad <= r.max) { rangoAplicable = r; break; } 
+                    else if (cantidad > r.max) { rangoAplicable = r; }
+                }
+                return { precioUnitario: rangoAplicable.precio, total: cantidad * rangoAplicable.precio };
+            } else {
+                const precio = producto.precio || 0;
+                return { precioUnitario: precio, total: cantidad * precio };
             }
-            return { precioUnitario: rangoAplicable.precio, total: cantidad * rangoAplicable.precio };
         }
 
         function actualizarPrecioCard(index) {
@@ -403,7 +429,7 @@
                 carrito[indexExistente].subtotal = calculo.total;
             } else {
                 carrito.push({
-                    id: producto.id, nombre: producto.nombre, cantidad: cantidadAgregada, variante: estilo || 'Estándar', personalizacion: especificaciones, diseno: diseno, subtotal: calculo.total
+                    id: producto.id || producto._id, nombre: producto.nombre, cantidad: cantidadAgregada, variante: estilo || 'Estándar', personalizacion: especificaciones, diseno: diseno, subtotal: calculo.total
                 });
             }
             renderizarCarrito();
@@ -412,7 +438,7 @@
 
         function cambiarCantidad(idx, delta) {
             const item = carrito[idx];
-            const producto = productosGlobal.find(p => p.id === item.id);
+            const producto = productosGlobal.find(p => (p.id === item.id || p._id === item.id));
             if (!producto) return;
             const nuevaCantidad = item.cantidad + delta;
             if (nuevaCantidad <= 0) { eliminarDelCarrito(idx); return; }
@@ -496,26 +522,28 @@
             `).join('');
         }
 
-        // Consultar pedido desde el catálogo
+        // Consultar pedido desde la sección de catálogo
         async function consultarPedido() {
             const q = document.getElementById('inputRastreo').value.trim();
             const resDiv = document.getElementById('resultadoRastreo');
-            if (!q) { resDiv.innerHTML = "<span style='color:red;'>Escribe folio o teléfono.</span>"; return; }
+            if (!q) { resDiv.innerHTML = "<p style='color:red;'>Escribe tu folio o teléfono.</p>"; return; }
 
             const res = await fetch(`/api/rastreo?q=${q}`);
             const data = await res.json();
-            if (data.length === 0) { resDiv.innerHTML = "<span style='color:#d97706;'>No se encontró el pedido.</span>"; return; }
+            if (data.length === 0) { resDiv.innerHTML = "<p style='color:red;'>No se encontró ningún pedido.</p>"; return; }
             resDiv.innerHTML = data.map(p => `
-                <div style="background:#f1f5f9; padding:8px; border-radius:6px; margin-top:5px; border:1px solid #cbd5e1;">
-                    <b>Folio #${p.folio}</b> | Estatus: <span style="color:var(--primary); font-weight:bold;">${p.estado}</span> | Pago: ${p.estadoPago}
+                <div style="background:#f1f5f9; padding:10px; border-radius:6px; margin-top:10px; border:1px solid #cbd5e1; font-size:13px;">
+                    <b>Folio #${p.folio}</b> - Cliente: ${p.cliente.nombre}<br>
+                    Estatus: <b style="color:#2563eb;">${p.estado}</b> | Pago: ${p.estadoPago}
                 </div>
             `).join('');
         }
 
-        // Cargas iniciales
-        cargarConfiguracion();
-        cargarCatalogo();
-        setInterval(() => { cargarCatalogo(); }, 10000);
+        // Inicializar al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            cargarConfiguracion();
+            cargarCatalogo();
+        });
     </script>
 </body>
 </html>
