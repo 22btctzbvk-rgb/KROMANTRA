@@ -55,7 +55,7 @@
 </head>
 <body>
     <script>
-        // Sistema de PIN Inteligente: Te lo pide una sola vez por dispositivo/navegador (PIN por defecto: 4321)
+        // Sistema de PIN Inteligente (PIN por defecto: 4321)
         (function verificarAccesoAdmin() {
             const PIN_SECRETO = '4321'; 
             const pinGuardado = localStorage.getItem('kromantra_admin_ok');
@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        <!-- NUEVA SECCIÓN: CONFIGURACIÓN GENERAL Y TEXTOS -->
+        <!-- SECCIÓN: CONFIGURACIÓN GENERAL Y TEXTOS EDITABLES -->
         <div class="card">
             <h2>⚙️ Configuración General y Textos del Negocio</h2>
             <form onsubmit="guardarConfig(event)">
@@ -108,10 +108,12 @@
                         <input type="text" id="cfg-subtitulo" required>
                     </div>
                 </div>
+
                 <div style="margin-bottom: 12px;">
                     <label>Texto "Quiénes Somos / Nuestra Esencia":</label>
                     <textarea id="cfg-quienes" rows="3" required></textarea>
                 </div>
+
                 <div class="form-grid-3">
                     <div>
                         <label>WhatsApp (Ej. 5255...):</label>
@@ -126,10 +128,41 @@
                         <input type="text" id="cfg-titular" required>
                     </div>
                 </div>
-                <div style="margin-bottom: 15px;">
+
+                <div style="margin-bottom: 12px;">
                     <label>Número de Tarjeta (16 dígitos):</label>
                     <input type="text" id="cfg-tarjeta" required>
                 </div>
+
+                <div class="section-sub">Textos, Horarios y Redes de la Página Principal</div>
+
+                <div class="form-grid">
+                    <div>
+                        <label>Tiempo de Elaboración:</label>
+                        <input type="text" id="cfg-tiempo" placeholder="Ej: 3 a 4 días hábiles">
+                    </div>
+                    <div>
+                        <label>Texto de Ubicación / Recogida:</label>
+                        <input type="text" id="cfg-ubicacion" placeholder="Ej: Recogida directa en Taller (Zona Tlalnepantla)">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label>Horarios de Atención:</label>
+                    <input type="text" id="cfg-horarios" placeholder="Ej: Lunes a Sábado: 10:00 am - 7:00 pm">
+                </div>
+
+                <div class="form-grid" style="margin-bottom: 15px;">
+                    <div>
+                        <label>Enlace de Instagram:</label>
+                        <input type="text" id="cfg-instagram" placeholder="https://instagram.com/tu_usuario">
+                    </div>
+                    <div>
+                        <label>Enlace de TikTok:</label>
+                        <input type="text" id="cfg-tiktok" placeholder="https://tiktok.com/@tu_usuario">
+                    </div>
+                </div>
+
                 <button type="submit" style="background: #2563eb;">Guardar Configuración General 💾</button>
             </form>
         </div>
@@ -229,6 +262,13 @@
                     document.getElementById('cfg-banco').value = data.banco || '';
                     document.getElementById('cfg-tarjeta').value = data.tarjeta || '';
                     document.getElementById('cfg-titular').value = data.titular || '';
+                    
+                    // Nuevos campos de texto de la página principal
+                    document.getElementById('cfg-tiempo').value = data.tiempoElaboracion || '';
+                    document.getElementById('cfg-ubicacion').value = data.ubicacionTexto || '';
+                    document.getElementById('cfg-horarios').value = data.horarios || '';
+                    document.getElementById('cfg-instagram').value = data.instagram || '';
+                    document.getElementById('cfg-tiktok').value = data.tiktok || '';
                 }
             } catch (e) {
                 console.error("Error al cargar configuración");
@@ -244,7 +284,12 @@
                 whatsapp: document.getElementById('cfg-whatsapp').value.trim(),
                 banco: document.getElementById('cfg-banco').value.trim(),
                 tarjeta: document.getElementById('cfg-tarjeta').value.trim(),
-                titular: document.getElementById('cfg-titular').value.trim()
+                titular: document.getElementById('cfg-titular').value.trim(),
+                tiempoElaboracion: document.getElementById('cfg-tiempo').value.trim(),
+                ubicacionTexto: document.getElementById('cfg-ubicacion').value.trim(),
+                horarios: document.getElementById('cfg-horarios').value.trim(),
+                instagram: document.getElementById('cfg-instagram').value.trim(),
+                tiktok: document.getElementById('cfg-tiktok').value.trim()
             };
 
             try {
@@ -255,7 +300,7 @@
                 });
                 const data = await res.json();
                 if (data.exito) {
-                    alert('¡Configuración general guardada con éxito!');
+                    alert('¡Configuración general y textos guardados con éxito!');
                 } else {
                     alert('Error al guardar la configuración.');
                 }
@@ -264,28 +309,26 @@
             }
         }
 
-        // Alerta sonora mejorada (Doble tono / Beep-Beep)
+        // Alerta sonora mejorada
         function reproducirAlertaSonora() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                // Primer tono
                 const osc1 = audioCtx.createOscillator();
                 const gain1 = audioCtx.createGain();
                 osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc1.frequency.setValueAtTime(587.33, audioCtx.currentTime);
                 gain1.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 osc1.connect(gain1);
                 gain1.connect(audioCtx.destination);
                 osc1.start();
                 osc1.stop(audioCtx.currentTime + 0.15);
 
-                // Segundo tono más agudo
                 setTimeout(() => {
                     const osc2 = audioCtx.createOscillator();
                     const gain2 = audioCtx.createGain();
                     osc2.type = 'sine';
-                    osc2.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+                    osc2.frequency.setValueAtTime(880, audioCtx.currentTime);
                     gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
                     osc2.connect(gain2);
                     gain2.connect(audioCtx.destination);
@@ -456,8 +499,8 @@
             const texto = document.getElementById('buscador').value.toLowerCase();
             let filtrados = globalPedidos.filter(p => {
                 const coincideTexto = p.cliente.nombre.toLowerCase().includes(texto) || 
-                                      p.cliente.telefono.toLowerCase().includes(texto) ||
-                                      String(p.folio).includes(texto);
+                                    p.cliente.telefono.toLowerCase().includes(texto) ||
+                                    String(p.folio).includes(texto);
                 const coincideEstado = (filtroActual === 'todos' || p.estado === filtroActual);
                 return coincideTexto && coincideEstado;
             });
