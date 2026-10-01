@@ -106,11 +106,14 @@
                 <div style="margin-bottom: 12px;"><label>Número de Tarjeta:</label><input type="text" id="cfg-tarjeta" required></div>
 
                 <div class="section-sub">Textos, Horarios y Redes de la Página Principal</div>
-                <div class="form-grid">
-                    <div><label>Tiempo de Elaboración:</label><input type="text" id="cfg-tiempo" placeholder="Ej: 3 a 4 días hábiles"></div>
-                    <div><label>Texto de Ubicación / Recogida:</label><input type="text" id="cfg-ubicacion" placeholder="Ej: Recogida directa en Zona Tlalnepantla"></div>
+                <div style="margin-bottom: 12px;">
+                    <label>Tiempo de Elaboración:</label>
+                    <input type="text" id="cfg-tiempo" placeholder="Ej: 3 a 4 días hábiles">
                 </div>
-                <div style="margin-bottom: 12px;"><label>Horarios de Atención:</label><input type="text" id="cfg-horarios" placeholder="Ej: Lunes a Sábado: 10:00 am - 7:00 pm"></div>
+                <div style="margin-bottom: 12px;">
+                    <label>Horarios de Atención:</label>
+                    <input type="text" id="cfg-horarios" placeholder="Ej: Lunes a Sábado: 10:00 am - 7:00 pm">
+                </div>
                 <div class="form-grid" style="margin-bottom: 15px;">
                     <div><label>Enlace de Instagram:</label><input type="text" id="cfg-instagram"></div>
                     <div><label>Enlace de TikTok:</label><input type="text" id="cfg-tiktok"></div>
@@ -203,7 +206,6 @@
                     document.getElementById('cfg-tarjeta').value = data.tarjeta || '';
                     document.getElementById('cfg-titular').value = data.titular || '';
                     document.getElementById('cfg-tiempo').value = data.tiempoElaboracion || '';
-                    document.getElementById('cfg-ubicacion').value = data.ubicacionTexto || '';
                     document.getElementById('cfg-horarios').value = data.horarios || '';
                     document.getElementById('cfg-instagram').value = data.instagram || '';
                     document.getElementById('cfg-tiktok').value = data.tiktok || '';
@@ -264,7 +266,6 @@
                 tarjeta: document.getElementById('cfg-tarjeta').value.trim(),
                 titular: document.getElementById('cfg-titular').value.trim(),
                 tiempoElaboracion: document.getElementById('cfg-tiempo').value.trim(),
-                ubicacionTexto: document.getElementById('cfg-ubicacion').value.trim(),
                 horarios: document.getElementById('cfg-horarios').value.trim(),
                 instagram: document.getElementById('cfg-instagram').value.trim(),
                 tiktok: document.getElementById('cfg-tiktok').value.trim(),
