@@ -7,7 +7,8 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Permitir imágenes en Base64 grandes
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static(path.join(__dirname))); // Sirve archivos estáticos (HTML, imágenes, etc.)
 
 // Conexión a MongoDB Atlas
@@ -28,7 +29,9 @@ const pedidoSchema = new mongoose.Schema({
     productos: Array,
     total: Number,
     estado: { type: String, default: 'Pendiente' },
-    fecha: { type: Date, default: Date.now }
+    metodoPago: String,
+    estadoPago: { type: String, default: 'Pendiente' },
+    fecha: { type: String, default: () => new Date().toLocaleString() }
 });
 const Pedido = mongoose.model('Pedido', pedidoSchema);
 
@@ -36,24 +39,97 @@ const productoSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
     nombre: String,
     imagen: String,
-    precios: Object
+    rangos: Array
 });
 const Producto = mongoose.model('Producto', productoSchema);
 
-// ==================== RUTAS DE PEDIDOS ====================
+const configSchema = new mongoose.Schema({
+    key: { type: String, unique: true, default: 'main' },
+    titulo: String,
+    subtitulo: String,
+    quienesSomos: String,
+    whatsapp: String,
+    banco: String,
+    tarjeta: String,
+    titular: String,
+    tiempoElaboracion: String,
+    horarios: String,
+    instagram: String,
+    tiktok: String,
+    materiales: Array,
+    galeria: Array
+});
+const Config = mongoose.model('Config', configSchema);
 
-// 1. Obtener todos los pedidos (Panel de Administración)
+// ==================== RUTAS DE CONFIGURACIÓN ====================
+app.get('/api/config', async (req, res) => {
+    try {
+        const cfg = await Config.findOne({ key: 'main' });
+        res.json(cfg || {});
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/config', async (req, res) => {
+    try {
+        await Config.findOneAndUpdate({ key: 'main' }, { ...req.body, key: 'main' }, { upsert: true, new: true });
+        res.json({ exito: true });
+    } catch (err) {
+        res.status(500).json({ exito: false, error: err.message });
+    }
+});
+
+// ==================== RUTAS DE PRODUCTOS ====================
+app.get('/api/productos', async (req, res) => {
+    try {
+        const productos = await Producto.find();
+        res.json(productos);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/productos', async (req, res) => {
+    try {
+        const nuevo = new Producto(req.body);
+        await nuevo.save();
+        res.json({ exito: true });
+    } catch (err) {
+        res.status(500).json({ exito: false, error: err.message });
+    }
+});
+
+app.put('/api/productos/:id', async (req, res) => {
+    try {
+        await Producto.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
+        res.json({ exito: true });
+    } catch (err) {
+        res.status(500).json({ exito: false, error: err.message });
+    }
+});
+
+app.delete('/api/productos/:id', async (req, res) => {
+    try {
+        await Producto.findOneAndDelete({ id: req.params.id });
+        res.json({ exito: true });
+    } catch (err) {
+        res.status(500).json({ exito: false, error: err.message });
+    }
+});
+
+// ==================== RUTAS DE PEDIDOS ====================
 app.get('/api/pedidos', async (req, res) => {
     try {
-        const pedidos = await Pedido.find().sort({ fecha: -1 });
+        const pedidos = await Pedido.find().sort({ folio: -1 });
         res.json(pedidos);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// 2. Crear un nuevo pedido (Tienda Pública)
-app.post('/api/pedidos', async (req, res) => {
+// Compatible tanto con /api/pedidos (tienda) como /api/pedido
+app.post(['/api/pedidos', '/api/pedido'], async (req, res) => {
     try {
         const ultimoPedido = await Pedido.findOne().sort({ folio: -1 });
         const nuevoFolio = ultimoPedido && ultimoPedido.folio ? ultimoPedido.folio + 1 : 1001;
@@ -63,31 +139,36 @@ app.post('/api/pedidos', async (req, res) => {
             cliente: req.body.cliente,
             productos: req.body.productos,
             total: req.body.total,
+            metodoPago: req.body.metodoPago,
             estado: req.body.estado || 'Pendiente'
         });
 
         const guardado = await nuevoPedido.save();
-        res.status(201).json(guardado);
+        res.status(201).json({ exito: true, folio: guardado.folio, pedido: guardado });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ exito: false, error: err.message });
     }
 });
 
-// 3. Actualizar estado de un pedido (Administrador)
-app.put('/api/pedido/:id', async (req, res) => {
+app.put('/api/pedidos/:folio', async (req, res) => {
     try {
-        const actualizado = await Pedido.findByIdAndUpdate(
-            req.params.id, 
-            { estado: req.body.estado }, 
-            { new: true }
-        );
-        res.json(actualizado);
+        await Pedido.findOneAndUpdate({ folio: req.params.folio }, { estado: req.body.estado }, { new: true });
+        res.json({ exito: true });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ exito: false, error: err.message });
     }
 });
 
-// 4. Rastreo inteligente (Busca por folio numérico, teléfono o nombre del cliente)
+app.delete('/api/pedidos/:folio', async (req, res) => {
+    try {
+        await Pedido.findOneAndDelete({ folio: req.params.folio });
+        res.json({ exito: true });
+    } catch (err) {
+        res.status(500).json({ exito: false, error: err.message });
+    }
+});
+
+// ==================== RASTREO INTELIGENTE ====================
 app.get('/api/rastreo', async (req, res) => {
     try {
         const q = req.query.q;
@@ -107,43 +188,6 @@ app.get('/api/rastreo', async (req, res) => {
         res.json(pedidos);
     } catch (err) { 
         res.status(500).json({ error: err.message }); 
-    }
-});
-
-// ==================== RUTAS DE PRODUCTOS ====================
-
-// Obtener todos los productos (Catálogo)
-app.get('/api/productos', async (req, res) => {
-    try {
-        const productos = await Producto.find();
-        res.json(productos);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Guardar o actualizar un producto (Administrador)
-app.post('/api/productos', async (req, res) => {
-    try {
-        const { id, nombre, imagen, precios } = req.body;
-        const productoActualizado = await Producto.findOneAndUpdate(
-            { id: id },
-            { nombre, imagen, precios },
-            { new: true, upsert: true }
-        );
-        res.json(productoActualizado);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Eliminar un producto (Administrador)
-app.delete('/api/productos/:id', async (req, res) => {
-    try {
-        await Producto.findOneAndDelete({ id: req.params.id });
-        res.json({ mensaje: 'Producto eliminado correctamente' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
     }
 });
 
