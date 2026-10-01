@@ -3,69 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kromantra | Regalos y Mayoreo</title>
+    <title id="page-title">Kromantra | Regalos y Mayoreo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; scroll-behavior: smooth; }
         
-        /* ==========================================
-           1. ESTILOS DE LA PORTADA (INICIO)
-           ========================================== */
-        #vista-inicio {
-            display: block; /* Visible al cargar */
+        /* 1. BARRA DE AVISOS SUPERIOR */
+        .announcement-bar {
+            background: #1e293b; color: #f8fafc; font-size: 12px; text-align: center; padding: 8px 15px; font-weight: 500; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
         }
+
+        #vista-inicio { display: block; }
         
         .hero-section {
-            background: linear-gradient(135deg, #4f46e5, #9333ea);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            border-bottom: 5px solid #3b82f6;
+            background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid #3b82f6;
         }
         .hero-content { max-width: 800px; margin: 0 auto; }
-        .hero-section img {
-            width: 100px; height: 100px; object-fit: contain; margin-bottom: 15px; border-radius: 50%; background: white; padding: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .hero-section h1 { font-size: 36px; font-weight: 800; margin: 0 0 10px 0; letter-spacing: -0.5px; }
-        .hero-section p.subtitle { font-size: 18px; margin: 0 0 30px 0; opacity: 0.9; }
+        .hero-section img { width: 90px; height: 90px; object-fit: contain; margin-bottom: 12px; border-radius: 50%; background: white; padding: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .hero-section h1 { font-size: 34px; font-weight: 800; margin: 0 0 8px 0; }
+        .hero-section p.subtitle { font-size: 17px; margin: 0 0 25px 0; opacity: 0.9; }
         
         .btn-grande {
-            display: inline-block; background: white; color: var(--primary); padding: 15px 40px; border-radius: 30px; font-weight: 800; font-size: 18px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; border: none; transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block; background: white; color: var(--primary); padding: 14px 35px; border-radius: 30px; font-weight: 800; font-size: 17px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; border: none; transition: transform 0.2s;
         }
-        .btn-grande:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
+        .btn-grande:hover { transform: translateY(-3px); }
 
-        /* Nuevas Secciones de Información */
-        .info-container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        .info-card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); }
-        .info-card h2 { color: #1e3a8a; margin-top: 0; font-size: 22px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
+        /* Buscador en Portada */
+        .rastreo-portada-box { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 12px 15px; border-radius: 10px; display: flex; gap: 10px; max-width: 500px; margin: 25px auto 0 auto; }
+        .rastreo-portada-box input { flex: 1; padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; }
+        .rastreo-portada-box button { padding: 8px 15px; background: #1e293b; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+
+        .info-container { max-width: 900px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
+        .info-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        .info-card h2 { color: #1e3a8a; margin-top: 0; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
         
-        /* Grid de Cómo funciona */
-        .pasos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center; }
-        .paso-item { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .paso-icon { font-size: 30px; margin-bottom: 10px; }
-        .paso-item h3 { margin: 0 0 10px 0; font-size: 16px; color: var(--primary); }
-        .paso-item p { margin: 0; font-size: 13px; color: #475569; }
+        /* Materiales y Técnicas */
+        .materiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; text-align: center; }
+        .material-item { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .material-item b { display: block; font-size: 14px; color: #334155; margin-bottom: 4px; }
+        .material-item span { font-size: 12px; color: #64748b; }
 
-        /* Preguntas Frecuentes */
-        .faq-item { margin-bottom: 15px; }
-        .faq-item b { color: #334155; font-size: 15px; display: block; margin-bottom: 4px; }
-        .faq-item p { margin: 0; font-size: 14px; color: #64748b; }
+        /* Galería */
+        .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .galeria-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: #e2e8f0; }
 
-        /* ==========================================
-           2. ESTILOS DEL CATÁLOGO Y CARRITO
-           ========================================== */
-        #vista-catalogo {
-            display: none; /* Oculto por defecto */
-            max-width: 1200px; margin: 20px auto 40px auto; padding: 0 20px; gap: 30px;
-        }
-        /* Cuando esté activo, usaremos grid */
+        /* Horarios y Ubicación */
+        .horarios-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; font-size: 14px; color: #475569; }
+        .horarios-box b { color: #1e3a8a; display: block; margin-bottom: 5px; }
+
+        /* Acordeón FAQ */
+        .faq-item { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 12px; cursor: pointer; }
+        .faq-pregunta { display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #334155; font-size: 15px; }
+        .faq-respuesta { font-size: 13px; color: #64748b; margin-top: 8px; display: none; line-height: 1.5; }
+        .faq-item.activo .faq-respuesta { display: block; }
+
+        /* Redes Sociales */
+        .social-links { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        .btn-social { background: #f1f5f9; color: #334155; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; border: 1px solid var(--border); transition: background 0.2s; }
+        .btn-social:hover { background: #e2e8f0; }
+
+        /* VISTA 2: CATÁLOGO */
+        #vista-catalogo { display: none; max-width: 1200px; margin: 20px auto 40px auto; padding: 0 20px; gap: 30px; }
         .catalogo-activo { display: grid !important; grid-template-columns: 1fr 380px; }
         @media (max-width: 900px) { .catalogo-activo { grid-template-columns: 1fr; } }
 
         .btn-volver { background: #334155; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-volver:hover { background: #1e293b; }
-
         #toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 1000; }
 
         .main-content { display: flex; flex-direction: column; gap: 20px; }
@@ -74,8 +77,7 @@
         .rastreo-box button { padding: 8px 16px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
         
         .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.05); }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
         .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; background: #f1f5f9; }
         .card h3 { margin: 0 0 8px 0; font-size: 16px; color: #1e293b; }
         
@@ -105,81 +107,109 @@
 <body>
     <div id="toast">¡Producto agregado al carrito!</div>
 
-    <!-- ==========================================
-         VISTA 1: PORTADA DEL NEGOCIO
-         ========================================== -->
+    <!-- 1. BARRA DE AVISOS SUPERIOR -->
+    <div class="announcement-bar">
+        <span>⏱️ Tiempo de elaboración: 3 a 4 días hábiles</span>
+        <span>📍 Recogida directa en Taller (Zona Tlalnepantla)</span>
+    </div>
+
+    <!-- VISTA 1: PORTADA -->
     <div id="vista-inicio">
         <section class="hero-section">
             <div class="hero-content">
-                <img src="logo.jpg" alt="Kromantra Logo" onerror="this.style.display='none'">
-                <h1>Kromantra</h1>
-                <p class="subtitle">Regalos Personalizados y Mayoreo Inteligente</p>
-                <!-- BOTÓN QUE ABRE EL CATÁLOGO -->
+                <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
+                <h1 id="lbl-titulo">Kromantra</h1>
+                <p class="subtitle" id="lbl-subtitulo">Regalos Personalizados y Mayoreo Inteligente</p>
+                
                 <button class="btn-grande" onclick="abrirCatalogo()">Ir a la Tienda y Comprar 🛍️</button>
+
+                <!-- Buscador rápido en portada -->
+                <div class="rastreo-portada-box">
+                    <input type="text" id="inputRastreoInicio" placeholder="🔍 Rastrear pedido por Folio o Teléfono...">
+                    <button onclick="consultarPedidoInicio()">Buscar</button>
+                </div>
+                <div id="resultadoRastreoInicio" style="margin-top: 10px; font-size: 13px;"></div>
             </div>
         </section>
 
         <div class="info-container">
-            <!-- Sección Quiénes Somos -->
+            <!-- Esencia -->
             <div class="info-card">
                 <h2>👋 Nuestra Esencia</h2>
-                <p style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">
-                    Somos un taller dedicado a crear piezas con alta precisión y detalle. Ya sea que busques un <b>regalo único y personalizado</b> para una ocasión especial, o necesites <b>producción de mayoreo</b> para tu marca, ponemos pasión y cuidado en cada trabajo.
+                <p id="lbl-quienes" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">
+                    Somos un taller dedicado a crear piezas con alta precisión y detalle. Ya sea que busques un regalo único y personalizado para una ocasión especial, o necesites producción de mayoreo inteligente para hacer crecer tu marca, ponemos pasión y cuidado en cada trabajo que fabricamos.
                 </p>
             </div>
 
-            <!-- Sección Cómo Funciona -->
+            <!-- Materiales y Técnicas -->
             <div class="info-card">
-                <h2>¿Cómo hacer un pedido?</h2>
-                <div class="pasos-grid">
-                    <div class="paso-item">
-                        <div class="paso-icon">🎨</div>
-                        <h3>1. Personaliza</h3>
-                        <p>Elige tu producto, añade tu frase, color o sube tu logo.</p>
+                <h2>🛠️ Materiales y Precisión</h2>
+                <div class="materiales-grid">
+                    <div class="material-item"><b>Grabado Láser</b><span>Alta definición en madera y metales</span></div>
+                    <div class="material-item"><b>Acrílico Premium</b><span>Cortes limpios y acabados modernos</span></div>
+                    <div class="material-item"><b>Impresión UV</b><span>Colores vivos y duraderos</span></div>
+                    <div class="material-item"><b>Bases Especiales</b><span>Selección de materiales resistentes</span></div>
+                </div>
+            </div>
+
+            <!-- Galería de Trabajos -->
+            <div class="info-card">
+                <h2>✨ Galería de Trabajos</h2>
+                <div class="galeria-grid">
+                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400" alt="Trabajo 1" class="galeria-img">
+                    <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=400" alt="Trabajo 2" class="galeria-img">
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400" alt="Trabajo 3" class="galeria-img">
+                </div>
+            </div>
+
+            <!-- Horarios y Ubicación -->
+            <div class="info-card">
+                <h2>📍 Ubicación y Horarios de Taller</h2>
+                <div class="horarios-box">
+                    <div>
+                        <b>🕒 Horarios de Atención:</b>
+                        Lunes a Sábado: 10:00 am - 7:00 pm<br>Domingos: Cerrado
                     </div>
-                    <div class="paso-item">
-                        <div class="paso-icon">🛒</div>
-                        <h3>2. Arma el carrito</h3>
-                        <p>Llena tus datos de contacto y envía tu pedido oficial.</p>
-                    </div>
-                    <div class="paso-item">
-                        <div class="paso-icon">💳</div>
-                        <h3>3. Paga y Confirma</h3>
-                        <p>Haz tu transferencia a BBVA y manda el comprobante por WhatsApp.</p>
+                    <div>
+                        <b>📍 Recogida en Taller:</b>
+                        Ubicados en Tlalnepantla, Estado de México. Te notificaremos por WhatsApp en cuanto tu pedido esté listo para pasar a recogerlo sin costo extra.
                     </div>
                 </div>
             </div>
 
-            <!-- Sección FAQ -->
+            <!-- Preguntas Frecuentes (Acordeón) -->
             <div class="info-card">
-                <h2>Preguntas Frecuentes</h2>
-                <div class="faq-item">
-                    <b>¿Cómo funciona el precio de mayoreo?</b>
-                    <p>El sistema calcula el descuento en automático. Entre más piezas de un producto agregues a tu carrito, menor será el precio unitario.</p>
+                <h2>❓ Preguntas Frecuentes</h2>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-pregunta"><span>¿Cómo funciona el descuento de mayoreo?</span> <span>+</span></div>
+                    <div class="faq-respuesta">El sistema de la tienda calcula el descuento de forma automática. Entre más piezas de un mismo producto agregues a tu carrito, menor será el costo unitario de cada una.</div>
                 </div>
-                <div class="faq-item">
-                    <b>¿Cuáles son los métodos de pago?</b>
-                    <p>Aceptamos pago en efectivo al recoger en nuestro taller, o Transferencia Bancaria / Tarjeta de Débito (BBVA) enviando tu comprobante por WhatsApp.</p>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-pregunta"><span>¿Cuáles son los métodos de pago?</span> <span>+</span></div>
+                    <div class="faq-respuesta">Puedes pagar en efectivo al recoger directamente en nuestro taller, o bien mediante Tarjeta / Transferencia bancaria (BBVA) enviando tu comprobante por WhatsApp.</div>
                 </div>
-                <div class="faq-item">
-                    <b>¿Tienen entregas a domicilio?</b>
-                    <p>Si requieres entrega a domicilio o envío, por favor consúltalo por WhatsApp al enviar tu folio de pedido para cotizar la paquetería.</p>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-pregunta"><span>¿Cómo subo mi diseño o logotipo personalizado?</span> <span>+</span></div>
+                    <div class="faq-respuesta">Al agregar cualquier producto al carrito, verás un campo para adjuntar tu archivo en imagen (JPG, PNG) o escribir el texto exacto que deseas plasmar en tu pieza.</div>
+                </div>
+            </div>
+
+            <!-- Redes Sociales -->
+            <div class="info-card" style="text-align: center; padding: 20px;">
+                <h2 style="border: none; margin-bottom: 10px;">¡Síguenos en Redes!</h2>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Conoce más de nuestros trabajos diarios y entregas especiales.</p>
+                <div class="social-links">
+                    <a href="https://instagram.com" target="_blank" class="btn-social">📸 Instagram</a>
+                    <a href="https://tiktok.com" target="_blank" class="btn-social">🎵 TikTok</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-         VISTA 2: CATÁLOGO DE PRODUCTOS Y CARRITO
-         ========================================== -->
+    <!-- VISTA 2: CATÁLOGO -->
     <div id="vista-catalogo">
-        <!-- Columna Izquierda: Rastreo y Catálogo -->
         <div class="main-content">
-            <!-- Botón para regresar a la portada -->
-            <div>
-                <button class="btn-volver" onclick="cerrarCatalogo()">← Volver al Inicio</button>
-            </div>
-
+            <div><button class="btn-volver" onclick="cerrarCatalogo()">← Volver al Inicio</button></div>
             <div class="rastreo-box">
                 <input type="text" id="inputRastreo" placeholder="🔍 Ingresa tu Folio o Teléfono para rastrear pedido...">
                 <button onclick="consultarPedido()">Buscar</button>
@@ -187,12 +217,9 @@
             <div id="resultadoRastreo"></div>
 
             <h2 style="font-size: 18px; margin: 0; color: #334155; padding-top: 10px;">📦 Catálogo Oficial</h2>
-            <div id="catalogo" class="grid-productos">
-                <p>Cargando productos...</p>
-            </div>
+            <div id="catalogo" class="grid-productos"><p>Cargando productos...</p></div>
         </div>
 
-        <!-- Columna Derecha: Carrito y Checkout -->
         <div class="sidebar">
             <h2>🛒 Tu Carrito de Pedido</h2>
             <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;">
@@ -216,7 +243,9 @@
                 <div id="info-pago-div" class="info-pago-box">
                     <b style="color: #1e40af; display: block; margin-bottom: 4px; font-size: 12px;">💳 Datos para tu Transferencia:</b>
                     <div style="background: white; padding: 8px; border-radius: 6px; border: 1px solid #93c5fd; font-family: monospace; font-size: 11px; color: #0f172a; line-height: 1.4;">
-                        <b>Banco:</b> BBVA<br><b>Tarjeta:</b> 4152314063676335<br><b>Titular:</b> Carolina Perez Mendez
+                        <b>Banco:</b> <span id="banco-txt">BBVA</span><br>
+                        <b>Tarjeta:</b> <span id="tarjeta-txt">4152314063676335</span><br>
+                        <b>Titular:</b> <span id="titular-txt">Carolina Perez Mendez</span>
                     </div>
                     <p style="margin: 6px 0 0 0; font-size: 10px; color: #1e3a8a;">* Al finalizar, envía tu comprobante por WhatsApp con tu número de folio.</p>
                 </div>
@@ -226,17 +255,42 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         SCRIPTS Y LÓGICA DE LA TIENDA
-         ========================================== -->
     <script>
-        const WHATSAPP_NEGOCIO = '525514494333'; 
+        let configGlobal = { whatsapp: '525514494333', tarjeta: '4152314063676335', titular: 'Carolina Perez Mendez', banco: 'BBVA' };
 
-        // --- NAVEGACIÓN ENTRE VISTAS ---
+        // Cargar configuración dinámica (si el admin la modificó)
+        async function cargarConfiguracion() {
+            try {
+                const res = await fetch('/api/config');
+                const data = await res.json();
+                if(data && Object.keys(data).length > 0) {
+                    configGlobal = data;
+                    if(data.titulo) {
+                        document.getElementById('page-title').innerText = `${data.titulo} | Regalos y Mayoreo`;
+                        document.getElementById('lbl-titulo').innerText = data.titulo;
+                    }
+                    if(data.subtitulo) document.getElementById('lbl-subtitulo').innerText = data.subtitulo;
+                    if(data.quienesSomos) document.getElementById('lbl-quienes').innerText = data.quienesSomos;
+                    if(data.banco) document.getElementById('banco-txt').innerText = data.banco;
+                    if(data.tarjeta) document.getElementById('tarjeta-txt').innerText = data.tarjeta;
+                    if(data.titular) document.getElementById('titular-txt').innerText = data.titular;
+                }
+            } catch (e) {
+                console.log("Usando datos locales predeterminados");
+            }
+        }
+
+        // Acordeón FAQ
+        function toggleFaq(element) {
+            element.classList.toggle('activo');
+            const span = element.querySelector('.faq-pregunta span:last-child');
+            span.innerText = element.classList.contains('activo') ? '-' : '+';
+        }
+
         function abrirCatalogo() {
             document.getElementById('vista-inicio').style.display = 'none';
             document.getElementById('vista-catalogo').classList.add('catalogo-activo');
-            window.scrollTo(0, 0); // Sube la pantalla al tope
+            window.scrollTo(0, 0);
         }
 
         function cerrarCatalogo() {
@@ -245,7 +299,6 @@
             window.scrollTo(0, 0);
         }
 
-        // --- LÓGICA DEL CARRITO (La misma que ya tenías) ---
         let carrito = [];
         let productosGlobal = [];
 
@@ -418,7 +471,7 @@
 
                     const mensajeWa = encodeURIComponent(textoWp);
                     if (confirm(`¡Pedido #${data.folio} guardado!\n\n¿Deseas abrir WhatsApp para enviar el detalle al taller?`)) {
-                        window.open(`https://wa.me/${WHATSAPP_NEGOCIO}?text=${mensajeWa}`, '_blank');
+                        window.open(`https://wa.me/${configGlobal.whatsapp}?text=${mensajeWa}`, '_blank');
                     }
                     carrito = []; renderizarCarrito();
                     document.getElementById('cli-nombre').value = ''; document.getElementById('cli-telefono').value = '';
@@ -427,6 +480,23 @@
             } catch (e) { alert('Error de conexión con el servidor.'); }
         }
 
+        // Consultar pedido desde la portada
+        async function consultarPedidoInicio() {
+            const q = document.getElementById('inputRastreoInicio').value.trim();
+            const resDiv = document.getElementById('resultadoRastreoInicio');
+            if (!q) { resDiv.innerHTML = "<span style='color:#fca5a5;'>Escribe tu folio o teléfono.</span>"; return; }
+
+            const res = await fetch(`/api/rastreo?q=${q}`);
+            const data = await res.json();
+            if (data.length === 0) { resDiv.innerHTML = "<span style='color:#fca5a5;'>No se encontró ningún pedido.</span>"; return; }
+            resDiv.innerHTML = data.map(p => `
+                <div style="background:rgba(255,255,255,0.2); padding:8px; border-radius:6px; margin-top:5px; border:1px solid rgba(255,255,255,0.4); text-align:left;">
+                    <b>Folio #${p.folio}</b> | Estatus: <b style="color:#fde047;">${p.estado}</b> | Pago: ${p.estadoPago}
+                </div>
+            `).join('');
+        }
+
+        // Consultar pedido desde el catálogo
         async function consultarPedido() {
             const q = document.getElementById('inputRastreo').value.trim();
             const resDiv = document.getElementById('resultadoRastreo');
@@ -442,6 +512,8 @@
             `).join('');
         }
 
+        // Cargas iniciales
+        cargarConfiguracion();
         cargarCatalogo();
         setInterval(() => { cargarCatalogo(); }, 10000);
     </script>
