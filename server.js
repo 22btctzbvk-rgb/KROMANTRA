@@ -1,151 +1,129 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
 const path = require('path');
 
 const app = express();
-
-app.use(express.static(__dirname));
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.static(__dirname));
 
-const MONGO_URI = process.env.MONGO_URI || 'TU_CONEXION_MONGODB_ATLAS'; 
+// Configura tu conexión a MongoDB Atlas
+const mongoUrl = process.env.MONGO_URI || "tu_cadena_de_conexion_mongodb";
+const dbName = "kromantra";
+let db;
 
-mongoose.connect(MONGO_URI)
-    .then(() => console.log('Conectado exitosamente a MongoDB Atlas'))
-    .catch(err => console.error('Error conectando a MongoDB:', err));
+MongoClient.connect(mongoUrl, { useUnifiedTopology: true })
+    .then(client => {
+        db = client.db(dbName);
+        console.log("Conectado exitosamente a MongoDB Atlas");
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`Servidor corriendo en el puerto ${PORT}`);
+        });
+    })
+    .catch(err => console.error("Error al conectar a MongoDB:", err));
 
 // ==========================================
-// 1. ESQUEMAS Y MODELOS
+// RUTA: CONFIGURACIÓN DEL NEGOCIO
 // ==========================================
-const productoSchema = new mongoose.Schema({
-    id: { type: String, unique: true, required: true },
-    nombre: { type: String, required: true },
-    imagen: String,
-    tieneVariantes: Boolean,
-    rangos: [{ min: Number, max: Number, precio: Number }]
+app.get('/api/config', async (req, res) => {
+    try {
+        let config = await db.collection('configuracion').findOne({});
+        if (!config) {
+            config = {
+                titulo: "Kromantra",
+                subtitulo: "Regalos Personalizados y Mayoreo Inteligente",
+                quienesSomos: "Somos un taller dedicado a crear piezas con alta precisión y detalle. Ya sea que busques un regalo único y personalizado para una ocasión especial, o necesites producción de mayoreo inteligente para hacer crecer tu marca, ponemos pasión y cuidado en cada trabajo que fabricamos.",
+                whatsapp: "525514494333",
+                banco: "BBVA",
+                tarjeta: "4152314063676335",
+                titular: "Carolina Perez Mendez"
+            };
+        }
+        res.json(config);
+    } catch (e) {
+        res.status(500).json({ error: "Error al obtener configuración" });
+    }
 });
-const Producto = mongoose.model('Producto', productoSchema);
 
-const pedidoSchema = new mongoose.Schema({
-    folio: Number,
-    cliente: {
-        nombre: String,
-        telefono: String
-    },
-    productos: [{
-        id: String,
-        nombre: String,
-        cantidad: Number,
-        variante: String,
-        personalizacion: String,
-        diseno: String,
-        subtotal: Number
-    }],
-    total: Number,
-    metodoPago: String,   // 'Efectivo / En Taller' o 'Tarjeta / En Línea'
-    estadoPago: String,   // 'Pendiente' o 'Pagado'
-    estado: { type: String, default: 'Pendiente' }, // 'Pendiente', 'En Proceso', 'Entregado'
-    fecha: String
+app.post('/api/config', async (req, res) => {
+    try {
+        const nuevaConfig = req.body;
+        await db.collection('configuracion').updateOne(
+            {}, 
+            { $set: nuevaConfig }, 
+            { upsert: true }
+        );
+        res.json({ exito: true });
+    } catch (e) {
+        res.status(500).json({ error: "Error al guardar configuración" });
+    }
 });
-const Pedido = mongoose.model('Pedido', pedidoSchema);
 
 // ==========================================
-// 2. RUTAS API (PRODUCTOS)
+// RUTAS: PRODUCTOS
 // ==========================================
 app.get('/api/productos', async (req, res) => {
     try {
-        const productos = await Producto.find();
+        const productos = await db.collection('productos').find({}).toArray();
         res.json(productos);
-    } catch (error) { res.status(500).json({ error: 'Error al obtener productos' }); }
+    } catch (e) {
+        res.status(500).json({ error: "Error al obtener productos" });
+    }
 });
 
 app.post('/api/productos', async (req, res) => {
     try {
-        const nuevo = new Producto(req.body);
-        await nuevo.save();
+        const nuevoProducto = req.body;
+        const count = await db.collection('productos').countDocuments();
+        nuevoProducto.id = count + 1;
+        await db.collection('productos').insertOne(nuevoProducto);
         res.json({ exito: true });
-    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
-});
-
-app.put('/api/productos/:id', async (req, res) => {
-    try {
-        const { nombre, imagen, rangos } = req.body;
-        await Producto.findOneAndUpdate({ id: req.params.id }, { nombre, imagen, rangos });
-        res.json({ exito: true });
-    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
+    } catch (e) {
+        res.status(500).json({ error: "Error al guardar producto" });
+    }
 });
 
 app.delete('/api/productos/:id', async (req, res) => {
     try {
-        await Producto.findOneAndDelete({ id: req.params.id });
+        const id = parseInt(req.params.id);
+        await db.collection('productos').deleteOne({ id: id });
         res.json({ exito: true });
-    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
+    } catch (e) {
+        res.status(500).json({ error: "Error al eliminar producto" });
+    }
 });
 
 // ==========================================
-// 3. RUTAS API (PEDIDOS Y RASTREO)
+// RUTAS: PEDIDOS Y RASTREO
 // ==========================================
 app.post('/api/pedido', async (req, res) => {
     try {
-        const datos = req.body;
-        // Si elige en línea, se marca como pagado automáticamente; si es físico, queda pendiente de pago
-        const estPago = datos.metodoPago === 'Tarjeta / En Línea' ? 'Pagado' : 'Pendiente';
+        const pedido = req.body;
+        const count = await db.collection('pedidos').countDocuments();
+        pedido.folio = 1000 + count + 1;
+        pedido.estado = "Pendiente en Taller";
+        pedido.estadoPago = pedido.metodoPago.includes('Tarjeta') ? "Verificando Comprobante" : "Pago en Taller";
+        pedido.fecha = new Date();
         
-        const nuevoPedido = new Pedido({
-            folio: Date.now(),
-            ...datos,
-            estadoPago: estPago,
-            estado: 'Pendiente',
-            fecha: new Date().toLocaleString()
-        });
-        await nuevoPedido.save();
-        res.json({ exito: true, folio: nuevoPedido.folio });
-    } catch (error) { res.status(500).json({ exito: false, error: 'Error al guardar pedido' }); }
+        await db.collection('pedidos').insertOne(pedido);
+        res.json({ exito: true, folio: pedido.folio });
+    } catch (e) {
+        res.status(500).json({ error: "Error al registrar pedido" });
+    }
 });
 
-app.get('/api/pedidos', async (req, res) => {
-    try {
-        const pedidos = await Pedido.find().sort({ folio: -1 });
-        res.json(pedidos);
-    } catch (error) { res.status(500).json({ error: 'Error al obtener pedidos' }); }
-});
-
-// NUEVA RUTA: Consulta de rastreo pública para clientes
 app.get('/api/rastreo', async (req, res) => {
     try {
-        const { q } = req.query;
-        if (!q) return res.json([]);
-        const queryFolio = isNaN(q) ? null : Number(q);
-        const pedidos = await Pedido.find({
+        const q = req.query.q;
+        const query = {
             $or: [
-                { folio: queryFolio },
-                { 'cliente.telefono': { $regex: q,$options: 'i' } }
+                { folio: isNaN(q) ? q : parseInt(q) },
+                { "cliente.telefono": { $regex: q,$options: 'i' } }
             ]
-        });
+        };
+        const pedidos = await db.collection('pedidos').find(query).toArray();
         res.json(pedidos);
-    } catch (error) { res.status(500).json({ error: 'Error en rastreo' }); }
+    } catch (e) {
+        res.status(500).json({ error: "Error en rastreo" });
+    }
 });
-
-app.put('/api/pedidos/:folio', async (req, res) => {
-    try {
-        const { estado } = req.body;
-        await Pedido.findOneAndUpdate({ folio: req.params.folio }, { estado });
-        res.json({ exito: true });
-    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
-});
-
-app.delete('/api/pedidos/:folio', async (req, res) => {
-    try {
-        await Pedido.findOneAndDelete({ folio: req.params.folio });
-        res.json({ exito: true });
-    } catch (error) { res.status(500).json({ exito: false, error: error.message }); }
-});
-
-// ==========================================
-// 4. VISTAS HTML
-// ==========================================
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin.html')));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Kromantra corriendo en puerto ${PORT}`));
