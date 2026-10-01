@@ -55,13 +55,11 @@
 </head>
 <body>
     <script>
-        // Sistema de PIN Inteligente (PIN por defecto: 4321)
         (function verificarAccesoAdmin() {
             const PIN_SECRETO = '4321'; 
             const pinGuardado = localStorage.getItem('kromantra_admin_ok');
-            
             if (pinGuardado !== PIN_SECRETO) {
-                const ingreso = prompt('🔒 Ingresa el PIN de acceso al taller de Kromantra (Solo se te pedirá esta vez en este dispositivo):');
+                const ingreso = prompt('🔒 Ingresa el PIN de acceso al taller de Kromantra:');
                 if (ingreso === PIN_SECRETO) {
                     localStorage.setItem('kromantra_admin_ok', PIN_SECRETO);
                 } else {
@@ -80,18 +78,9 @@
         </header>
 
         <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Ventas Totales</h3>
-                <p id="stat-ventas">$0.00</p>
-            </div>
-            <div class="stat-card">
-                <h3>Pendientes de Taller</h3>
-                <p id="stat-pendientes">0</p>
-            </div>
-            <div class="stat-card">
-                <h3>Total Pedidos</h3>
-                <p id="stat-total-pedidos">0</p>
-            </div>
+            <div class="stat-card"><h3>Ventas Totales</h3><p id="stat-ventas">$0.00</p></div>
+            <div class="stat-card"><h3>Pendientes de Taller</h3><p id="stat-pendientes">0</p></div>
+            <div class="stat-card"><h3>Total Pedidos</h3><p id="stat-total-pedidos">0</p></div>
         </div>
 
         <!-- SECCIÓN: CONFIGURACIÓN GENERAL Y TEXTOS EDITABLES -->
@@ -99,14 +88,8 @@
             <h2>⚙️ Configuración General y Textos del Negocio</h2>
             <form onsubmit="guardarConfig(event)">
                 <div class="form-grid">
-                    <div>
-                        <label>Título del Negocio:</label>
-                        <input type="text" id="cfg-titulo" required>
-                    </div>
-                    <div>
-                        <label>Subtítulo / Eslogan:</label>
-                        <input type="text" id="cfg-subtitulo" required>
-                    </div>
+                    <div><label>Título del Negocio:</label><input type="text" id="cfg-titulo" required></div>
+                    <div><label>Subtítulo / Eslogan:</label><input type="text" id="cfg-subtitulo" required></div>
                 </div>
 
                 <div style="margin-bottom: 12px;">
@@ -115,52 +98,37 @@
                 </div>
 
                 <div class="form-grid-3">
-                    <div>
-                        <label>WhatsApp (Ej. 5255...):</label>
-                        <input type="text" id="cfg-whatsapp" required>
-                    </div>
-                    <div>
-                        <label>Banco:</label>
-                        <input type="text" id="cfg-banco" required>
-                    </div>
-                    <div>
-                        <label>Titular Tarjeta:</label>
-                        <input type="text" id="cfg-titular" required>
-                    </div>
+                    <div><label>WhatsApp:</label><input type="text" id="cfg-whatsapp" required></div>
+                    <div><label>Banco:</label><input type="text" id="cfg-banco" required></div>
+                    <div><label>Titular Tarjeta:</label><input type="text" id="cfg-titular" required></div>
                 </div>
 
-                <div style="margin-bottom: 12px;">
-                    <label>Número de Tarjeta (16 dígitos):</label>
-                    <input type="text" id="cfg-tarjeta" required>
-                </div>
+                <div style="margin-bottom: 12px;"><label>Número de Tarjeta:</label><input type="text" id="cfg-tarjeta" required></div>
 
                 <div class="section-sub">Textos, Horarios y Redes de la Página Principal</div>
-
                 <div class="form-grid">
-                    <div>
-                        <label>Tiempo de Elaboración:</label>
-                        <input type="text" id="cfg-tiempo" placeholder="Ej: 3 a 4 días hábiles">
-                    </div>
-                    <div>
-                        <label>Texto de Ubicación / Recogida:</label>
-                        <input type="text" id="cfg-ubicacion" placeholder="Ej: Recogida directa en Taller (Zona Tlalnepantla)">
-                    </div>
+                    <div><label>Tiempo de Elaboración:</label><input type="text" id="cfg-tiempo" placeholder="Ej: 3 a 4 días hábiles"></div>
+                    <div><label>Texto de Ubicación / Recogida:</label><input type="text" id="cfg-ubicacion" placeholder="Ej: Recogida directa en Taller"></div>
                 </div>
-
-                <div style="margin-bottom: 12px;">
-                    <label>Horarios de Atención:</label>
-                    <input type="text" id="cfg-horarios" placeholder="Ej: Lunes a Sábado: 10:00 am - 7:00 pm">
-                </div>
-
+                <div style="margin-bottom: 12px;"><label>Horarios de Atención:</label><input type="text" id="cfg-horarios" placeholder="Ej: Lunes a Sábado: 10:00 am - 7:00 pm"></div>
                 <div class="form-grid" style="margin-bottom: 15px;">
-                    <div>
-                        <label>Enlace de Instagram:</label>
-                        <input type="text" id="cfg-instagram" placeholder="https://instagram.com/tu_usuario">
-                    </div>
-                    <div>
-                        <label>Enlace de TikTok:</label>
-                        <input type="text" id="cfg-tiktok" placeholder="https://tiktok.com/@tu_usuario">
-                    </div>
+                    <div><label>Enlace de Instagram:</label><input type="text" id="cfg-instagram"></div>
+                    <div><label>Enlace de TikTok:</label><input type="text" id="cfg-tiktok"></div>
+                </div>
+
+                <!-- NUEVA SECCIÓN: MATERIALES Y PRECISIÓN -->
+                <div class="section-sub">🛠️ Materiales y Precisión (4 Tarjetas)</div>
+                <div class="form-grid"><div><label>Material 1 - Título:</label><input type="text" id="mat-t-0"></div><div><label>Material 1 - Descripción:</label><input type="text" id="mat-d-0"></div></div>
+                <div class="form-grid"><div><label>Material 2 - Título:</label><input type="text" id="mat-t-1"></div><div><label>Material 2 - Descripción:</label><input type="text" id="mat-d-1"></div></div>
+                <div class="form-grid"><div><label>Material 3 - Título:</label><input type="text" id="mat-t-2"></div><div><label>Material 3 - Descripción:</label><input type="text" id="mat-d-2"></div></div>
+                <div class="form-grid" style="margin-bottom: 15px;"><div><label>Material 4 - Título:</label><input type="text" id="mat-t-3"></div><div><label>Material 4 - Descripción:</label><input type="text" id="mat-d-3"></div></div>
+
+                <!-- NUEVA SECCIÓN: GALERÍA DE TRABAJOS -->
+                <div class="section-sub">✨ Galería de Trabajos (3 Imágenes - URLs)</div>
+                <div class="form-grid-3" style="margin-bottom: 15px;">
+                    <div><label>Imagen Galería 1 (URL):</label><input type="text" id="gal-0"></div>
+                    <div><label>Imagen Galería 2 (URL):</label><input type="text" id="gal-1"></div>
+                    <div><label>Imagen Galería 3 (URL):</label><input type="text" id="gal-2"></div>
                 </div>
 
                 <button type="submit" style="background: #2563eb;">Guardar Configuración General 💾</button>
@@ -171,85 +139,42 @@
             <h2 id="titulo-form">➕ Agregar Producto Nuevo</h2>
             <form id="form-producto" onsubmit="guardarProducto(event)">
                 <div class="form-grid">
-                    <div>
-                        <label>ID único (ej. taza):</label>
-                        <input type="text" id="prod-id" required placeholder="taza">
-                    </div>
-                    <div>
-                        <label>Nombre del Producto:</label>
-                        <input type="text" id="prod-nombre" required placeholder="Taza personalizada">
-                    </div>
+                    <div><label>ID único (ej. taza):</label><input type="text" id="prod-id" required placeholder="taza"></div>
+                    <div><label>Nombre del Producto:</label><input type="text" id="prod-nombre" required placeholder="Taza personalizada"></div>
                 </div>
-                
                 <div class="form-grid">
-                    <div>
-                        <label>Seleccionar Imagen del Producto:</label>
-                        <input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)">
-                        <input type="hidden" id="prod-imagen">
-                    </div>
-                    <div>
-                        <label>Vista previa:</label>
-                        <div id="preview-container"><span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span></div>
-                    </div>
+                    <div><label>Imagen del Producto:</label><input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)"><input type="hidden" id="prod-imagen"></div>
+                    <div><label>Vista previa:</label><div id="preview-container"><span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span></div></div>
                 </div>
-
                 <div class="section-sub">Precios y Descuentos por Mayoreo</div>
-                
-                <div class="form-grid-3">
-                    <div><label>Rango 1 (Desde - Hasta):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="10"></div></div>
-                    <div><label>Precio Unitario ($):</label><input type="number" id="precio1" placeholder="100" required></div>
-                </div>
-                <div class="form-grid-3">
-                    <div><label>Rango 2 (Desde - Hasta):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="11"><input type="number" id="max2" value="99"></div></div>
-                    <div><label>Precio Mayoreo ($):</label><input type="number" id="precio2" placeholder="80" required></div>
-                </div>
-                <div class="form-grid-3" style="margin-bottom: 15px;">
-                    <div><label>Rango 3 (Desde - Hasta):</label><div style="display:flex; gap:5px;"><input type="number" id="min3" value="100"><input type="number" id="max3" value="1000"></div></div>
-                    <div><label>Precio Gran Mayoreo ($):</label><input type="number" id="precio3" placeholder="40" required></div>
-                </div>
-
+                <div class="form-grid-3"><div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="10"></div></div><div><label>Precio ($):</label><input type="number" id="precio1" required></div></div>
+                <div class="form-grid-3"><div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="11"><input type="number" id="max2" value="99"></div></div><div><label>Precio ($):</label><input type="number" id="precio2" required></div></div>
+                <div class="form-grid-3" style="margin-bottom: 15px;"><div><label>Rango 3 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min3" value="100"><input type="number" id="max3" value="1000"></div></div><div><label>Precio ($):</label><input type="number" id="precio3" required></div></div>
                 <button type="submit" id="btn-submit">Guardar Producto 🚀</button>
                 <button type="button" id="btn-cancelar" class="btn-secondary" style="display:none;" onclick="cancelarEdicion()">Cancelar Edición</button>
             </form>
         </div>
 
-        <div class="card">
-            <h2>📦 Tus Productos</h2>
-            <div id="productos-container">Cargando catálogo...</div>
-        </div>
+        <div class="card"><h2>📦 Tus Productos</h2><div id="productos-container">Cargando catálogo...</div></div>
 
         <div class="card">
             <h2>🛍️ Tickets de Pedidos y Producción</h2>
-
             <div class="tabs" style="margin-top: 15px;">
                 <button class="tab-btn active" onclick="cambiarFiltro('todos', this)">Todos</button>
                 <button class="tab-btn" onclick="cambiarFiltro('Pendiente', this)">🟡 Pendientes</button>
                 <button class="tab-btn" onclick="cambiarFiltro('En proceso', this)">🔵 En Proceso</button>
                 <button class="tab-btn" onclick="cambiarFiltro('Entregado', this)">🟢 Entregados</button>
             </div>
-
             <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar por cliente, teléfono o folio..." oninput="filtrarPedidos()">
-            
-            <div id="pedidos-container" class="pedidos-grid">
-                Cargando pedidos...
-            </div>
+            <div id="pedidos-container" class="pedidos-grid">Cargando pedidos...</div>
         </div>
     </div>
 
     <script>
-        let globalPedidos = [];
-        let filtroActual = 'todos';
-        let modoEdicion = false;
-        let totalPedidosAnterior = 0;
+        let globalPedidos = [], filtroActual = 'todos', modoEdicion = false, totalPedidosAnterior = 0;
 
-        async function cargarTodo() {
-            cargarConfig();
-            cargarProductos();
-            cargarPedidos();
-            setInterval(cargarPedidosSilencioso, 15000);
-        }
+        async function cargarTodo() { cargarConfig(); cargarProductos(); cargarPedidos(); setInterval(cargarPedidosSilencioso, 15000); }
 
-        // --- CARGAR Y GUARDAR CONFIGURACIÓN GENERAL ---
         async function cargarConfig() {
             try {
                 const res = await fetch('/api/config');
@@ -262,21 +187,48 @@
                     document.getElementById('cfg-banco').value = data.banco || '';
                     document.getElementById('cfg-tarjeta').value = data.tarjeta || '';
                     document.getElementById('cfg-titular').value = data.titular || '';
-                    
-                    // Nuevos campos de texto de la página principal
                     document.getElementById('cfg-tiempo').value = data.tiempoElaboracion || '';
                     document.getElementById('cfg-ubicacion').value = data.ubicacionTexto || '';
                     document.getElementById('cfg-horarios').value = data.horarios || '';
                     document.getElementById('cfg-instagram').value = data.instagram || '';
                     document.getElementById('cfg-tiktok').value = data.tiktok || '';
+
+                    // Cargar Materiales
+                    if (data.materiales) {
+                        data.materiales.forEach((m, i) => {
+                            if(document.getElementById(`mat-t-${i}`)) document.getElementById(`mat-t-${i}`).value = m.titulo || '';
+                            if(document.getElementById(`mat-d-${i}`)) document.getElementById(`mat-d-${i}`).value = m.descripcion || '';
+                        });
+                    }
+                    // Cargar Galería
+                    if (data.galeria) {
+                        data.galeria.forEach((img, i) => {
+                            if(document.getElementById(`gal-${i}`)) document.getElementById(`gal-${i}`).value = img || '';
+                        });
+                    }
                 }
-            } catch (e) {
-                console.error("Error al cargar configuración");
-            }
+            } catch (e) { console.error("Error al cargar configuración"); }
         }
 
         async function guardarConfig(e) {
             e.preventDefault();
+            
+            // Recolectar Materiales
+            let materiales = [];
+            for(let i=0; i<4; i++) {
+                materiales.push({
+                    titulo: document.getElementById(`mat-t-${i}`).value.trim(),
+                    descripcion: document.getElementById(`mat-d-${i}`).value.trim()
+                });
+            }
+
+            // Recolectar Galería
+            let galeria = [
+                document.getElementById('gal-0').value.trim(),
+                document.getElementById('gal-1').value.trim(),
+                document.getElementById('gal-2').value.trim()
+            ];
+
             const body = {
                 titulo: document.getElementById('cfg-titulo').value.trim(),
                 subtitulo: document.getElementById('cfg-subtitulo').value.trim(),
@@ -289,56 +241,31 @@
                 ubicacionTexto: document.getElementById('cfg-ubicacion').value.trim(),
                 horarios: document.getElementById('cfg-horarios').value.trim(),
                 instagram: document.getElementById('cfg-instagram').value.trim(),
-                tiktok: document.getElementById('cfg-tiktok').value.trim()
+                tiktok: document.getElementById('cfg-tiktok').value.trim(),
+                materiales: materiales,
+                galeria: galeria
             };
 
             try {
-                const res = await fetch('/api/config', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
+                const res = await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
                 const data = await res.json();
-                if (data.exito) {
-                    alert('¡Configuración general y textos guardados con éxito!');
-                } else {
-                    alert('Error al guardar la configuración.');
-                }
-            } catch (err) {
-                alert('Error de conexión con el servidor.');
-            }
+                if (data.exito) { alert('¡Configuración general, materiales y galería guardados con éxito!'); }
+                else { alert('Error al guardar.'); }
+            } catch (err) { alert('Error de conexión.'); }
         }
 
-        // Alerta sonora mejorada
         function reproducirAlertaSonora() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
-                const osc1 = audioCtx.createOscillator();
-                const gain1 = audioCtx.createGain();
-                osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-                gain1.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                osc1.connect(gain1);
-                gain1.connect(audioCtx.destination);
-                osc1.start();
-                osc1.stop(audioCtx.currentTime + 0.15);
-
+                const osc1 = audioCtx.createOscillator(); const gain1 = audioCtx.createGain();
+                osc1.type = 'sine'; osc1.frequency.setValueAtTime(587.33, audioCtx.currentTime); gain1.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                osc1.connect(gain1); gain1.connect(audioCtx.destination); osc1.start(); osc1.stop(audioCtx.currentTime + 0.15);
                 setTimeout(() => {
-                    const osc2 = audioCtx.createOscillator();
-                    const gain2 = audioCtx.createGain();
-                    osc2.type = 'sine';
-                    osc2.frequency.setValueAtTime(880, audioCtx.currentTime);
-                    gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    osc2.connect(gain2);
-                    gain2.connect(audioCtx.destination);
-                    osc2.start();
-                    osc2.stop(audioCtx.currentTime + 0.25);
+                    const osc2 = audioCtx.createOscillator(); const gain2 = audioCtx.createGain();
+                    osc2.type = 'sine'; osc2.frequency.setValueAtTime(880, audioCtx.currentTime); gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    osc2.connect(gain2); gain2.connect(audioCtx.destination); osc2.start(); osc2.stop(audioCtx.currentTime + 0.25);
                 }, 180);
-
-            } catch (e) {
-                console.log("Audio no soportado o bloqueado por el navegador", e);
-            }
+            } catch (e) {}
         }
 
         function convertirImagen(event) {
@@ -355,49 +282,28 @@
 
         async function cargarProductos() {
             try {
-                const res = await fetch('/api/productos');
-                const prods = await res.json();
+                const res = await fetch('/api/productos'); const prods = await res.json();
                 const div = document.getElementById('productos-container');
                 if (prods.length === 0) { div.innerHTML = '<p>No hay productos.</p>'; return; }
-                
                 div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Imagen</th><th>Precios</th><th>Acciones</th></tr>` +
                     prods.map(p => `
                         <tr>
-                            <td><b>${p.id}</b></td>
-                            <td>${p.nombre}</td>
+                            <td><b>${p.id}</b></td><td>${p.nombre}</td>
                             <td>${p.imagen ? `<img src="${p.imagen}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : 'Sin imagen'}</td>
-                            <td>
-                                <ul style="margin:0; padding-left:15px; font-size:12px;">
-                                    ${(p.rangos || []).map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio}</b></li>`).join('')}
-                                </ul>
-                            </td>
-                            <td>
-                                <button class="btn-warning" onclick='prepararEdicion(${JSON.stringify(p)})'>✏️ Editar</button>
-                                <button class="btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button>
-                            </td>
+                            <td><ul style="margin:0; padding-left:15px; font-size:12px;">${(p.rangos || []).map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio}</b></li>`).join('')}</ul></td>
+                            <td><button class="btn-warning" onclick='prepararEdicion(${JSON.stringify(p)})'>✏️</button> <button class="btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button></td>
                         </tr>
                     `).join('') + `</table>`;
             } catch (e) { document.getElementById('productos-container').innerHTML = 'Error al cargar.'; }
         }
 
         function prepararEdicion(p) {
-            modoEdicion = true;
-            document.getElementById('titulo-form').innerText = `✏️ Editando Producto: ${p.id}`;
-            document.getElementById('btn-submit').innerText = 'Actualizar Producto 🔄';
-            document.getElementById('btn-cancelar').style.display = 'block';
-
-            document.getElementById('prod-id').value = p.id;
-            document.getElementById('prod-id').readOnly = true;
-            document.getElementById('prod-nombre').value = p.nombre;
-            document.getElementById('prod-imagen').value = p.imagen || '';
-
-            if (p.imagen) {
-                document.getElementById('preview-container').innerHTML = `<img src="${p.imagen}" class="preview-img">`;
-            } else {
-                document.getElementById('preview-container').innerHTML = '<span style="font-size:12px; color:#94a3b8;">Sin imagen actual</span>';
-            }
-
-            if (p.rangos && p.rangos.length > 0) {
+            modoEdicion = true; document.getElementById('titulo-form').innerText = `✏️ Editando: ${p.id}`;
+            document.getElementById('btn-submit').innerText = 'Actualizar 🔄'; document.getElementById('btn-cancelar').style.display = 'block';
+            document.getElementById('prod-id').value = p.id; document.getElementById('prod-id').readOnly = true;
+            document.getElementById('prod-nombre').value = p.nombre; document.getElementById('prod-imagen').value = p.imagen || '';
+            document.getElementById('preview-container').innerHTML = p.imagen ? `<img src="${p.imagen}" class="preview-img">` : 'Sin imagen';
+            if (p.rangos) {
                 if (p.rangos[0]) { document.getElementById('min1').value = p.rangos[0].min; document.getElementById('max1').value = p.rangos[0].max; document.getElementById('precio1').value = p.rangos[0].precio; }
                 if (p.rangos[1]) { document.getElementById('min2').value = p.rangos[1].min; document.getElementById('max2').value = p.rangos[1].max; document.getElementById('precio2').value = p.rangos[1].precio; }
                 if (p.rangos[2]) { document.getElementById('min3').value = p.rangos[2].min; document.getElementById('max3').value = p.rangos[2].max; document.getElementById('precio3').value = p.rangos[2].precio; }
@@ -406,14 +312,10 @@
         }
 
         function cancelarEdicion() {
-            modoEdicion = false;
-            document.getElementById('titulo-form').innerText = '➕ Agregar Producto Nuevo';
-            document.getElementById('btn-submit').innerText = 'Guardar Producto 🚀';
-            document.getElementById('btn-cancelar').style.display = 'none';
-            document.getElementById('form-producto').reset();
-            document.getElementById('prod-id').readOnly = false;
-            document.getElementById('prod-imagen').value = '';
-            document.getElementById('preview-container').innerHTML = '<span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span>';
+            modoEdicion = false; document.getElementById('titulo-form').innerText = '➕ Agregar Producto Nuevo';
+            document.getElementById('btn-submit').innerText = 'Guardar Producto 🚀'; document.getElementById('btn-cancelar').style.display = 'none';
+            document.getElementById('form-producto').reset(); document.getElementById('prod-id').readOnly = false;
+            document.getElementById('prod-imagen').value = ''; document.getElementById('preview-container').innerHTML = 'Ninguna imagen seleccionada';
         }
 
         async function guardarProducto(e) {
@@ -421,124 +323,78 @@
             const id = document.getElementById('prod-id').value.trim();
             const nombre = document.getElementById('prod-nombre').value.trim();
             const imagen = document.getElementById('prod-imagen').value;
-
             const rangos = [
                 { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
                 { min: parseInt(document.getElementById('min2').value), max: parseInt(document.getElementById('max2').value), precio: parseFloat(document.getElementById('precio2').value) },
                 { min: parseInt(document.getElementById('min3').value), max: parseInt(document.getElementById('max3').value), precio: parseFloat(document.getElementById('precio3').value) }
             ];
-
-            const url = modoEdicion ? `/api/productos/${id}` : '/api/productos';
-            const method = modoEdicion ? 'PUT' : 'POST';
-
-            const res = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
+            const res = await fetch(modoEdicion ? `/api/productos/${id}` : '/api/productos', {
+                method: modoEdicion ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id, nombre, imagen, tieneVariantes: false, rangos })
             });
             const data = await res.json();
-            
-            if (data.exito) {
-                alert(modoEdicion ? '¡Producto actualizado correctamente!' : '¡Producto agregado con éxito!');
-                cancelarEdicion();
-                cargarProductos();
-            } else { 
-                alert('Error al guardar: ' + (data.error || 'Desconocido')); 
-            }
+            if (data.exito) { alert('¡Producto guardado!'); cancelarEdicion(); cargarProductos(); }
+            else { alert('Error al guardar.'); }
         }
 
         async function eliminarProducto(id) {
-            if (!confirm(`¿Estás seguro de eliminar el producto ${id}?`)) return;
+            if (!confirm(`¿Eliminar producto ${id}?`)) return;
             const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
-            const data = await res.json();
-            if (data.exito) { cargarProductos(); }
+            if ((await res.json()).exito) cargarProductos();
         }
 
         async function cargarPedidos() {
             try {
-                const res = await fetch('/api/pedidos');
-                globalPedidos = await res.json();
-                totalPedidosAnterior = globalPedidos.length;
-                aplicarFiltrosYRenderizar();
-                calcularMetricas(globalPedidos);
-            } catch (e) { document.getElementById('pedidos-container').innerHTML = '<p>Error al cargar.</p>'; }
+                const res = await fetch('/api/pedidos'); globalPedidos = await res.json();
+                totalPedidosAnterior = globalPedidos.length; aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
+            } catch (e) {}
         }
 
         async function cargarPedidosSilencioso() {
             try {
-                const res = await fetch('/api/pedidos');
-                const nuevosPedidos = await res.json();
-                
-                if (totalPedidosAnterior > 0 && nuevosPedidos.length > totalPedidosAnterior) {
-                    reproducirAlertaSonora();
-                }
-                totalPedidosAnterior = nuevosPedidos.length;
-                globalPedidos = nuevosPedidos;
-                
-                aplicarFiltrosYRenderizar();
-                calcularMetricas(globalPedidos);
+                const res = await fetch('/api/pedidos'); const nuevos = await res.json();
+                if (totalPedidosAnterior > 0 && nuevos.length > totalPedidosAnterior) reproducirAlertaSonora();
+                totalPedidosAnterior = nuevos.length; globalPedidos = nuevos;
+                aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
             } catch (e) {}
         }
 
         function calcularMetricas(pedidos) {
-            let totalVentas = pedidos.reduce((acc, p) => acc + (p.total || 0), 0);
-            let pendientes = pedidos.filter(p => p.estado === 'Pendiente').length;
-            document.getElementById('stat-ventas').innerText = `$${totalVentas.toFixed(2)}`;
-            document.getElementById('stat-pendientes').innerText = pendientes;
+            document.getElementById('stat-ventas').innerText = `$${pedidos.reduce((acc, p) => acc + (p.total || 0), 0).toFixed(2)}`;
+            document.getElementById('stat-pendientes').innerText = pedidos.filter(p => p.estado === 'Pendiente').length;
             document.getElementById('stat-total-pedidos').innerText = pedidos.length;
         }
 
         function cambiarFiltro(estado, btn) {
-            filtroActual = estado;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            aplicarFiltrosYRenderizar();
+            filtroActual = estado; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active'); aplicarFiltrosYRenderizar();
         }
 
         function aplicarFiltrosYRenderizar() {
-            const texto = document.getElementById('buscador').value.toLowerCase();
-            let filtrados = globalPedidos.filter(p => {
-                const coincideTexto = p.cliente.nombre.toLowerCase().includes(texto) || 
-                                    p.cliente.telefono.toLowerCase().includes(texto) ||
-                                    String(p.folio).includes(texto);
-                const coincideEstado = (filtroActual === 'todos' || p.estado === filtroActual);
-                return coincideTexto && coincideEstado;
-            });
-            renderizarPedidos(filtrados);
+            const t = document.getElementById('buscador').value.toLowerCase();
+            renderizarPedidos(globalPedidos.filter(p => (p.cliente.nombre.toLowerCase().includes(t) || p.cliente.telefono.toLowerCase().includes(t) || String(p.folio).includes(t)) && (filtroActual === 'todos' || p.estado === filtroActual)));
         }
 
-        function filtrarPedidos() {
-            aplicarFiltrosYRenderizar();
-        }
+        function filtrarPedidos() { aplicarFiltrosYRenderizar(); }
 
         function renderizarPedidos(pedidos) {
             const div = document.getElementById('pedidos-container');
-            if (pedidos.length === 0) { div.innerHTML = '<p>No hay pedidos en esta sección.</p>'; return; }
-            
+            if (pedidos.length === 0) { div.innerHTML = '<p>No hay pedidos.</p>'; return; }
             div.innerHTML = pedidos.map(p => `
                 <div class="pedido-ticket">
                     <div>
-                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:10px;">
-                            <b style="color:var(--primary);">Folio #${p.folio}</b>
-                            <span style="font-size:11px; color:#64748b;">${p.fecha}</span>
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:10px;">
+                            <b style="color:var(--primary);">Folio #${p.folio}</b><span style="font-size:11px; color:#64748b;">${p.fecha}</span>
                         </div>
                         <p style="margin:4px 0; font-size:13px;"><b>Cliente:</b> ${p.cliente.nombre}</p>
                         <p style="margin:4px 0; font-size:13px;"><b>Teléfono:</b> ${p.cliente.telefono}</p>
                         <p style="margin:4px 0; font-size:13px;"><b>Pago:</b> ${p.estadoPago || 'Pendiente'} (${p.metodoPago || 'Efectivo'})</p>
-                        
                         <hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;">
-                        
-                        <div style="font-size:13px;">
-                            ${p.productos.map(prod => `
-                                <p style="margin:4px 0;"><b>${prod.cantidad}x</b> ${prod.nombre}</p>${prod.personalizacion ? `<div style="background:#f8fafc; border:1px solid var(--border); padding:6px; border-radius:6px; font-size:12px; margin:6px 0;">💬 <b>Especificaciones:</b><br>${prod.personalizacion}</div>` : ''}
-                                ${prod.diseno ? `<div style="margin-top:8px;"><b>🖼️ Diseño adjunto del cliente:</b><br><a href="${prod.diseno}" target="_blank"><img src="${prod.diseno}" style="width:100%; max-height:160px; object-fit:contain; border:1px solid var(--border); border-radius:6px; margin-top:4px; background:#f1f5f9; cursor:pointer;" title="Clic para ver completo"></a></div>` : ''}
-                            `).join('')}
-                        </div>
+                        <div style="font-size:13px;">${p.productos.map(prod => `<p style="margin:4px 0;"><b>${prod.cantidad}x</b> ${prod.nombre}</p>${prod.personalizacion ? `<div style="background:#f8fafc; border:1px solid var(--border); padding:6px; border-radius:6px; font-size:12px; margin:6px 0;">💬 ${prod.personalizacion}</div>` : ''}${prod.diseno ? `<div style="margin-top:8px;"><a href="${prod.diseno}" target="_blank"><img src="${prod.diseno}" style="width:100%; max-height:160px; object-fit:contain; border:1px solid var(--border); border-radius:6px;"></a></div>` : ''}`).join('')}</div>
                     </div>
-
                     <div>
                         <p style="margin:12px 0 8px 0; font-size:14px;"><b>Total:</b> $${p.total.toFixed(2)}</p>
-                        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                        <div style="display:flex; gap:8px;">
                             <select onchange="cambiarEstado('${p.folio}', this.value)" style="padding:6px; font-size:12px; flex:1;">
                                 <option value="Pendiente" ${p.estado === 'Pendiente' ? 'selected' : ''}>🟡 Pendiente</option>
                                 <option value="En proceso" ${p.estado === 'En proceso' ? 'selected' : ''}>🔵 En Proceso</option>
@@ -551,21 +407,8 @@
             `).join('');
         }
 
-        async function cambiarEstado(folio, nuevoEstado) {
-            await fetch(`/api/pedidos/${folio}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ estado: nuevoEstado })
-            });
-            cargarPedidosSilencioso();
-        }
-
-        async function eliminarPedido(folio) {
-            if (!confirm(`¿Estás seguro de eliminar el pedido #${folio}?`)) return;
-            const res = await fetch(`/api/pedidos/${folio}`, { method: 'DELETE' });
-            const data = await res.json();
-            if (data.exito) { cargarPedidos(); }
-        }
+        async function cambiarEstado(folio, est) { await fetch(`/api/pedidos/${folio}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado: est }) }); cargarPedidosSilencioso(); }
+        async function eliminarPedido(folio) { if (confirm(`¿Eliminar #${folio}?`)) { await fetch(`/api/pedidos/${folio}`, { method: 'DELETE' }); cargarPedidos(); } }
 
         cargarTodo();
     </script>
