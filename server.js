@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname))); // Sirve archivos estáticos (HTML, imágenes, etc.)
 
-// Conexión a MongoDB Atlas (Render usará la variable de entorno MONGO_URI configurada en su panel)
+// Conexión a MongoDB Atlas
 const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
@@ -30,10 +30,17 @@ const pedidoSchema = new mongoose.Schema({
     estado: { type: String, default: 'Pendiente' },
     fecha: { type: Date, default: Date.now }
 });
-
 const Pedido = mongoose.model('Pedido', pedidoSchema);
 
-// ==================== RUTAS DE API ====================
+const productoSchema = new mongoose.Schema({
+    id: { type: String, required: true, unique: true },
+    nombre: String,
+    imagen: String,
+    precios: Object
+});
+const Producto = mongoose.model('Producto', productoSchema);
+
+// ==================== RUTAS DE PEDIDOS ====================
 
 // 1. Obtener todos los pedidos (Panel de Administración)
 app.get('/api/pedidos', async (req, res) => {
@@ -48,7 +55,6 @@ app.get('/api/pedidos', async (req, res) => {
 // 2. Crear un nuevo pedido (Tienda Pública)
 app.post('/api/pedidos', async (req, res) => {
     try {
-        // Generar folio automático secuencial si no se envía
         const ultimoPedido = await Pedido.findOne().sort({ folio: -1 });
         const nuevoFolio = ultimoPedido && ultimoPedido.folio ? ultimoPedido.folio + 1 : 1001;
 
@@ -104,8 +110,44 @@ app.get('/api/rastreo', async (req, res) => {
     }
 });
 
+// ==================== RUTAS DE PRODUCTOS ====================
+
+// Obtener todos los productos (Catálogo)
+app.get('/api/productos', async (req, res) => {
+    try {
+        const productos = await Producto.find();
+        res.json(productos);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Guardar o actualizar un producto (Administrador)
+app.post('/api/productos', async (req, res) => {
+    try {
+        const { id, nombre, imagen, precios } = req.body;
+        const productoActualizado = await Producto.findOneAndUpdate(
+            { id: id },
+            { nombre, imagen, precios },
+            { new: true, upsert: true }
+        );
+        res.json(productoActualizado);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Eliminar un producto (Administrador)
+app.delete('/api/productos/:id', async (req, res) => {
+    try {
+        await Producto.findOneAndDelete({ id: req.params.id });
+        res.json({ mensaje: 'Producto eliminado correctamente' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ==================== INICIO DEL SERVIDOR ====================
-// CRÍTICO PARA RENDER: Escuchar en '0.0.0.0' y usar process.env.PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
