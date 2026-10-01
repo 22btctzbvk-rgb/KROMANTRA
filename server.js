@@ -24,6 +24,7 @@ MongoClient.connect(mongoUrl)
 // ==========================================
 // RUTA: CONFIGURACIÓN DEL NEGOCIO
 // ==========================================
+
 app.get('/api/config', async (req, res) => {
     try {
         let config = await db.collection('configuracion').findOne({});
@@ -31,11 +32,16 @@ app.get('/api/config', async (req, res) => {
             config = {
                 titulo: "Kromantra",
                 subtitulo: "Regalos Personalizados y Mayoreo Inteligente",
-                quienesSomos: "Somos un taller dedicado a crear piezas con alta precisión y detalle...",
+                quienesSomos: "Somos un taller dedicado a crear piezas con alta precisión y detalle. Ya sea que busques un regalo único y personalizado para una ocasión especial, o necesites producción de mayoreo inteligente para hacer crecer tu marca, ponemos pasión y cuidado en cada trabajo que fabricamos.",
                 whatsapp: "525514494333",
                 banco: "BBVA",
                 tarjeta: "4152314063676335",
-                titular: "Carolina Perez Mendez"
+                titular: "Carolina Perez Mendez",
+                tiempoElaboracion: "3 a 4 días hábiles",
+                ubicacionTexto: "Recogida directa en Taller (Zona Tlalnepantla)",
+                horarios: "Lunes a Sábado: 10:00 am - 7:00 pm",
+                instagram: "",
+                tiktok: ""
             };
         }
         res.json(config);
@@ -47,7 +53,11 @@ app.get('/api/config', async (req, res) => {
 app.post('/api/config', async (req, res) => {
     try {
         const nuevaConfig = req.body;
-        await db.collection('configuracion').updateOne({}, { $set: nuevaConfig }, { upsert: true });
+        await db.collection('configuracion').updateOne(
+            {}, 
+            { $set: nuevaConfig }, 
+            { upsert: true }
+        );
         res.json({ exito: true });
     } catch (e) {
         res.status(500).json({ error: "Error al guardar configuración" });
