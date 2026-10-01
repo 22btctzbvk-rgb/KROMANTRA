@@ -3,21 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kromantra | Tienda Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Kromantra | Regalos y Mayoreo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
-        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        
+        /* ==========================================
+           1. ESTILOS DE LA PÁGINA PRINCIPAL (HERO)
+           ========================================== */
+        .hero-section {
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 5px solid #3b82f6;
+        }
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-section img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .hero-section h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            letter-spacing: -0.5px;
+        }
+        .hero-section p.subtitle {
+            font-size: 18px;
+            margin: 0 0 30px 0;
+            opacity: 0.9;
+        }
+        .about-text {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-scroll {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-scroll:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
 
-        header { grid-column: 1 / -1; background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 25px; text-align: center; border-radius: 12px; margin-bottom: 10px; }
-        header img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 6px; border-radius: 50%; background: white; padding: 4px; }
-        h1 { margin: 0; font-size: 24px; } p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.9; }
+        /* ==========================================
+           2. ESTILOS DEL CONTENEDOR (CATÁLOGO Y CARRITO)
+           ========================================== */
+        .app-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+        }
+        @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } }
 
         #toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 1000; transition: opacity 0.3s ease; }
 
         .main-content { display: flex; flex-direction: column; gap: 20px; }
+        
         .rastreo-box { background: white; border: 1px solid var(--border); padding: 15px 20px; border-radius: 10px; display: flex; gap: 10px; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .rastreo-box input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
         .rastreo-box button { padding: 8px 16px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
@@ -53,17 +122,7 @@
         
         .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
         
-        /* Caja de pago rediseñada y muy visible */
-        .info-pago-box { 
-            font-size: 11px; 
-            background: #eff6ff; 
-            padding: 12px; 
-            border-radius: 8px; 
-            border: 1px solid #bfdbfe; 
-            color: #1e3a8a; 
-            display: none; 
-            margin-top: 4px; 
-        }
+        .info-pago-box { font-size: 11px; background: #eff6ff; padding: 12px; border-radius: 8px; border: 1px solid #bfdbfe; color: #1e3a8a; display: none; margin-top: 4px; }
         
         .btn-checkout { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
         .btn-checkout:hover { background: #15803d; }
@@ -74,13 +133,31 @@
 <body>
     <div id="toast">¡Producto agregado al carrito!</div>
 
-    <div class="container">
-        <header>
-            <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
+    <!-- ==========================================
+         SECCIÓN 1: PÁGINA PRINCIPAL (HERO)
+         ========================================== -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <img src="logo.jpg" alt="Kromantra Logo" onerror="this.style.display='none'">
             <h1>Kromantra</h1>
-            <p>Regalos Personalizados y Mayoreo Inteligente</p>
-        </header>
+            <p class="subtitle">Regalos Personalizados y Mayoreo Inteligente</p>
+            
+            <div class="about-text">
+                <b>👋 Conoce nuestra esencia:</b><br>
+                Somos un taller dedicado a crear piezas con alta precisión y detalle. Ya sea que busques un regalo único y personalizado para una ocasión especial, o necesites producción de mayoreo inteligente para hacer crecer tu marca, ponemos pasión y cuidado en cada trabajo que fabricamos.
+            </div>
 
+            <!-- Este botón lleva al usuario suavemente hacia la zona del catálogo -->
+            <a href="#zona-catalogo" class="btn-scroll">Ver Catálogo de Productos ↓</a>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         SECCIÓN 2: CATÁLOGO Y CARRITO (TU APP)
+         ========================================== -->
+    <div class="app-container" id="zona-catalogo">
+        
+        <!-- Columna Izquierda: Rastreo y Catálogo -->
         <div class="main-content">
             <div class="rastreo-box">
                 <input type="text" id="inputRastreo" placeholder="🔍 Ingresa tu Folio o Teléfono para rastrear pedido...">
@@ -88,12 +165,15 @@
             </div>
             <div id="resultadoRastreo"></div>
 
-            <h2 style="font-size: 18px; margin: 0; color: #334155;">📦 Catálogo de Productos</h2>
+            <h2 style="font-size: 18px; margin: 0; color: #334155; padding-top: 20px;">📦 Nuestro Catálogo</h2>
+            
+            <!-- Aquí se inyectan los productos desde tu base de datos -->
             <div id="catalogo" class="grid-productos">
                 <p>Cargando productos...</p>
             </div>
         </div>
 
+        <!-- Columna Derecha: Carrito y Checkout -->
         <div class="sidebar">
             <h2>🛒 Tu Carrito de Pedido</h2>
             <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;">
@@ -120,7 +200,7 @@
                     </select>
                 </div>
 
-                <!-- Cuadro de datos de pago rediseñado y claro -->
+                <!-- Caja de datos de pago BBVA (oculta por defecto) -->
                 <div id="info-pago-div" class="info-pago-box">
                     <b style="color: #1e40af; display: block; margin-bottom: 4px; font-size: 12px;">💳 Datos para tu Transferencia:</b>
                     <div style="background: white; padding: 8px; border-radius: 6px; border: 1px solid #93c5fd; font-family: monospace; font-size: 11px; color: #0f172a; line-height: 1.4;">
@@ -136,15 +216,23 @@
         </div>
     </div>
 
+    <!-- ==========================================
+         SCRIPTS: LÓGICA DE TU TIENDA
+         ========================================== -->
     <script>
-        // ==========================================
-        // ⚙️ CONFIGURACIÓN DE TU NEGOCIO
-        // ==========================================
+        // CONFIGURACIÓN
         const WHATSAPP_NEGOCIO = '525514494333'; 
-        // ==========================================
 
         let carrito = [];
         let productosGlobal = [];
+
+        // Smooth scroll para el botón "Ver Catálogo"
+        document.querySelector('.btn-scroll').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
 
         async function cargarCatalogo() {
             try {
@@ -429,10 +517,8 @@
             `).join('');
         }
 
-        // Carga inicial al abrir la tienda
+        // Carga inicial y polling
         cargarCatalogo();
-
-        // Sincronización automática en segundo plano cada 10 segundos
         setInterval(() => {
             cargarCatalogo();
         }, 10000);
