@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kromantra | Panel de Taller</title>
+    <title>Kromantra | Panel de Administración</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
@@ -59,7 +59,7 @@
             const PIN_SECRETO = '4321'; 
             const pinGuardado = localStorage.getItem('kromantra_admin_ok');
             if (pinGuardado !== PIN_SECRETO) {
-                const ingreso = prompt('🔒 Ingresa el PIN de acceso al taller de Kromantra:');
+                const ingreso = prompt('🔒 Ingresa el PIN de acceso a la administración de Kromantra:');
                 if (ingreso === PIN_SECRETO) {
                     localStorage.setItem('kromantra_admin_ok', PIN_SECRETO);
                 } else {
@@ -73,17 +73,17 @@
     <div class="container">
         <a href="/" class="btn-volver">← Ir a la Tienda</a>
         <header>
-            <h1>Panel de Taller Kromantra</h1>
-            <p>Control visual de producción, pagos y configuración de tienda</p>
+            <h1>Panel de Administración Kromantra</h1>
+            <p>Control visual de pedidos y configuración general</p>
         </header>
 
         <div class="stats-grid">
             <div class="stat-card"><h3>Ventas Totales</h3><p id="stat-ventas">$0.00</p></div>
-            <div class="stat-card"><h3>Pendientes de Taller</h3><p id="stat-pendientes">0</p></div>
+            <div class="stat-card"><h3>Pendientes</h3><p id="stat-pendientes">0</p></div>
             <div class="stat-card"><h3>Total Pedidos</h3><p id="stat-total-pedidos">0</p></div>
         </div>
 
-        <!-- SECCIÓN: CONFIGURACIÓN GENERAL Y TEXTOS EDITABLES -->
+        <!-- CONFIGURACIÓN GENERAL Y TEXTOS -->
         <div class="card">
             <h2>⚙️ Configuración General y Textos del Negocio</h2>
             <form onsubmit="guardarConfig(event)">
@@ -108,7 +108,7 @@
                 <div class="section-sub">Textos, Horarios y Redes de la Página Principal</div>
                 <div class="form-grid">
                     <div><label>Tiempo de Elaboración:</label><input type="text" id="cfg-tiempo" placeholder="Ej: 3 a 4 días hábiles"></div>
-                    <div><label>Texto de Ubicación / Recogida:</label><input type="text" id="cfg-ubicacion" placeholder="Ej: Recogida directa en Taller"></div>
+                    <div><label>Texto de Ubicación / Recogida:</label><input type="text" id="cfg-ubicacion" placeholder="Ej: Recogida directa en Zona Tlalnepantla"></div>
                 </div>
                 <div style="margin-bottom: 12px;"><label>Horarios de Atención:</label><input type="text" id="cfg-horarios" placeholder="Ej: Lunes a Sábado: 10:00 am - 7:00 pm"></div>
                 <div class="form-grid" style="margin-bottom: 15px;">
@@ -116,14 +116,14 @@
                     <div><label>Enlace de TikTok:</label><input type="text" id="cfg-tiktok"></div>
                 </div>
 
-                <!-- SECCIÓN: MATERIALES Y PRECISIÓN -->
+                <!-- MATERIALES Y PRECISIÓN -->
                 <div class="section-sub">🛠️ Materiales y Precisión (4 Tarjetas)</div>
                 <div class="form-grid"><div><label>Material 1 - Título:</label><input type="text" id="mat-t-0"></div><div><label>Material 1 - Descripción:</label><input type="text" id="mat-d-0"></div></div>
                 <div class="form-grid"><div><label>Material 2 - Título:</label><input type="text" id="mat-t-1"></div><div><label>Material 2 - Descripción:</label><input type="text" id="mat-d-1"></div></div>
                 <div class="form-grid"><div><label>Material 3 - Título:</label><input type="text" id="mat-t-2"></div><div><label>Material 3 - Descripción:</label><input type="text" id="mat-d-2"></div></div>
                 <div class="form-grid" style="margin-bottom: 15px;"><div><label>Material 4 - Título:</label><input type="text" id="mat-t-3"></div><div><label>Material 4 - Descripción:</label><input type="text" id="mat-d-3"></div></div>
 
-                <!-- SECCIÓN: GALERÍA DE TRABAJOS (DESDE DISPOSITIVO) -->
+                <!-- GALERÍA DE TRABAJOS -->
                 <div class="section-sub">✨ Galería de Trabajos (3 Imágenes desde Dispositivo)</div>
                 <div class="form-grid-3" style="margin-bottom: 15px;">
                     <div>
@@ -173,7 +173,7 @@
         <div class="card"><h2>📦 Tus Productos</h2><div id="productos-container">Cargando catálogo...</div></div>
 
         <div class="card">
-            <h2>🛍️ Tickets de Pedidos y Producción</h2>
+            <h2>🛍️ Tickets de Pedidos</h2>
             <div class="tabs" style="margin-top: 15px;">
                 <button class="tab-btn active" onclick="cambiarFiltro('todos', this)">Todos</button>
                 <button class="tab-btn" onclick="cambiarFiltro('Pendiente', this)">🟡 Pendientes</button>
@@ -208,7 +208,6 @@
                     document.getElementById('cfg-instagram').value = data.instagram || '';
                     document.getElementById('cfg-tiktok').value = data.tiktok || '';
 
-                    // Cargar Materiales
                     if (data.materiales) {
                         data.materiales.forEach((m, i) => {
                             if(document.getElementById(`mat-t-${i}`)) document.getElementById(`mat-t-${i}`).value = m.titulo || '';
@@ -216,7 +215,6 @@
                         });
                     }
 
-                    // Cargar Galería y sus previsualizaciones
                     if (data.galeria) {
                         data.galeria.forEach((img, i) => {
                             if(img) {
@@ -229,7 +227,6 @@
             } catch (e) { console.error("Error al cargar configuración"); }
         }
 
-        // Conversor de imágenes de galería desde dispositivo
         function convertirGaleria(event, index) {
             const file = event.target.files[0];
             if (file) {
@@ -244,8 +241,6 @@
 
         async function guardarConfig(e) {
             e.preventDefault();
-            
-            // Recolectar Materiales
             let materiales = [];
             for(let i=0; i<4; i++) {
                 materiales.push({
@@ -254,7 +249,6 @@
                 });
             }
 
-            // Recolectar Galería
             let galeria = [
                 document.getElementById('gal-0').value,
                 document.getElementById('gal-1').value,
@@ -281,7 +275,7 @@
             try {
                 const res = await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
                 const data = await res.json();
-                if (data.exito) { alert('¡Configuración general, materiales y galería guardados con éxito!'); }
+                if (data.exito) { alert('¡Configuración general guardada con éxito!'); }
                 else { alert('Error al guardar.'); }
             } catch (err) { alert('Error de conexión.'); }
         }
@@ -432,7 +426,7 @@
                                 <option value="En proceso" ${p.estado === 'En proceso' ? 'selected' : ''}>🔵 En Proceso</option>
                                 <option value="Entregado" ${p.estado === 'Entregado' ? 'selected' : ''}>🟢 Entregado</option>
                             </select>
-                            <button class="btn-danger" onclick="eliminarPedido('${p.folio}')">🗑️</button>
+                            <button class="btn-danger" onclick="eliminarPedido('${p.folio}')">🗑</button>
                         </div>
                     </div>
                 </div>
