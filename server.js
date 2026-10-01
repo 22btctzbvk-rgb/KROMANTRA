@@ -6,14 +6,15 @@ const app = express();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname)));
 
+// Configuración de la conexión a MongoDB Atlas (como lo teníamos el lunes)
 const mongoUrl = process.env.MONGO_URI || "mongodb+srv://angelvalderrama944_db_user:UAT5y3u0Jqzbd1mQ@cluster0.xlybp0s.mongodb.net";
-const dbName = "Prueba"; // Probaremos primero con Prueba
+const dbName = "kromantra";
 let db;
 
 MongoClient.connect(mongoUrl)
     .then(client => {
         db = client.db(dbName);
-        console.log("--> CONECTADO EXITOSAMENTE A LA BD:", db.databaseName);
+        console.log("Conectado exitosamente a MongoDB Atlas");
         const PORT = process.env.PORT || 10000;
         app.listen(PORT, () => {
             console.log(`Servidor corriendo en el puerto ${PORT}`);
@@ -31,7 +32,7 @@ app.get('/api/config', async (req, res) => {
             config = {
                 titulo: "Kromantra",
                 subtitulo: "Regalos Personalizados y Mayoreo Inteligente",
-                quienesSomos: "Somos un taller dedicado a crear piezas con alta precisión y detalle...",
+                quienesSomos: "Somos un taller dedicado a crear piezas con alta precisión y detalle. Ya sea que busques un regalo único y personalizado para una ocasión especial, o necesites producción de mayoreo inteligente para hacer crecer tu marca, ponemos pasión y cuidado en cada trabajo que fabricamos.",
                 whatsapp: "525514494333",
                 banco: "BBVA",
                 tarjeta: "4152314063676335",
@@ -47,7 +48,11 @@ app.get('/api/config', async (req, res) => {
 app.post('/api/config', async (req, res) => {
     try {
         const nuevaConfig = req.body;
-        await db.collection('configuracion').updateOne({}, { $set: nuevaConfig }, { upsert: true });
+        await db.collection('configuracion').updateOne(
+            {}, 
+            { $set: nuevaConfig }, 
+            { upsert: true }
+        );
         res.json({ exito: true });
     } catch (e) {
         res.status(500).json({ error: "Error al guardar configuración" });
@@ -55,16 +60,13 @@ app.post('/api/config', async (req, res) => {
 });
 
 // ==========================================
-// RUTAS: PRODUCTOS (CON REGISTROS DE DEPURACIÓN)
+// RUTAS: PRODUCTOS
 // ==========================================
 app.get('/api/productos', async (req, res) => {
     try {
-        console.log("--> Intentando leer productos de la BD:", db.databaseName);
         const productos = await db.collection('productos').find({}).toArray();
-        console.log("--> Productos encontrados:", productos.length);
         res.json(productos);
     } catch (e) {
-        console.error("--> Error al obtener productos:", e);
         res.status(500).json({ error: "Error al obtener productos" });
     }
 });
