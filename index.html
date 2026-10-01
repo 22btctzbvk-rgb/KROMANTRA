@@ -37,9 +37,6 @@
         .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .galeria-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: #e2e8f0; }
 
-        .horarios-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; font-size: 14px; color: #475569; }
-        .horarios-box b { color: #1e3a8a; display: block; margin-bottom: 5px; }
-
         .faq-item { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 12px; cursor: pointer; }
         .faq-pregunta { display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #334155; font-size: 15px; }
         .faq-respuesta { font-size: 13px; color: #64748b; margin-top: 8px; display: none; line-height: 1.5; }
@@ -94,7 +91,6 @@
 
     <div class="announcement-bar">
         <span id="lbl-tiempo">⏱️ Tiempo de elaboración: 3 a 4 días hábiles</span>
-        <span id="lbl-ubicacion">📍 Recogida directa en Zona Tlalnepantla</span>
     </div>
 
     <div id="vista-inicio">
@@ -134,11 +130,11 @@
                 </div>
             </div>
 
-            <div class="info-card">
-                <h2>📍 Ubicación y Horarios de Atención</h2>
-                <div class="horarios-box">
-                    <div><b>🕒 Horarios de Atención:</b><span id="lbl-horarios">Lunes a Sábado: 10:00 am - 7:00 pm</span></div>
-                    <div><b>📍 Recogida de Pedidos:</b><span id="lbl-ubicacion-texto">Ubicados en Zona Tlalnepantla, Estado de México. Te notificaremos en cuanto tu pedido esté listo.</span></div>
+            <!-- Horarios de Atención -->
+            <div class="info-card" style="text-align: center;">
+                <h2>🕒 Horarios de Atención</h2>
+                <div id="lbl-horarios" style="font-size: 16px; color: #475569; font-weight: 500; margin-top: 10px;">
+                    Lunes a Sábado: 10:00 am - 7:00 pm
                 </div>
             </div>
 
@@ -214,8 +210,7 @@
                     if(data.tarjeta) document.getElementById('tarjeta-txt').innerText = data.tarjeta;
                     if(data.titular) document.getElementById('titular-txt').innerText = data.titular;
                     if(data.tiempoElaboracion) document.getElementById('lbl-tiempo').innerText = `⏱ Tiempo de elaboración: ${data.tiempoElaboracion}`;
-                    if(data.ubicacionTexto) { document.getElementById('lbl-ubicacion').innerText = `📍 ${data.ubicacionTexto}`; document.getElementById('lbl-ubicacion-texto').innerText = data.ubicacionTexto; }
-                    if(data.horarios) document.getElementById('lbl-horarios').innerHTML = data.horarios;
+                    if(data.horarios) document.getElementById('lbl-horarios').innerText = data.horarios;
                     if(data.instagram) document.getElementById('link-instagram').href = data.instagram;
                     if(data.tiktok) document.getElementById('link-tiktok').href = data.tiktok;
 
