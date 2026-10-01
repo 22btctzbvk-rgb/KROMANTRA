@@ -2,8 +2,8 @@
   "name": "nueva-pagina-kromantra",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
- "scripts": {
+  "main": "server.js",
+  "scripts": {
     "start": "node server.js"
   },
   "keywords": [],
@@ -11,6 +11,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^5.2.1",
     "mongoose": "^9.10.2"
   }
