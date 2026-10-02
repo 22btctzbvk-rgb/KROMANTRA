@@ -11,9 +11,17 @@
         header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 20px; text-align: center; border-radius: 12px; margin-bottom: 20px; }
         h1 { margin: 0; font-size: 22px; } p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
         .container { max-width: 1050px; margin: 0 auto; }
+        .btn-volver { display: inline-block; margin-bottom: 15px; background: #e2e8f0; color: #1e293b; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 13px; }
         
+        /* Pestañas de Navegación del Admin */
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+        .nav-tab { background: white; border: 1px solid var(--border); padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: #475569; }
+        .nav-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .admin-seccion { display: none; }
+        .admin-seccion.activo { display: block; }
+
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align: center; }
+        .stat-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
         .stat-card h3 { margin: 0; font-size: 12px; color: #64748b; }
         .stat-card p { font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 5px; }
 
@@ -24,48 +32,32 @@
         th, td { border: 1px solid var(--border); padding: 10px; text-align: left; vertical-align: middle; }
         th { background: #f1f5f9; font-weight: 600; }
         
-        .btn-volver { display: inline-block; margin-bottom: 15px; background: #e2e8f0; color: #1e293b; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 13px; }
-        .btn-volver:hover { background: #cbd5e1; }
-        
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
         .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
         label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
-        input, select, textarea { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 13px; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 13px; }
         
         button { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; width: 100%; }
         button:hover { background: var(--primary-hover); }
         .btn-danger { background: #e11d48; padding: 6px 12px; font-size: 12px; width: auto; color: white; border-radius: 6px; border: none; cursor: pointer; }
-        .btn-danger:hover { background: #be123c; }
-        .btn-warning { background: #d97706; padding: 5px 10px; font-size: 12px; width: auto; color: white; border-radius: 6px; border: none; cursor: pointer;}
-        .btn-warning:hover { background: #b45309; }
+        .btn-warning { background: #d97706; padding: 5px 10px; font-size: 12px; width: auto; color: white; border-radius: 6px; border: none; cursor: pointer; }
         .btn-secondary { background: #64748b; margin-top: 5px; }
-
-        .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
-        .tab-btn { background: #f1f5f9; color: #475569; border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; width: auto; }
-        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
         .search-box { width: 100%; padding: 8px 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; box-sizing: border-box; }
         .section-sub { font-size: 13px; font-weight: 700; color: #475569; margin-top: 15px; margin-bottom: 8px; border-left: 3px solid var(--primary); padding-left: 8px; }
-        #titulo-form { color: #4f46e5; }
         .preview-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); margin-top: 5px; }
-
         .pedidos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-top: 15px; }
-        .pedido-ticket { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
+        .pedido-ticket { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
     </style>
 </head>
 <body>
     <script>
         (function verificarAccesoAdmin() {
             const PIN_SECRETO = '4321'; 
-            const pinGuardado = localStorage.getItem('kromantra_admin_ok');
-            if (pinGuardado !== PIN_SECRETO) {
-                const ingreso = prompt('🔒 Ingresa el PIN de acceso a la administración de Kromantra:');
-                if (ingreso === PIN_SECRETO) {
-                    localStorage.setItem('kromantra_admin_ok', PIN_SECRETO);
-                } else {
-                    alert('PIN incorrecto. Acceso denegado.');
-                    window.location.href = '/';
-                }
+            if (localStorage.getItem('kromantra_admin_ok') !== PIN_SECRETO) {
+                const ingreso = prompt('🔒 Ingresa el PIN de administración:');
+                if (ingreso === PIN_SECRETO) { localStorage.setItem('kromantra_admin_ok', PIN_SECRETO); }
+                else { alert('PIN incorrecto.'); window.location.href = '/'; }
             }
         })();
     </script>
@@ -74,124 +66,140 @@
         <a href="/" class="btn-volver">← Ir a la Tienda</a>
         <header>
             <h1>Panel de Administración Kromantra</h1>
-            <p>Control visual de pedidos y configuración general</p>
+            <p>Control limpio y organizado por secciones</p>
         </header>
 
-        <div class="stats-grid">
-            <div class="stat-card"><h3>Ventas Totales</h3><p id="stat-ventas">$0.00</p></div>
-            <div class="stat-card"><h3>Pendientes</h3><p id="stat-pendientes">0</p></div>
-            <div class="stat-card"><h3>Total Pedidos</h3><p id="stat-total-pedidos">0</p></div>
+        <!-- PESTAÑAS DE NAVEGACIÓN -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="cambiarSeccion('seccion-pedidos', this)">🛍️ Pedidos</button>
+            <button class="nav-tab" onclick="cambiarSeccion('seccion-productos', this)">📦 Productos y Catálogo</button>
+            <button class="nav-tab" onclick="cambiarSeccion('seccion-config', this)">⚙️ Configuración y Textos</button>
+            <button class="nav-tab" onclick="cambiarSeccion('seccion-resenas', this)">⭐ Reseñas</button>
         </div>
 
-        <!-- CONFIGURACIÓN GENERAL Y TEXTOS -->
-        <div class="card">
-            <h2>⚙️ Configuración General y Textos del Negocio</h2>
-            <form onsubmit="guardarConfig(event)">
-                <div class="form-grid">
-                    <div><label>Título del Negocio:</label><input type="text" id="cfg-titulo" required></div>
-                    <div><label>Subtítulo / Eslogan:</label><input type="text" id="cfg-subtitulo" required></div>
-                </div>
-
-                <div style="margin-bottom: 12px;">
-                    <label>Texto "Quiénes Somos / Nuestra Esencia":</label>
-                    <textarea id="cfg-quienes" rows="3" required></textarea>
-                </div>
-
-                <div class="form-grid-3">
-                    <div><label>WhatsApp:</label><input type="text" id="cfg-whatsapp" required></div>
-                    <div><label>Banco:</label><input type="text" id="cfg-banco" required></div>
-                    <div><label>Titular Tarjeta:</label><input type="text" id="cfg-titular" required></div>
-                </div>
-
-                <div style="margin-bottom: 12px;"><label>Número de Tarjeta:</label><input type="text" id="cfg-tarjeta" required></div>
-
-                <div class="section-sub">Textos, Horarios y Redes de la Página Principal</div>
-                <div style="margin-bottom: 12px;">
-                    <label>Tiempo de Elaboración:</label>
-                    <input type="text" id="cfg-tiempo" placeholder="Ej: 3 a 4 días hábiles">
-                </div>
-                <div style="margin-bottom: 12px;">
-                    <label>Horarios de Atención:</label>
-                    <input type="text" id="cfg-horarios" placeholder="Ej: Lunes a Sábado: 10:00 am - 7:00 pm">
-                </div>
-                <div class="form-grid" style="margin-bottom: 15px;">
-                    <div><label>Enlace de Instagram:</label><input type="text" id="cfg-instagram"></div>
-                    <div><label>Enlace de TikTok:</label><input type="text" id="cfg-tiktok"></div>
-                </div>
-
-                <!-- MATERIALES Y PRECISIÓN -->
-                <div class="section-sub">🛠️ Materiales y Precisión (4 Tarjetas)</div>
-                <div class="form-grid"><div><label>Material 1 - Título:</label><input type="text" id="mat-t-0"></div><div><label>Material 1 - Descripción:</label><input type="text" id="mat-d-0"></div></div>
-                <div class="form-grid"><div><label>Material 2 - Título:</label><input type="text" id="mat-t-1"></div><div><label>Material 2 - Descripción:</label><input type="text" id="mat-d-1"></div></div>
-                <div class="form-grid"><div><label>Material 3 - Título:</label><input type="text" id="mat-t-2"></div><div><label>Material 3 - Descripción:</label><input type="text" id="mat-d-2"></div></div>
-                <div class="form-grid" style="margin-bottom: 15px;"><div><label>Material 4 - Título:</label><input type="text" id="mat-t-3"></div><div><label>Material 4 - Descripción:</label><input type="text" id="mat-d-3"></div></div>
-
-                <!-- GALERÍA DE TRABAJOS -->
-                <div class="section-sub">✨ Galería de Trabajos (3 Imágenes desde Dispositivo)</div>
-                <div class="form-grid-3" style="margin-bottom: 15px;">
-                    <div>
-                        <label>Imagen Galería 1:</label>
-                        <input type="file" accept="image/*" onchange="convertirGaleria(event, 0)">
-                        <input type="hidden" id="gal-0">
-                        <div id="preview-gal-0" style="margin-top:5px;"><span style="font-size:11px; color:#94a3b8;">Sin imagen</span></div>
-                    </div>
-                    <div>
-                        <label>Imagen Galería 2:</label>
-                        <input type="file" accept="image/*" onchange="convertirGaleria(event, 1)">
-                        <input type="hidden" id="gal-1">
-                        <div id="preview-gal-1" style="margin-top:5px;"><span style="font-size:11px; color:#94a3b8;">Sin imagen</span></div>
-                    </div>
-                    <div>
-                        <label>Imagen Galería 3:</label>
-                        <input type="file" accept="image/*" onchange="convertirGaleria(event, 2)">
-                        <input type="hidden" id="gal-2">
-                        <div id="preview-gal-2" style="margin-top:5px;"><span style="font-size:11px; color:#94a3b8;">Sin imagen</span></div>
-                    </div>
-                </div>
-
-                <button type="submit" style="background: #2563eb;">Guardar Configuración General 💾</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h2 id="titulo-form">➕ Agregar Producto Nuevo</h2>
-            <form id="form-producto" onsubmit="guardarProducto(event)">
-                <div class="form-grid">
-                    <div><label>ID único (ej. taza):</label><input type="text" id="prod-id" required placeholder="taza"></div>
-                    <div><label>Nombre del Producto:</label><input type="text" id="prod-nombre" required placeholder="Taza personalizada"></div>
-                </div>
-                <div class="form-grid">
-                    <div><label>Imagen del Producto:</label><input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)"><input type="hidden" id="prod-imagen"></div>
-                    <div><label>Vista previa:</label><div id="preview-container"><span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span></div></div>
-                </div>
-                <div class="section-sub">Precios y Descuentos por Mayoreo</div>
-                <div class="form-grid-3"><div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="10"></div></div><div><label>Precio ($):</label><input type="number" id="precio1" required></div></div>
-                <div class="form-grid-3"><div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="11"><input type="number" id="max2" value="99"></div></div><div><label>Precio ($):</label><input type="number" id="precio2" required></div></div>
-                <div class="form-grid-3" style="margin-bottom: 15px;"><div><label>Rango 3 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min3" value="100"><input type="number" id="max3" value="1000"></div></div><div><label>Precio ($):</label><input type="number" id="precio3" required></div></div>
-                <button type="submit" id="btn-submit">Guardar Producto 🚀</button>
-                <button type="button" id="btn-cancelar" class="btn-secondary" style="display:none;" onclick="cancelarEdicion()">Cancelar Edición</button>
-            </form>
-        </div>
-
-        <div class="card"><h2>📦 Tus Productos</h2><div id="productos-container">Cargando catálogo...</div></div>
-
-        <div class="card">
-            <h2>🛍️ Tickets de Pedidos</h2>
-            <div class="tabs" style="margin-top: 15px;">
-                <button class="tab-btn active" onclick="cambiarFiltro('todos', this)">Todos</button>
-                <button class="tab-btn" onclick="cambiarFiltro('Pendiente', this)">🟡 Pendientes</button>
-                <button class="tab-btn" onclick="cambiarFiltro('En proceso', this)">🔵 En Proceso</button>
-                <button class="tab-btn" onclick="cambiarFiltro('Entregado', this)">🟢 Entregados</button>
+        <!-- SECCIÓN 1: PEDIDOS -->
+        <div id="seccion-pedidos" class="admin-seccion activo">
+            <div class="stats-grid">
+                <div class="stat-card"><h3>Ventas Totales</h3><p id="stat-ventas">$0.00</p></div>
+                <div class="stat-card"><h3>Pendientes</h3><p id="stat-pendientes">0</p></div>
+                <div class="stat-card"><h3>Total Pedidos</h3><p id="stat-total-pedidos">0</p></div>
             </div>
-            <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar por cliente, teléfono o folio..." oninput="filtrarPedidos()">
-            <div id="pedidos-container" class="pedidos-grid">Cargando pedidos...</div>
+            <div class="card">
+                <h2>Tickets de Pedidos</h2>
+                <div style="display: flex; gap: 8px; margin: 15px 0;">
+                    <button class="nav-tab active" onclick="cambiarFiltroPedido('todos', this)" style="padding:5px 10px; font-size:12px;">Todos</button>
+                    <button class="nav-tab" onclick="cambiarFiltroPedido('Pendiente', this)" style="padding:5px 10px; font-size:12px;">🟡 Pendientes</button>
+                    <button class="nav-tab" onclick="cambiarFiltroPedido('En proceso', this)" style="padding:5px 10px; font-size:12px;">🔵 En Proceso</button>
+                    <button class="nav-tab" onclick="cambiarFiltroPedido('Entregado', this)" style="padding:5px 10px; font-size:12px;">🟢 Entregados</button>
+                </div>
+                <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar por cliente, teléfono o folio..." oninput="filtrarPedidos()">
+                <div id="pedidos-container" class="pedidos-grid">Cargando pedidos...</div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: PRODUCTOS -->
+        <div id="seccion-productos" class="admin-seccion">
+            <div class="card">
+                <h2 id="titulo-form">➕ Agregar Producto Nuevo</h2>
+                <form id="form-producto" onsubmit="guardarProducto(event)">
+                    <div class="form-grid">
+                        <div><label>ID único (ej. taza):</label><input type="text" id="prod-id" required placeholder="taza"></div>
+                        <div><label>Nombre del Producto:</label><input type="text" id="prod-nombre" required placeholder="Taza personalizada"></div>
+                    </div>
+                    <div class="form-grid">
+                        <div>
+                            <label>Categoría:</label>
+                            <select id="prod-categoria">
+                                <option value="Grabado láser">Grabado láser</option>
+                                <option value="Serigrafía">Serigrafía</option>
+                                <option value="Termos">Termos</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+                        <div><label>Imagen del Producto:</label><input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)"><input type="hidden" id="prod-imagen"></div>
+                    </div>
+                    <div style="margin-bottom: 12px;"><label>Vista previa:</label><div id="preview-container"><span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span></div></div>
+                    
+                    <div class="section-sub">Precios y Descuentos por Mayoreo</div>
+                    <div class="form-grid-3"><div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="10"></div></div><div><label>Precio ($):</label><input type="number" id="precio1" required></div></div>
+                    <div class="form-grid-3"><div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="11"><input type="number" id="max2" value="99"></div></div><div><label>Precio ($):</label><input type="number" id="precio2" required></div></div>
+                    <div class="form-grid-3" style="margin-bottom: 15px;"><div><label>Rango 3 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min3" value="100"><input type="number" id="max3" value="1000"></div></div><div><label>Precio ($):</label><input type="number" id="precio3" required></div></div>
+                    
+                    <button type="submit" id="btn-submit">Guardar Producto 🚀</button>
+                    <button type="button" id="btn-cancelar" class="btn-secondary" style="display:none;" onclick="cancelarEdicion()">Cancelar Edición</button>
+                </form>
+            </div>
+            <div class="card"><h2>📦 Tus Productos</h2><div id="productos-container">Cargando catálogo...</div></div>
+        </div>
+
+        <!-- SECCIÓN 3: CONFIGURACIÓN -->
+        <div id="seccion-config" class="admin-seccion">
+            <div class="card">
+                <h2>⚙️ Configuración General y Textos del Negocio</h2>
+                <form onsubmit="guardarConfig(event)">
+                    <div class="form-grid">
+                        <div><label>Título del Negocio:</label><input type="text" id="cfg-titulo" required></div>
+                        <div><label>Subtítulo / Eslogan:</label><input type="text" id="cfg-subtitulo" required></div>
+                    </div>
+                    <div style="margin-bottom: 12px;"><label>Quiénes Somos:</label><textarea id="cfg-quienes" rows="3" required></textarea></div>
+                    <div class="form-grid-3">
+                        <div><label>WhatsApp:</label><input type="text" id="cfg-whatsapp" required></div>
+                        <div><label>Banco:</label><input type="text" id="cfg-banco" required></div>
+                        <div><label>Titular Tarjeta:</label><input type="text" id="cfg-titular" required></div>
+                    </div>
+                    <div style="margin-bottom: 12px;"><label>Número de Tarjeta:</label><input type="text" id="cfg-tarjeta" required></div>
+                    
+                    <div class="section-sub">Textos y Redes de la Portada</div>
+                    <div class="form-grid" style="margin-bottom: 12px;">
+                        <div><label>Tiempo Elaboración:</label><input type="text" id="cfg-tiempo"></div>
+                        <div><label>Horarios:</label><input type="text" id="cfg-horarios"></div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom: 15px;">
+                        <div><label>Instagram:</label><input type="text" id="cfg-instagram"></div>
+                        <div><label>TikTok:</label><input type="text" id="cfg-tiktok"></div>
+                    </div>
+
+                    <div class="section-sub">🛠️ Materiales (4 Tarjetas)</div>
+                    <div class="form-grid"><div><label>Mat 1 Título:</label><input type="text" id="mat-t-0"></div><div><label>Mat 1 Desc:</label><input type="text" id="mat-d-0"></div></div>
+                    <div class="form-grid"><div><label>Mat 2 Título:</label><input type="text" id="mat-t-1"></div><div><label>Mat 2 Desc:</label><input type="text" id="mat-d-1"></div></div>
+                    <div class="form-grid"><div><label>Mat 3 Título:</label><input type="text" id="mat-t-2"></div><div><label>Mat 3 Desc:</label><input type="text" id="mat-d-2"></div></div>
+                    <div class="form-grid" style="margin-bottom: 15px;"><div><label>Mat 4 Título:</label><input type="text" id="mat-t-3"></div><div><label>Mat 4 Desc:</label><input type="text" id="mat-d-3"></div></div>
+
+                    <div class="section-sub">✨ Galería (3 Imágenes)</div>
+                    <div class="form-grid-3" style="margin-bottom: 15px;">
+                        <div><label>Imagen 1:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 0)"><input type="hidden" id="gal-0"><div id="preview-gal-0" style="margin-top:5px;"></div></div>
+                        <div><label>Imagen 2:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 1)"><input type="hidden" id="gal-1"><div id="preview-gal-1" style="margin-top:5px;"></div></div>
+                        <div><label>Imagen 3:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 2)"><input type="hidden" id="gal-2"><div id="preview-gal-2" style="margin-top:5px;"></div></div>
+                    </div>
+
+                    <button type="submit" style="background: #2563eb;">Guardar Configuración General 💾</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4: RESEÑAS -->
+        <div id="seccion-resenas" class="admin-seccion">
+            <div class="card">
+                <h2>⭐ Gestión de Reseñas de Clientes</h2>
+                <div id="admin-resenas-container" style="margin-top: 15px;">Cargando reseñas...</div>
+            </div>
         </div>
     </div>
 
     <script>
-        let globalPedidos = [], filtroActual = 'todos', modoEdicion = false, totalPedidosAnterior = 0;
+        let globalPedidos = [], filtroPedidoActual = 'todos', modoEdicion = false, totalPedidosAnterior = 0;
 
-        async function cargarTodo() { cargarConfig(); cargarProductos(); cargarPedidos(); setInterval(cargarPedidosSilencioso, 15000); }
+        function cambiarSeccion(seccionId, btn) {
+            document.querySelectorAll('.admin-seccion').forEach(s => s.classList.remove('activo'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(seccionId).classList.add('activo');
+            btn.classList.add('active');
+        }
+
+        async function cargarTodo() {
+            cargarConfig(); cargarProductos(); cargarPedidos(); cargarAdminResenas();
+            setInterval(cargarPedidosSilencioso, 15000);
+        }
 
         async function cargarConfig() {
             try {
@@ -209,19 +217,17 @@
                     document.getElementById('cfg-horarios').value = data.horarios || '';
                     document.getElementById('cfg-instagram').value = data.instagram || '';
                     document.getElementById('cfg-tiktok').value = data.tiktok || '';
-
                     if (data.materiales) {
                         data.materiales.forEach((m, i) => {
                             if(document.getElementById(`mat-t-${i}`)) document.getElementById(`mat-t-${i}`).value = m.titulo || '';
                             if(document.getElementById(`mat-d-${i}`)) document.getElementById(`mat-d-${i}`).value = m.descripcion || '';
                         });
                     }
-
                     if (data.galeria) {
                         data.galeria.forEach((img, i) => {
                             if(img) {
                                 document.getElementById(`gal-${i}`).value = img;
-                                document.getElementById(`preview-gal-${i}`).innerHTML = `<img src="${img}" style="width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid #e2e8f0;">`;
+                                document.getElementById(`preview-gal-${i}`).innerHTML = `<img src="${img}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">`;
                             }
                         });
                     }
@@ -235,7 +241,7 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById(`gal-${index}`).value = e.target.result;
-                    document.getElementById(`preview-gal-${index}`).innerHTML = `<img src="${e.target.result}" style="width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid #e2e8f0;">`;
+                    document.getElementById(`preview-gal-${index}`).innerHTML = `<img src="${e.target.result}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">`;
                 };
                 reader.readAsDataURL(file);
             }
@@ -245,18 +251,9 @@
             e.preventDefault();
             let materiales = [];
             for(let i=0; i<4; i++) {
-                materiales.push({
-                    titulo: document.getElementById(`mat-t-${i}`).value.trim(),
-                    descripcion: document.getElementById(`mat-d-${i}`).value.trim()
-                });
+                materiales.push({ titulo: document.getElementById(`mat-t-${i}`).value.trim(), descripcion: document.getElementById(`mat-d-${i}`).value.trim() });
             }
-
-            let galeria = [
-                document.getElementById('gal-0').value,
-                document.getElementById('gal-1').value,
-                document.getElementById('gal-2').value
-            ];
-
+            let galeria = [document.getElementById('gal-0').value, document.getElementById('gal-1').value, document.getElementById('gal-2').value];
             const body = {
                 titulo: document.getElementById('cfg-titulo').value.trim(),
                 subtitulo: document.getElementById('cfg-subtitulo').value.trim(),
@@ -269,30 +266,14 @@
                 horarios: document.getElementById('cfg-horarios').value.trim(),
                 instagram: document.getElementById('cfg-instagram').value.trim(),
                 tiktok: document.getElementById('cfg-tiktok').value.trim(),
-                materiales: materiales,
-                galeria: galeria
+                materiales, galeria
             };
-
             try {
                 const res = await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
                 const data = await res.json();
-                if (data.exito) { alert('¡Configuración general guardada con éxito!'); }
-                else { alert('Error al guardar.'); }
+                if (data.exito) alert('¡Configuración general guardada!');
+                else alert('Error al guardar.');
             } catch (err) { alert('Error de conexión.'); }
-        }
-
-        function reproducirAlertaSonora() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc1 = audioCtx.createOscillator(); const gain1 = audioCtx.createGain();
-                osc1.type = 'sine'; osc1.frequency.setValueAtTime(587.33, audioCtx.currentTime); gain1.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                osc1.connect(gain1); gain1.connect(audioCtx.destination); osc1.start(); osc1.stop(audioCtx.currentTime + 0.15);
-                setTimeout(() => {
-                    const osc2 = audioCtx.createOscillator(); const gain2 = audioCtx.createGain();
-                    osc2.type = 'sine'; osc2.frequency.setValueAtTime(880, audioCtx.currentTime); gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    osc2.connect(gain2); gain2.connect(audioCtx.destination); osc2.start(); osc2.stop(audioCtx.currentTime + 0.25);
-                }, 180);
-            } catch (e) {}
         }
 
         function convertirImagen(event) {
@@ -312,10 +293,10 @@
                 const res = await fetch('/api/productos'); const prods = await res.json();
                 const div = document.getElementById('productos-container');
                 if (prods.length === 0) { div.innerHTML = '<p>No hay productos.</p>'; return; }
-                div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Imagen</th><th>Precios</th><th>Acciones</th></tr>` +
+                div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Imagen</th><th>Precios</th><th>Acciones</th></tr>` +
                     prods.map(p => `
                         <tr>
-                            <td><b>${p.id}</b></td><td>${p.nombre}</td>
+                            <td><b>${p.id}</b></td><td>${p.nombre}</td><td><span style="font-size:11px; background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:4px;">${p.categoria || 'Grabado láser'}</span></td>
                             <td>${p.imagen ? `<img src="${p.imagen}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : 'Sin imagen'}</td>
                             <td><ul style="margin:0; padding-left:15px; font-size:12px;">${(p.rangos || []).map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio}</b></li>`).join('')}</ul></td>
                             <td><button class="btn-warning" onclick='prepararEdicion(${JSON.stringify(p)})'>✏️</button> <button class="btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button></td>
@@ -328,13 +309,16 @@
             modoEdicion = true; document.getElementById('titulo-form').innerText = `✏️ Editando: ${p.id}`;
             document.getElementById('btn-submit').innerText = 'Actualizar 🔄'; document.getElementById('btn-cancelar').style.display = 'block';
             document.getElementById('prod-id').value = p.id; document.getElementById('prod-id').readOnly = true;
-            document.getElementById('prod-nombre').value = p.nombre; document.getElementById('prod-imagen').value = p.imagen || '';
+            document.getElementById('prod-nombre').value = p.nombre; 
+            document.getElementById('prod-categoria').value = p.categoria || 'Grabado láser';
+            document.getElementById('prod-imagen').value = p.imagen || '';
             document.getElementById('preview-container').innerHTML = p.imagen ? `<img src="${p.imagen}" class="preview-img">` : 'Sin imagen';
             if (p.rangos) {
                 if (p.rangos[0]) { document.getElementById('min1').value = p.rangos[0].min; document.getElementById('max1').value = p.rangos[0].max; document.getElementById('precio1').value = p.rangos[0].precio; }
                 if (p.rangos[1]) { document.getElementById('min2').value = p.rangos[1].min; document.getElementById('max2').value = p.rangos[1].max; document.getElementById('precio2').value = p.rangos[1].precio; }
                 if (p.rangos[2]) { document.getElementById('min3').value = p.rangos[2].min; document.getElementById('max3').value = p.rangos[2].max; document.getElementById('precio3').value = p.rangos[2].precio; }
             }
+            cambiarSeccion('seccion-productos', document.querySelectorAll('.nav-tab')[1]);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -349,6 +333,7 @@
             e.preventDefault();
             const id = document.getElementById('prod-id').value.trim();
             const nombre = document.getElementById('prod-nombre').value.trim();
+            const categoria = document.getElementById('prod-categoria').value;
             const imagen = document.getElementById('prod-imagen').value;
             const rangos = [
                 { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
@@ -357,7 +342,7 @@
             ];
             const res = await fetch(modoEdicion ? `/api/productos/${id}` : '/api/productos', {
                 method: modoEdicion ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, nombre, imagen, tieneVariantes: false, rangos })
+                body: JSON.stringify({ id, nombre, categoria, imagen, rangos })
             });
             const data = await res.json();
             if (data.exito) { alert('¡Producto guardado!'); cancelarEdicion(); cargarProductos(); }
@@ -370,6 +355,31 @@
             if ((await res.json()).exito) cargarProductos();
         }
 
+        async function cargarAdminResenas() {
+            try {
+                const res = await fetch('/api/resenas');
+                const resenas = await res.json();
+                const div = document.getElementById('admin-resenas-container');
+                if (resenas.length === 0) { div.innerHTML = '<p>No hay reseñas registradas.</p>'; return; }
+                div.innerHTML = `<table><tr><th>Cliente</th><th>Calificación</th><th>Comentario</th><th>Fecha</th><th>Acciones</th></tr>` +
+                    resenas.map(r => `
+                        <tr>
+                            <td><b>${r.nombre}</b></td>
+                            <td>⭐ ${r.estrellas}/5</td>
+                            <td>${r.comentario}</td>
+                            <td>${r.fecha}</td>
+                            <td><button class="btn-danger" onclick="eliminarResena('${r._id}')">🗑️</button></td>
+                        </tr>
+                    `).join('') + `</table>`;
+            } catch (e) { document.getElementById('admin-resenas-container').innerHTML = 'Error al cargar reseñas.'; }
+        }
+
+        async function eliminarResena(id) {
+            if (!confirm('¿Eliminar esta reseña?')) return;
+            const res = await fetch(`/api/resenas/${id}`, { method: 'DELETE' });
+            if ((await res.json()).exito) cargarAdminResenas();
+        }
+
         async function cargarPedidos() {
             try {
                 const res = await fetch('/api/pedidos'); globalPedidos = await res.json();
@@ -380,7 +390,6 @@
         async function cargarPedidosSilencioso() {
             try {
                 const res = await fetch('/api/pedidos'); const nuevos = await res.json();
-                if (totalPedidosAnterior > 0 && nuevos.length > totalPedidosAnterior) reproducirAlertaSonora();
                 totalPedidosAnterior = nuevos.length; globalPedidos = nuevos;
                 aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
             } catch (e) {}
@@ -392,14 +401,14 @@
             document.getElementById('stat-total-pedidos').innerText = pedidos.length;
         }
 
-        function cambiarFiltro(estado, btn) {
-            filtroActual = estado; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active'); aplicarFiltrosYRenderizar();
+        function cambiarFiltroPedido(estado, btn) {
+            filtroPedidoActual = estado; 
+            aplicarFiltrosYRenderizar();
         }
 
         function aplicarFiltrosYRenderizar() {
             const t = document.getElementById('buscador').value.toLowerCase();
-            renderizarPedidos(globalPedidos.filter(p => (p.cliente.nombre.toLowerCase().includes(t) || p.cliente.telefono.toLowerCase().includes(t) || String(p.folio).includes(t)) && (filtroActual === 'todos' || p.estado === filtroActual)));
+            renderizarPedidos(globalPedidos.filter(p => (p.cliente.nombre.toLowerCase().includes(t) || p.cliente.telefono.toLowerCase().includes(t) || String(p.folio).includes(t)) && (filtroPedidoActual === 'todos' || p.estado === filtroPedidoActual)));
         }
 
         function filtrarPedidos() { aplicarFiltrosYRenderizar(); }
@@ -415,7 +424,7 @@
                         </div>
                         <p style="margin:4px 0; font-size:13px;"><b>Cliente:</b> ${p.cliente.nombre}</p>
                         <p style="margin:4px 0; font-size:13px;"><b>Teléfono:</b> ${p.cliente.telefono}</p>
-                        <p style="margin:4px 0; font-size:13px;"><b>Pago:</b> ${p.estadoPago || 'Pendiente'} (${p.metodoPago || 'Efectivo'})</p>
+                        <p style="margin:4px 0; font-size:13px;"><b>Pago:</b> ${p.metodoPago || 'Efectivo'}</p>
                         <hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;">
                         <div style="font-size:13px;">${p.productos.map(prod => `<p style="margin:4px 0;"><b>${prod.cantidad}x</b> ${prod.nombre}</p>${prod.personalizacion ? `<div style="background:#f8fafc; border:1px solid var(--border); padding:6px; border-radius:6px; font-size:12px; margin:6px 0;">💬 ${prod.personalizacion}</div>` : ''}${prod.diseno ? `<div style="margin-top:8px;"><a href="${prod.diseno}" target="_blank"><img src="${prod.diseno}" style="width:100%; max-height:160px; object-fit:contain; border:1px solid var(--border); border-radius:6px;"></a></div>` : ''}`).join('')}</div>
                     </div>
