@@ -68,7 +68,6 @@
             <p>Control limpio y organizado por secciones</p>
         </header>
 
-        <!-- PESTAÑAS DE NAVEGACIÓN -->
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="cambiarSeccion('seccion-pedidos', this)">🛍️ Pedidos</button>
             <button class="nav-tab" onclick="cambiarSeccion('seccion-productos', this)">📦 Productos y Catálogo</button>
@@ -76,7 +75,7 @@
             <button class="nav-tab" onclick="cambiarSeccion('seccion-resenas', this)">⭐ Reseñas</button>
         </div>
 
-        <!-- SECCIÓN 1: PEDIDOS -->
+        <!-- SECCIÓN PEDIDOS -->
         <div id="seccion-pedidos" class="admin-seccion activo">
             <div class="stats-grid">
                 <div class="stat-card"><h3>Ventas Totales</h3><p id="stat-ventas">$0.00</p></div>
@@ -96,7 +95,7 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 2: PRODUCTOS -->
+        <!-- SECCIÓN PRODUCTOS -->
         <div id="seccion-productos" class="admin-seccion">
             <div class="card">
                 <h2 id="titulo-form">➕ Agregar Producto Nuevo</h2>
@@ -107,8 +106,8 @@
                     </div>
                     <div class="form-grid">
                         <div>
-                            <label>Categoría (Escribe la que quieras):</label>
-                            <input type="text" id="prod-categoria" required placeholder="Ej. Grabado láser, Termos, Serigrafía">
+                            <label>Categoría:</label>
+                            <input type="text" id="prod-categoria" required placeholder="Ej. Grabado láser, Sublimado">
                         </div>
                         <div><label>Imagen del Producto:</label><input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)"><input type="hidden" id="prod-imagen"></div>
                     </div>
@@ -126,7 +125,7 @@
             <div class="card"><h2>📦 Tus Productos</h2><div id="productos-container">Cargando catálogo...</div></div>
         </div>
 
-        <!-- SECCIÓN 3: CONFIGURACIÓN -->
+        <!-- SECCIÓN CONFIGURACIÓN -->
         <div id="seccion-config" class="admin-seccion">
             <div class="card">
                 <h2>⚙️ Configuración General y Textos del Negocio</h2>
@@ -171,7 +170,7 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 4: RESEÑAS -->
+        <!-- SECCIÓN RESEÑAS -->
         <div id="seccion-resenas" class="admin-seccion">
             <div class="card">
                 <h2>⭐ Gestión de Reseñas de Clientes</h2>
