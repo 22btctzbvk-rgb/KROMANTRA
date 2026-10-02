@@ -13,7 +13,6 @@
         .container { max-width: 1050px; margin: 0 auto; }
         .btn-volver { display: inline-block; margin-bottom: 15px; background: #e2e8f0; color: #1e293b; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 13px; }
         
-        /* Pestañas de Navegación del Admin */
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
         .nav-tab { background: white; border: 1px solid var(--border); padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: #475569; }
         .nav-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
@@ -108,13 +107,8 @@
                     </div>
                     <div class="form-grid">
                         <div>
-                            <label>Categoría:</label>
-                            <select id="prod-categoria">
-                                <option value="Grabado láser">Grabado láser</option>
-                                <option value="Serigrafía">Serigrafía</option>
-                                <option value="Termos">Termos</option>
-                                <option value="Otros">Otros</option>
-                            </select>
+                            <label>Categoría (Escribe la que quieras):</label>
+                            <input type="text" id="prod-categoria" required placeholder="Ej. Grabado láser, Termos, Serigrafía">
                         </div>
                         <div><label>Imagen del Producto:</label><input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)"><input type="hidden" id="prod-imagen"></div>
                     </div>
@@ -333,7 +327,7 @@
             e.preventDefault();
             const id = document.getElementById('prod-id').value.trim();
             const nombre = document.getElementById('prod-nombre').value.trim();
-            const categoria = document.getElementById('prod-categoria').value;
+            const categoria = document.getElementById('prod-categoria').value.trim();
             const imagen = document.getElementById('prod-imagen').value;
             const rangos = [
                 { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
