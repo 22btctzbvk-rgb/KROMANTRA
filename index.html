@@ -8,78 +8,63 @@
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; scroll-behavior: smooth; }
-        
-        .announcement-bar { background: #1e293b; color: #f8fafc; font-size: 12px; text-align: center; padding: 8px 15px; font-weight: 500; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        #vista-inicio { display: block; }
-        
+        .announcement-bar { background: #1e293b; color: #f8fafc; font-size: 12px; text-align: center; padding: 8px 15px; font-weight: 500; }
         .hero-section { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid #3b82f6; }
         .hero-content { max-width: 800px; margin: 0 auto; }
         .hero-section img { width: 90px; height: 90px; object-fit: contain; margin-bottom: 12px; border-radius: 50%; background: white; padding: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .hero-section h1 { font-size: 34px; font-weight: 800; margin: 0 0 8px 0; }
         .hero-section p.subtitle { font-size: 17px; margin: 0 0 25px 0; opacity: 0.9; }
-        
-        .btn-grande { display: inline-block; background: white; color: var(--primary); padding: 14px 35px; border-radius: 30px; font-weight: 800; font-size: 17px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; border: none; transition: transform 0.2s; }
+        .btn-grande { display: inline-block; background: white; color: var(--primary); padding: 14px 35px; border-radius: 30px; font-weight: 800; font-size: 17px; text-decoration: none; cursor: pointer; border: none; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .btn-grande:hover { transform: translateY(-3px); }
-
         .rastreo-portada-box { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 12px 15px; border-radius: 10px; display: flex; gap: 10px; max-width: 500px; margin: 25px auto 0 auto; }
         .rastreo-portada-box input { flex: 1; padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; }
         .rastreo-portada-box button { padding: 8px 15px; background: #1e293b; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-
         .info-container { max-width: 900px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
         .info-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); }
         .info-card h2 { color: #1e3a8a; margin-top: 0; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
-        
         .materiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; text-align: center; }
         .material-item { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
         .material-item b { display: block; font-size: 14px; color: #334155; margin-bottom: 4px; }
         .material-item span { font-size: 12px; color: #64748b; }
-
         .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .galeria-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: #e2e8f0; }
-
-        .faq-item { border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 12px; cursor: pointer; }
-        .faq-pregunta { display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #334155; font-size: 15px; }
-        .faq-respuesta { font-size: 13px; color: #64748b; margin-top: 8px; display: none; line-height: 1.5; }
-        .faq-item.activo .faq-respuesta { display: block; }
-
-        .social-links { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        .btn-social { background: #f1f5f9; color: #334155; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; border: 1px solid var(--border); transition: background 0.2s; }
-        .btn-social:hover { background: #e2e8f0; }
+        
+        /* Reseñas en Portada */
+        .resenas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .resena-card { background: #f8fafc; border: 1px solid var(--border); padding: 15px; border-radius: 8px; font-size: 13px; }
+        .resena-card b { color: var(--primary); }
 
         #vista-catalogo { display: none; max-width: 1200px; margin: 20px auto 40px auto; padding: 0 20px; gap: 30px; }
         .catalogo-activo { display: grid !important; grid-template-columns: 1fr 380px; }
         @media (max-width: 900px) { .catalogo-activo { grid-template-columns: 1fr; } }
-
         .btn-volver { background: #334155; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; }
         #toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 1000; }
+        
+        /* Filtros de Categorías */
+        .categorias-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .cat-btn { background: #e2e8f0; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; color: #475569; }
+        .cat-btn.active { background: var(--primary); color: white; }
 
         .main-content { display: flex; flex-direction: column; gap: 20px; }
-        .rastreo-box { background: white; border: 1px solid var(--border); padding: 15px 20px; border-radius: 10px; display: flex; gap: 10px; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .rastreo-box { background: white; border: 1px solid var(--border); padding: 15px 20px; border-radius: 10px; display: flex; gap: 10px; align-items: center; }
         .rastreo-box input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
         .rastreo-box button { padding: 8px 16px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-        
         .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; background: #f1f5f9; }
         .card h3 { margin: 0 0 8px 0; font-size: 16px; color: #1e293b; }
-        
         .rango-box { font-size: 11px; color: #64748b; background: #f8fafc; padding: 6px 8px; border-radius: 6px; margin-bottom: 10px; border: 1px solid var(--border); }
         .rango-box ul { margin: 0; padding-left: 12px; }
-
         .form-mini { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
         label { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 2px; display: block; }
         input, textarea, select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12px; box-sizing: border-box; }
-        
         .precio-preview { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
         .btn-agregar { background: var(--primary); color: white; border: none; padding: 9px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 13px; }
-        
-        .sidebar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: fit-content; position: sticky; top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .sidebar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: fit-content; position: sticky; top: 20px; }
         .sidebar h2 { font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: #1e293b; }
-        
         .cart-item { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
         .cart-controls { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
         .cart-controls button { background: #e2e8f0; border: none; width: 22px; height: 22px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        
         .cart-total { font-size: 18px; font-weight: 700; color: #1e293b; margin: 15px 0; text-align: right; }
         .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
         .info-pago-box { font-size: 11px; background: #eff6ff; padding: 12px; border-radius: 8px; border: 1px solid #bfdbfe; color: #1e3a8a; display: none; margin-top: 4px; }
@@ -111,10 +96,9 @@
         <div class="info-container">
             <div class="info-card">
                 <h2>👋 Nuestra Esencia</h2>
-                <p id="lbl-quienes" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Somos un negocio dedicado a crear piezas personalizadas con alta precisión y detalle.</p>
+                <p id="lbl-quienes" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Somos un negocio dedicado a crear piezas personalizadas con alta precisión.</p>
             </div>
 
-            <!-- Materiales y Precisión Dinámicos -->
             <div class="info-card">
                 <h2>🛠️ Materiales y Precisión</h2>
                 <div class="materiales-grid" id="materiales-container">
@@ -122,7 +106,6 @@
                 </div>
             </div>
 
-            <!-- Galería de Trabajos Dinámica -->
             <div class="info-card">
                 <h2>✨ Galería de Trabajos</h2>
                 <div class="galeria-grid" id="galeria-container">
@@ -130,7 +113,17 @@
                 </div>
             </div>
 
-            <!-- Horarios de Atención -->
+            <!-- APARTADO DE RESEÑAS -->
+            <div class="info-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px;">
+                    <h2 style="margin: 0; border: none; padding: 0;">⭐ Reseñas de Clientes</h2>
+                    <button onclick="abrirModalResena()" style="background:var(--primary); color:white; border:none; padding:6px 12px; border-radius:6px; font-size:12px; cursor:pointer; font-weight:600;">Dejar Reseña ✍️</button>
+                </div>
+                <div class="resenas-grid" id="resenas-container">
+                    <p style="color:#64748b; font-size:13px;">Cargando opiniones...</p>
+                </div>
+            </div>
+
             <div class="info-card" style="text-align: center;">
                 <h2>🕒 Horarios de Atención</h2>
                 <div id="lbl-horarios" style="font-size: 16px; color: #475569; font-weight: 500; margin-top: 10px;">
@@ -138,29 +131,29 @@
                 </div>
             </div>
 
-            <div class="info-card">
-                <h2>❓ Preguntas Frecuentes</h2>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-pregunta"><span>¿Cómo funciona el descuento de mayoreo?</span> <span>+</span></div>
-                    <div class="faq-respuesta">El sistema de la tienda calcula el descuento de forma automática. Entre más piezas, menor costo unitario.</div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-pregunta"><span>¿Cuáles son los métodos de pago?</span> <span>+</span></div>
-                    <div class="faq-respuesta">Efectivo al recoger o tarjeta/transferencia BBVA.</div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-pregunta"><span>¿Cómo subo mi diseño o logotipo personalizado?</span> <span>+</span></div>
-                    <div class="faq-respuesta">Adjuntando tu archivo de imagen al agregar el producto al carrito.</div>
-                </div>
-            </div>
-
             <div class="info-card" style="text-align: center; padding: 20px;">
                 <h2 style="border: none; margin-bottom: 10px;">¡Síguenos en Redes!</h2>
-                <div class="social-links">
-                    <a id="link-instagram" href="https://instagram.com" target="_blank" class="btn-social">📸 Instagram</a>
-                    <a id="link-tiktok" href="https://tiktok.com" target="_blank" class="btn-social">🎵 TikTok</a>
+                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
+                    <a id="link-instagram" href="https://instagram.com" target="_blank" class="btn-social" style="background:#f1f5f9; color:#334155; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">📸 Instagram</a>
+                    <a id="link-tiktok" href="https://tiktok.com" target="_blank" class="btn-social" style="background:#f1f5f9; color:#334155; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">🎵 TikTok</a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE RESEÑA -->
+    <div id="modal-resena" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:400px; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+            <h3 style="margin-top:0; color:#1e293b;">Escribe tu Reseña</h3>
+            <form onsubmit="enviarResena(event)">
+                <div style="margin-bottom:10px;"><label>Tu Nombre:</label><input type="text" id="res-nombre" required></div>
+                <div style="margin-bottom:10px;"><label>Calificación:</label><select id="res-estrellas"><option value="5">⭐⭐⭐⭐⭐ (5/5)</option><option value="4">⭐⭐⭐⭐ (4/5)</option><option value="3">⭐⭐⭐ (3/5)</option></select></div>
+                <div style="margin-bottom:15px;"><label>Tu Comentario:</label><textarea id="res-comentario" rows="3" required></textarea></div>
+                <div style="display:flex; gap:10px;">
+                    <button type="submit" style="background:var(--primary); color:white; border:none; padding:10px; border-radius:6px; flex:1; font-weight:600; cursor:pointer;">Enviar</button>
+                    <button type="button" onclick="cerrarModalResena()" style="background:#e2e8f0; color:#334155; border:none; padding:10px; border-radius:6px; flex:1; font-weight:600; cursor:pointer;">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -168,8 +161,16 @@
         <div class="main-content">
             <div><button class="btn-volver" onclick="cerrarCatalogo()">← Volver al Inicio</button></div>
             <div class="rastreo-box"><input type="text" id="inputRastreo" placeholder="🔍 Folio o Teléfono..."><button onclick="consultarPedido()">Buscar</button></div>
-            <div id="resultadoRastreo"></div>
-            <h2 style="font-size: 18px; margin: 0; color: #334155;">📦 Catálogo Oficial</h2>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                <h2 style="font-size: 18px; margin: 0; color: #334155;">📦 Catálogo Oficial</h2>
+            </div>
+            
+            <!-- Barra de Categorías -->
+            <div class="categorias-bar" id="categorias-bar">
+                <button class="cat-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
+            </div>
+
             <div id="catalogo" class="grid-productos"><p>Cargando productos...</p></div>
         </div>
         <div class="sidebar">
@@ -195,7 +196,13 @@
 
     <script>
         let configGlobal = { whatsapp: '525514494333', tarjeta: '4152314063676335', titular: 'Carolina Perez Mendez', banco: 'BBVA' };
-        let carrito = [], productosGlobal = [];
+        let carrito = [], productosGlobal = [], categoriaSeleccionada = 'todos';
+
+        async function inicializar() {
+            cargarConfiguracion();
+            cargarCatalogo();
+            cargarResenas();
+        }
 
         async function cargarConfiguracion() {
             try {
@@ -213,26 +220,54 @@
                     if(data.horarios) document.getElementById('lbl-horarios').innerText = data.horarios;
                     if(data.instagram) document.getElementById('link-instagram').href = data.instagram;
                     if(data.tiktok) document.getElementById('link-tiktok').href = data.tiktok;
-
                     if (data.materiales && data.materiales.length > 0) {
-                        document.getElementById('materiales-container').innerHTML = data.materiales.map(m => `
-                            <div class="material-item"><b>${m.titulo || ''}</b><span>${m.descripcion || ''}</span></div>
-                        `).join('');
+                        document.getElementById('materiales-container').innerHTML = data.materiales.map(m => `<div class="material-item"><b>${m.titulo || ''}</b><span>${m.descripcion || ''}</span></div>`).join('');
                     }
-
                     if (data.galeria && data.galeria.length > 0) {
-                        document.getElementById('galeria-container').innerHTML = data.galeria.map(url => `
-                            <img src="${url || 'https://via.placeholder.com/400'}" alt="Trabajo Galería" class="galeria-img" onerror="this.src='https://via.placeholder.com/400?text=Sin+Imagen'">
-                        `).join('');
+                        document.getElementById('galeria-container').innerHTML = data.galeria.map(url => `<img src="${url || 'https://via.placeholder.com/400'}" alt="Trabajo" class="galeria-img" onerror="this.src='https://via.placeholder.com/400?text=Sin+Imagen'">`).join('');
                     }
                 }
-            } catch (e) { console.log("Usando datos locales predeterminados"); }
+            } catch (e) { console.log("Configuración local predeterminada"); }
         }
 
-        function toggleFaq(element) {
-            element.classList.toggle('activo');
-            const span = element.querySelector('.faq-pregunta span:last-child');
-            span.innerText = element.classList.contains('activo') ? '-' : '+';
+        async function cargarResenas() {
+            try {
+                const res = await fetch('/api/resenas');
+                const resenas = await res.json();
+                const container = document.getElementById('resenas-container');
+                if(resenas.length === 0) { container.innerHTML = '<p style="color:#64748b; font-size:13px;">Aún no hay reseñas registradas.</p>'; return; }
+                container.innerHTML = resenas.map(r => `
+                    <div class="resena-card">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                            <b>${r.nombre}</b>
+                            <span style="color:#eab308;">${'⭐'.repeat(r.estrellas)}</span>
+                        </div>
+                        <p style="margin:0; color:#475569;">"${r.comentario}"</p>
+                        <span style="font-size:10px; color:#94a3b8; display:block; margin-top:6px;">${r.fecha}</span>
+                    </div>
+                `).join('');
+            } catch (e) { document.getElementById('resenas-container').innerHTML = '<p style="color:red; font-size:13px;">Error al cargar reseñas.</p>'; }
+        }
+
+        function abrirModalResena() { document.getElementById('modal-resena').style.display = 'flex'; }
+        function cerrarModalResena() { document.getElementById('modal-resena').style.display = 'none'; }
+
+        async function enviarResena(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('res-nombre').value.trim();
+            const estrellas = parseInt(document.getElementById('res-estrellas').value);
+            const comentario = document.getElementById('res-comentario').value.trim();
+            try {
+                const res = await fetch('/api/resenas', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre, estrellas, comentario }) });
+                const data = await res.json();
+                if(data.exito) {
+                    alert('¡Gracias por tu reseña!');
+                    cerrarModalResena();
+                    document.getElementById('res-nombre').value = '';
+                    document.getElementById('res-comentario').value = '';
+                    cargarResenas();
+                } else { alert('Error al enviar reseña.'); }
+            } catch (err) { alert('Error de conexión.'); }
         }
 
         function abrirCatalogo() { document.getElementById('vista-inicio').style.display = 'none'; document.getElementById('vista-catalogo').classList.add('catalogo-activo'); window.scrollTo(0, 0); }
@@ -240,34 +275,61 @@
 
         async function cargarCatalogo() {
             try {
-                const res = await fetch('/api/productos'); productosGlobal = await res.json();
-                const container = document.getElementById('catalogo');
-                if (productosGlobal.length === 0) { container.innerHTML = '<p>No hay productos disponibles.</p>'; return; }
-                container.innerHTML = productosGlobal.map((p, index) => {
-                    const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : (p.precio || 0);
-                    const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') : `<li>Precio: <b>$${precioBase} c/u</b></li>`;
-                    return `
-                        <div class="card">
-                            <div>
-                                <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
-                                <h3>${p.nombre}</h3>
-                                <p style="font-size: 12px; color: #64748b; margin: 4px 0 8px 0;">${p.descripcion || ''}</p>
-                                <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
-                            </div>
-                            <div>
-                                <div class="form-mini">
-                                    <div><label>Cantidad:</label><input type="number" id="cant-${index}" value="1" min="1" oninput="actualizarPrecioCard(${index})"></div>
-                                    <div><label>✍️ Texto:</label><input type="text" id="texto-${index}" placeholder="Ej. Nombre"></div>
-                                    <div><label>🎨 Estilo:</label><input type="text" id="estilo-${index}" placeholder="Ej. Mate"></div>
-                                    <div><label>🖼️ Logo:</label><input type="file" id="archivo-${index}" accept="image/*" onchange="convertirArchivo(event, ${index})"><input type="hidden" id="base64-${index}"></div>
-                                </div>
-                                <div class="precio-preview" id="preview-precio-${index}">$${precioBase.toFixed(2)}</div>
-                                <button class="btn-agregar" onclick="agregarAlCarrito(${index})">+ Agregar al Carrito</button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+                const res = await fetch('/api/productos'); 
+                productosGlobal = await res.json();
+                actualizarBarraCategorias();
+                renderizarProductosFiltrados();
             } catch (err) { document.getElementById('catalogo').innerHTML = '<p style="color:red;">Error al cargar tienda.</p>'; }
+        }
+
+        function actualizarBarraCategorias() {
+            const categoriasSet = new Set(productosGlobal.map(p => p.categoria || 'Grabado láser'));
+            const bar = document.getElementById('categorias-bar');
+            let html = `<button class="cat-btn ${categoriaSeleccionada === 'todos' ? 'active' : ''}" onclick="filtrarCategoria('todos', this)">Todos</button>`;
+            categoriasSet.forEach(cat => {
+                html += `<button class="cat-btn ${categoriaSeleccionada === cat ? 'active' : ''}" onclick="filtrarCategoria('${cat}', this)">${cat}</button>`;
+            });
+            bar.innerHTML = html;
+        }
+
+        function filtrarCategoria(cat, btn) {
+            categoriaSeleccionada = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderizarProductosFiltrados();
+        }
+
+        function renderizarProductosFiltrados() {
+            const container = document.getElementById('catalogo');
+            const filtrados = categoriaSeleccionada === 'todos' ? productosGlobal : productosGlobal.filter(p => (p.categoria || 'Grabado láser') === categoriaSeleccionada);
+            
+            if (filtrados.length === 0) { container.innerHTML = '<p>No hay productos en esta categoría.</p>'; return; }
+            
+            container.innerHTML = filtrados.map((p) => {
+                const index = productosGlobal.findIndex(prod => prod.id === p.id);
+                const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
+                const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') : '';
+                return `
+                    <div class="card">
+                        <div>
+                            <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
+                            <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria || 'Grabado láser'}</span>
+                            <h3 style="margin-top:6px;">${p.nombre}</h3>
+                            <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
+                        </div>
+                        <div>
+                            <div class="form-mini">
+                                <div><label>Cantidad:</label><input type="number" id="cant-${index}" value="1" min="1" oninput="actualizarPrecioCard(${index})"></div>
+                                <div><label>✍️ Texto:</label><input type="text" id="texto-${index}" placeholder="Ej. Nombre"></div>
+                                <div><label>🎨 Estilo:</label><input type="text" id="estilo-${index}" placeholder="Ej. Mate"></div>
+                                <div><label>🖼️ Logo:</label><input type="file" id="archivo-${index}" accept="image/*" onchange="convertirArchivo(event, ${index})"><input type="hidden" id="base64-${index}"></div>
+                            </div>
+                            <div class="precio-preview" id="preview-precio-${index}">$${precioBase.toFixed(2)} ($${precioBase} c/u)</div>
+                            <button class="btn-agregar" onclick="agregarAlCarrito(${index})">+ Agregar al Carrito</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function convertirArchivo(event, index) {
@@ -286,8 +348,7 @@
                 for (let r of rangos) { if (cantidad >= r.min && cantidad <= r.max) { rangoAplicable = r; break; } else if (cantidad > r.max) { rangoAplicable = r; } }
                 return { precioUnitario: rangoAplicable.precio, total: cantidad * rangoAplicable.precio };
             }
-            const precio = producto.precio || 0;
-            return { precioUnitario: precio, total: cantidad * precio };
+            return { precioUnitario: 0, total: 0 };
         }
 
         function actualizarPrecioCard(index) {
@@ -318,7 +379,7 @@
             if (estilo) especificaciones += `| Estilo: ${estilo}`;
             if (!especificaciones) especificaciones = 'Estándar';
 
-            const indexExistente = carrito.findIndex(item => item.id === (producto.id || producto._id) && item.personalizacion === especificaciones);
+            const indexExistente = carrito.findIndex(item => item.id === producto.id && item.personalizacion === especificaciones);
             let nuevaCantidadTotal = cantidadAgregada;
             if (indexExistente !== -1) nuevaCantidadTotal += carrito[indexExistente].cantidad;
 
@@ -327,14 +388,14 @@
                 carrito[indexExistente].cantidad = nuevaCantidadTotal;
                 carrito[indexExistente].subtotal = calculo.total;
             } else {
-                carrito.push({ id: producto.id || producto._id, nombre: producto.nombre, cantidad: cantidadAgregada, variante: estilo || 'Estándar', personalizacion: especificaciones, diseno: diseno, subtotal: calculo.total });
+                carrito.push({ id: producto.id, nombre: producto.nombre, cantidad: cantidadAgregada, personalizacion: especificaciones, diseno: diseno, subtotal: calculo.total });
             }
             renderizarCarrito(); mostrarToast(`¡${producto.nombre} agregado!`);
         }
 
         function cambiarCantidad(idx, delta) {
             const item = carrito[idx];
-            const producto = productosGlobal.find(p => (p.id === item.id || p._id === item.id));
+            const producto = productosGlobal.find(p => p.id === item.id);
             if (!producto) return;
             const nuevaCantidad = item.cantidad + delta;
             if (nuevaCantidad <= 0) { eliminarDelCarrito(idx); return; }
@@ -350,7 +411,7 @@
                 totalGeneral += item.subtotal;
                 return `
                     <div class="cart-item">
-                        <div class="cart-item-info">
+                        <div>
                             <b>${item.nombre}</b><br><span style="color:#64748b; font-size:11px;">${item.personalizacion}</span>
                             <div class="cart-controls"><button onclick="cambiarCantidad(${idx}, -1)">-</button><span style="font-weight:600;">${item.cantidad} pzas</span><button onclick="cambiarCantidad(${idx}, 1)">+</button></div>
                         </div>
@@ -376,7 +437,6 @@
                 if (data.exito) {
                     let detalle = carrito.map(i => `• ${i.cantidad}x ${i.nombre} (${i.personalizacion}) - $${i.subtotal.toFixed(2)}`).join('\n');
                     let textoWp = `Hola Kromantra, acabo de realizar mi pedido.\n\n*Folio:* #${data.folio}\n*Cliente:* ${nombre}\n*Teléfono:* ${telefono}\n*Método de Pago:* ${metodoPago}\n\n*Productos:*\n${detalle}\n\n*Total:* $${totalGeneral.toFixed(2)}`;
-                    if (metodoPago.includes('Tarjeta')) textoWp += `\n\n💳 *Pago por transferencia seleccionado.*`;
                     if (confirm(`¡Pedido #${data.folio} guardado!\n¿Deseas abrir WhatsApp para enviarlo?`)) {
                         window.open(`https://wa.me/${configGlobal.whatsapp}?text=${encodeURIComponent(textoWp)}`, '_blank');
                     }
@@ -404,7 +464,7 @@
             resDiv.innerHTML = data.map(p => `<div style="background:#f1f5f9; padding:10px; border-radius:6px; margin-top:10px; font-size:13px;"><b>Folio #${p.folio}</b> - Estatus: <b style="color:#2563eb;">${p.estado}</b></div>`).join('');
         }
 
-        window.addEventListener('DOMContentLoaded', () => { cargarConfiguracion(); cargarCatalogo(); });
+        window.addEventListener('DOMContentLoaded', inicializar);
     </script>
 </body>
 </html>
