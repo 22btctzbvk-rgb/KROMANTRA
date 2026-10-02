@@ -9,7 +9,6 @@
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; scroll-behavior: smooth; }
         
-        /* Animaciones Globales */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -27,21 +26,18 @@
         .rastreo-portada-box { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 12px 15px; border-radius: 10px; display: flex; gap: 10px; max-width: 500px; margin: 25px auto 0 auto; }
         .rastreo-portada-box input { flex: 1; padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; }
         .rastreo-portada-box button { padding: 8px 15px; background: #1e293b; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .rastreo-portada-box button:hover { background: #0f172a; }
 
         .info-container { max-width: 900px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
         .info-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); animation: slideUp 0.6s ease; }
         .info-card h2 { color: #1e3a8a; margin-top: 0; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
         
         .materiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; text-align: center; }
-        .material-item { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; transition: transform 0.2s; }
-        .material-item:hover { transform: translateY(-3px); }
+        .material-item { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
         .material-item b { display: block; font-size: 14px; color: #334155; margin-bottom: 4px; }
         .material-item span { font-size: 12px; color: #64748b; }
 
         .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .galeria-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: #e2e8f0; transition: transform 0.3s ease; }
-        .galeria-img:hover { transform: scale(1.03); }
+        .galeria-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: #e2e8f0; }
         
         .resenas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
         .resena-card { background: #f8fafc; border: 1px solid var(--border); padding: 15px; border-radius: 8px; font-size: 13px; }
@@ -50,14 +46,11 @@
         .catalogo-activo { display: grid !important; grid-template-columns: 1fr 380px; animation: fadeIn 0.4s ease; }
         @media (max-width: 900px) { .catalogo-activo { grid-template-columns: 1fr; } }
         
-        .btn-volver { background: #334155; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
-        .btn-volver:hover { background: #1e293b; }
-
+        .btn-volver { background: #334155; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; }
         #toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 3000; animation: slideUp 0.3s ease; }
         
         .categorias-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
         .cat-btn { background: #e2e8f0; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; color: #475569; transition: all 0.2s ease; }
-        .cat-btn:hover { background: #cbd5e1; }
         .cat-btn.active { background: var(--primary); color: white; transform: scale(1.05); }
 
         .main-content { display: flex; flex-direction: column; gap: 20px; }
@@ -65,7 +58,6 @@
         .rastreo-box input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
         .rastreo-box button { padding: 8px 16px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
         
-        /* Tarjetas de Producto Limpias */
         .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
         .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
@@ -77,11 +69,9 @@
         .btn-personalizar { background: var(--primary); color: white; border: none; padding: 11px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; font-size: 13px; transition: background 0.2s, transform 0.2s; }
         .btn-personalizar:hover { background: var(--primary-hover); transform: scale(1.02); }
 
-        /* Ventana Modal de Personalización */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2500; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.25s ease; }
         .modal-content { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; box-shadow: 0 15px 30px rgba(0,0,0,0.25); position: relative; animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .modal-close { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; color: #475569; transition: background 0.2s; }
-        .modal-close:hover { background: #e2e8f0; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; color: #475569; }
 
         .form-mini { display: flex; flex-direction: column; gap: 10px; }
         label { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 2px; display: block; }
@@ -91,23 +81,20 @@
         .sidebar h2 { font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: #1e293b; }
         .cart-item { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
         .cart-controls { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-        .cart-controls button { background: #e2e8f0; border: none; width: 22px; height: 22px; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        .cart-controls button:hover { background: #cbd5e1; }
+        .cart-controls button { background: #e2e8f0; border: none; width: 22px; height: 22px; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .cart-total { font-size: 18px; font-weight: 700; color: #1e293b; margin: 15px 0; text-align: right; }
         .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
         .info-pago-box { font-size: 11px; background: #eff6ff; padding: 12px; border-radius: 8px; border: 1px solid #bfdbfe; color: #1e3a8a; display: none; margin-top: 4px; }
-        .btn-checkout { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; transition: background 0.2s; }
-        .btn-checkout:hover { background: #15803d; }
+        .btn-checkout { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
     </style>
 </head>
 <body>
     <div id="toast">¡Producto agregado al carrito!</div>
 
     <div class="announcement-bar">
-        <span id="lbl-tiempo">⏱️ Tiempo de elaboración: 3 a 4 días hábiles</span>
+        <span id="lbl-tiempo">⏱️️ Tiempo de elaboración: 3 a 4 días hábiles</span>
     </div>
 
-    <!-- VISTA INICIO -->
     <div id="vista-inicio">
         <section class="hero-section">
             <div class="hero-content">
@@ -186,7 +173,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE PERSONALIZACIÓN DE PRODUCTO -->
+    <!-- MODAL DE PERSONALIZACIÓN -->
     <div id="modal-personalizar" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close" onclick="cerrarModalPersonalizacion()">×</button>
@@ -206,7 +193,6 @@
         </div>
     </div>
 
-    <!-- VISTA CATALOGO -->
     <div id="vista-catalogo">
         <div class="main-content">
             <div><button class="btn-volver" onclick="cerrarCatalogo()">← Volver al Inicio</button></div>
@@ -332,51 +318,62 @@
         }
 
         function actualizarBarraCategorias() {
-            const categoriasSet = new Set(productosGlobal.map(p => p.categoria || 'Grabado láser'));
+            const mapCategorias = new Map();
+            productosGlobal.forEach(p => {
+                const catOriginal = (p.categoria || 'Grabado láser').trim();
+                const catKey = catOriginal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                if (!mapCategorias.has(catKey)) {
+                    mapCategorias.set(catKey, catOriginal);
+                }
+            });
+
             const bar = document.getElementById('categorias-bar');
             let html = `<button class="cat-btn ${categoriaSeleccionada === 'todos' ? 'active' : ''}" onclick="filtrarCategoria('todos', this)">Todos</button>`;
-            categoriasSet.forEach(cat => {
-                html += `<button class="cat-btn ${categoriaSeleccionada === cat ? 'active' : ''}" onclick="filtrarCategoria('${cat}', this)">${cat}</button>`;
+            
+            mapCategorias.forEach((displayLabel, catKey) => {
+                const isActive = categoriaSeleccionada === catKey ? 'active' : '';
+                html += `<button class="cat-btn ${isActive}" onclick="filtrarCategoria('${catKey}', this)">${displayLabel}</button>`;
             });
             bar.innerHTML = html;
         }
 
-  function actualizarBarraCategorias() {
-    // .trim() limpia cualquier espacio invisible o sobrante para evitar duplicados
-    const categoriasSet = new Set(productosGlobal.map(p => (p.categoria ? p.categoria.trim() : 'Grabado láser')));
-    const bar = document.getElementById('categorias-bar');
-    let html = `<button class="cat-btn ${categoriaSeleccionada === 'todos' ? 'active' : ''}" onclick="filtrarCategoria('todos', this)">Todos</button>`;
-    categoriasSet.forEach(cat => {
-        html += `<button class="cat-btn ${categoriaSeleccionada === cat ? 'active' : ''}" onclick="filtrarCategoria('${cat}', this)">${cat}</button>`;
-    });
-    bar.innerHTML = html;
-}
+        function filtrarCategoria(cat, btn) {
+            categoriaSeleccionada = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderizarProductosFiltrados();
+        }
 
-function renderizarProductosFiltrados() {
-    const container = document.getElementById('catalogo');
-    const filtrados = categoriaSeleccionada === 'todos' ? productosGlobal : productosGlobal.filter(p => (p.categoria ? p.categoria.trim() : 'Grabado láser') === categoriaSeleccionada);
-    
-    if (filtrados.length === 0) { container.innerHTML = '<p>No hay productos en esta categoría.</p>'; return; }
-    
-    container.innerHTML = filtrados.map((p) => {
-        const index = productosGlobal.findIndex(prod => prod.id === p.id);
-        const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
-        const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') : '';
-        return `
-            <div class="card">
-                <div>
-                    <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
-                    <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria ? p.categoria.trim() : 'Grabado láser'}</span>
-                    <h3 style="margin-top:6px;">${p.nombre}</h3>
-                    <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
-                </div>
-                <div>
-                    <button class="btn-personalizar" onclick="abrirModalPersonalizacion(${index})">✨ Personalizar y Agregar</button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
+        function renderizarProductosFiltrados() {
+            const container = document.getElementById('catalogo');
+            const filtrados = categoriaSeleccionada === 'todos' ? productosGlobal : productosGlobal.filter(p => {
+                const catOriginal = (p.categoria || 'Grabado láser').trim();
+                const catKey = catOriginal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                return catKey === categoriaSeleccionada;
+            });
+            
+            if (filtrados.length === 0) { container.innerHTML = '<p>No hay productos en esta categoría.</p>'; return; }
+            
+            container.innerHTML = filtrados.map((p) => {
+                const index = productosGlobal.findIndex(prod => prod.id === p.id);
+                const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
+                const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') : '';
+                return `
+                    <div class="card">
+                        <div>
+                            <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
+                            <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria ? p.categoria.trim() : 'Grabado láser'}</span>
+                            <h3 style="margin-top:6px;">${p.nombre}</h3>
+                            <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
+                        </div>
+                        <div>
+                            <button class="btn-personalizar" onclick="abrirModalPersonalizacion(${index})">✨ Personalizar y Agregar</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function abrirModalPersonalizacion(index) {
             productoSeleccionadoIndex = index;
             const producto = productosGlobal[index];
