@@ -341,39 +341,42 @@
             bar.innerHTML = html;
         }
 
-        function filtrarCategoria(cat, btn) {
-            categoriaSeleccionada = cat;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderizarProductosFiltrados();
-        }
+  function actualizarBarraCategorias() {
+    // .trim() limpia cualquier espacio invisible o sobrante para evitar duplicados
+    const categoriasSet = new Set(productosGlobal.map(p => (p.categoria ? p.categoria.trim() : 'Grabado láser')));
+    const bar = document.getElementById('categorias-bar');
+    let html = `<button class="cat-btn ${categoriaSeleccionada === 'todos' ? 'active' : ''}" onclick="filtrarCategoria('todos', this)">Todos</button>`;
+    categoriasSet.forEach(cat => {
+        html += `<button class="cat-btn ${categoriaSeleccionada === cat ? 'active' : ''}" onclick="filtrarCategoria('${cat}', this)">${cat}</button>`;
+    });
+    bar.innerHTML = html;
+}
 
-        function renderizarProductosFiltrados() {
-            const container = document.getElementById('catalogo');
-            const filtrados = categoriaSeleccionada === 'todos' ? productosGlobal : productosGlobal.filter(p => (p.categoria || 'Grabado láser') === categoriaSeleccionada);
-            
-            if (filtrados.length === 0) { container.innerHTML = '<p>No hay productos en esta categoría.</p>'; return; }
-            
-            container.innerHTML = filtrados.map((p) => {
-                const index = productosGlobal.findIndex(prod => prod.id === p.id);
-                const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
-                const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') : '';
-                return `
-                    <div class="card">
-                        <div>
-                            <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
-                            <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria || 'Grabado láser'}</span>
-                            <h3 style="margin-top:6px;">${p.nombre}</h3>
-                            <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
-                        </div>
-                        <div>
-                            <button class="btn-personalizar" onclick="abrirModalPersonalizacion(${index})">✨ Personalizar y Agregar</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
+function renderizarProductosFiltrados() {
+    const container = document.getElementById('catalogo');
+    const filtrados = categoriaSeleccionada === 'todos' ? productosGlobal : productosGlobal.filter(p => (p.categoria ? p.categoria.trim() : 'Grabado láser') === categoriaSeleccionada);
+    
+    if (filtrados.length === 0) { container.innerHTML = '<p>No hay productos en esta categoría.</p>'; return; }
+    
+    container.innerHTML = filtrados.map((p) => {
+        const index = productosGlobal.findIndex(prod => prod.id === p.id);
+        const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
+        const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') : '';
+        return `
+            <div class="card">
+                <div>
+                    <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
+                    <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria ? p.categoria.trim() : 'Grabado láser'}</span>
+                    <h3 style="margin-top:6px;">${p.nombre}</h3>
+                    <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
+                </div>
+                <div>
+                    <button class="btn-personalizar" onclick="abrirModalPersonalizacion(${index})">✨ Personalizar y Agregar</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
         function abrirModalPersonalizacion(index) {
             productoSeleccionadoIndex = index;
             const producto = productosGlobal[index];
