@@ -92,7 +92,7 @@
     <div id="toast">¡Producto agregado al carrito!</div>
 
     <div class="announcement-bar">
-        <span id="lbl-tiempo">⏱️️ Tiempo de elaboración: 3 a 4 días hábiles</span>
+        <span id="lbl-tiempo">⏱ Tiempo de elaboración: 3 a 4 días hábiles</span>
     </div>
 
     <div id="vista-inicio">
@@ -237,6 +237,23 @@
             cargarConfiguracion();
             cargarCatalogo();
             cargarResenas();
+
+            // Sincronización automática en segundo plano cada 10 segundos
+            setInterval(async () => {
+                try {
+                    const res = await fetch('/api/productos');
+                    const nuevos = await res.json();
+                    if (JSON.stringify(nuevos) !== JSON.stringify(productosGlobal)) {
+                        productosGlobal = nuevos;
+                        actualizarBarraCategorias();
+                        if (document.getElementById('modal-personalizar').style.display !== 'flex') {
+                            renderizarProductosFiltrados();
+                        }
+                    }
+                } catch (e) {
+                    // Silencioso
+                }
+            }, 10000);
         }
 
         async function cargarConfiguracion() {
@@ -305,7 +322,14 @@
             } catch (err) { alert('Error de conexión.'); }
         }
 
-        function abrirCatalogo() { document.getElementById('vista-inicio').style.display = 'none'; document.getElementById('vista-catalogo').classList.add('catalogo-activo'); window.scrollTo(0, 0); }
+        function abrirCatalogo() { 
+            document.getElementById('vista-inicio').style.display = 'none'; 
+            document.getElementById('vista-catalogo').classList.add('catalogo-activo'); 
+            cargarConfiguracion();
+            cargarCatalogo();
+            window.scrollTo(0, 0); 
+        }
+
         function cerrarCatalogo() { document.getElementById('vista-catalogo').classList.remove('catalogo-activo'); document.getElementById('vista-inicio').style.display = 'block'; window.scrollTo(0, 0); }
 
         async function cargarCatalogo() {
