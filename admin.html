@@ -3,443 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kromantra | Panel de Administración</title>
+    <title>Panel de Administración | Kromantra</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 20px; text-align: center; border-radius: 12px; margin-bottom: 20px; }
-        h1 { margin: 0; font-size: 22px; } p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
-        .container { max-width: 1050px; margin: 0 auto; }
-        .btn-volver { display: inline-block; margin-bottom: 15px; background: #e2e8f0; color: #1e293b; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 13px; }
-        
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-        .nav-tab { background: white; border: 1px solid var(--border); padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: #475569; }
-        .nav-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .admin-seccion { display: none; }
-        .admin-seccion.activo { display: block; }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
-        .stat-card h3 { margin: 0; font-size: 12px; color: #64748b; }
-        .stat-card p { font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 5px; }
-
-        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        h2 { font-size: 16px; margin-top: 0; color: #334155; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
-        th, td { border: 1px solid var(--border); padding: 10px; text-align: left; vertical-align: middle; }
-        th { background: #f1f5f9; font-weight: 600; }
-        
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-        .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
-        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
-        input, select, textarea { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 13px; }
-        
-        button { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; width: 100%; }
-        button:hover { background: var(--primary-hover); }
-        .btn-danger { background: #e11d48; padding: 6px 12px; font-size: 12px; width: auto; color: white; border-radius: 6px; border: none; cursor: pointer; }
-        .btn-warning { background: #d97706; padding: 5px 10px; font-size: 12px; width: auto; color: white; border-radius: 6px; border: none; cursor: pointer; }
-        .btn-secondary { background: #64748b; margin-top: 5px; }
-
-        .search-box { width: 100%; padding: 8px 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; box-sizing: border-box; }
-        .section-sub { font-size: 13px; font-weight: 700; color: #475569; margin-top: 15px; margin-bottom: 8px; border-left: 3px solid var(--primary); padding-left: 8px; }
-        .preview-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); margin-top: 5px; }
-        .pedidos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-top: 15px; }
-        .pedido-ticket { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; padding-bottom: 50px; }
+        .admin-header { background: #1e293b; color: white; padding: 20px 0; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .card { border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 25px; }
+        .card-header { background-color: #ffffff; font-weight: 700; border-bottom: 1px solid #e2e8f0; border-radius: 12px 12px 0 0 !important; padding: 15px 20px; color: #334155; }
+        .form-label { font-size: 13px; font-weight: 600; color: #475569; }
+        textarea.form-control { resize: vertical; min-height: 80px; }
+        .badge-status { padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; }
+        .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; }
     </style>
 </head>
 <body>
-    <script>
-        (function verificarAccesoAdmin() {
-            const PIN_SECRETO = '4321'; 
-            if (localStorage.getItem('kromantra_admin_ok') !== PIN_SECRETO) {
-                const ingreso = prompt('🔒 Ingresa el PIN de administración:');
-                if (ingreso === PIN_SECRETO) { localStorage.setItem('kromantra_admin_ok', PIN_SECRETO); }
-                else { alert('PIN incorrecto.'); window.location.href = '/'; }
-            }
-        })();
-    </script>
+
+    <div class="admin-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h3 class="m-0 font-weight-bold">⚙️ Panel de Administración - Kromantra</h3>
+            <a href="index.html" target="_blank" class="btn btn-outline-light btn-sm">Ver Tienda 🛍️</a>
+        </div>
+    </div>
 
     <div class="container">
-        <a href="/" class="btn-volver">← Ir a la Tienda</a>
-        <header>
-            <h1>Panel de Administración Kromantra</h1>
-            <p>Control limpio y organizado por secciones</p>
-        </header>
-
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="cambiarSeccion('seccion-pedidos', this)">🛍️ Pedidos</button>
-            <button class="nav-tab" onclick="cambiarSeccion('seccion-productos', this)">📦 Productos y Catálogo</button>
-            <button class="nav-tab" onclick="cambiarSeccion('seccion-config', this)">⚙️ Configuración y Textos</button>
-            <button class="nav-tab" onclick="cambiarSeccion('seccion-resenas', this)">⭐ Reseñas</button>
-        </div>
-
-        <!-- SECCIÓN PEDIDOS -->
-        <div id="seccion-pedidos" class="admin-seccion activo">
-            <div class="stats-grid">
-                <div class="stat-card"><h3>Ventas Totales</h3><p id="stat-ventas">$0.00</p></div>
-                <div class="stat-card"><h3>Pendientes</h3><p id="stat-pendientes">0</p></div>
-                <div class="stat-card"><h3>Total Pedidos</h3><p id="stat-total-pedidos">0</p></div>
-            </div>
-            <div class="card">
-                <h2>Tickets de Pedidos</h2>
-                <div style="display: flex; gap: 8px; margin: 15px 0;">
-                    <button class="nav-tab active" onclick="cambiarFiltroPedido('todos', this)" style="padding:5px 10px; font-size:12px;">Todos</button>
-                    <button class="nav-tab" onclick="cambiarFiltroPedido('Pendiente', this)" style="padding:5px 10px; font-size:12px;">🟡 Pendientes</button>
-                    <button class="nav-tab" onclick="cambiarFiltroPedido('En proceso', this)" style="padding:5px 10px; font-size:12px;">🔵 En Proceso</button>
-                    <button class="nav-tab" onclick="cambiarFiltroPedido('Entregado', this)" style="padding:5px 10px; font-size:12px;">🟢 Entregados</button>
-                </div>
-                <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar por cliente, teléfono o folio..." oninput="filtrarPedidos()">
-                <div id="pedidos-container" class="pedidos-grid">Cargando pedidos...</div>
-            </div>
-        </div>
-
-        <!-- SECCIÓN PRODUCTOS -->
-        <div id="seccion-productos" class="admin-seccion">
-            <div class="card">
-                <h2 id="titulo-form">➕ Agregar Producto Nuevo</h2>
-                <form id="form-producto" onsubmit="guardarProducto(event)">
-                    <div class="form-grid">
-                        <div><label>ID único (ej. taza):</label><input type="text" id="prod-id" required placeholder="taza"></div>
-                        <div><label>Nombre del Producto:</label><input type="text" id="prod-nombre" required placeholder="Taza personalizada"></div>
-                    </div>
-                    <div class="form-grid">
-                        <div>
-                            <label>Categoría:</label>
-                            <input type="text" id="prod-categoria" required placeholder="Ej. Grabado láser, Sublimado">
+        <!-- 1. CONFIGURACIÓN GENERAL -->
+        <div class="card">
+            <div class="card-header">🎨 Configuración General, Textos y Redes de la Portada</div>
+            <div class="card-body">
+                <form id="form-config" onsubmit="guardarConfiguracion(event)">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Título de la Tienda:</label>
+                            <input type="text" id="config_titulo" class="form-control" placeholder="Kromantra">
                         </div>
-                        <div><label>Imagen del Producto:</label><input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)"><input type="hidden" id="prod-imagen"></div>
+                        <div class="col-md-6">
+                            <label class="form-label">Subtítulo / Eslogan:</label>
+                            <input type="text" id="config_subtitulo" class="form-control" placeholder="Regalos Personalizados y Mayoreo">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tiempo de Elaboración:</label>
+                            <input type="text" id="config_tiempoElaboracion" class="form-control" placeholder="3 a 4 días hábiles">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">WhatsApp de Atención (sin +):</label>
+                            <input type="text" id="config_whatsapp" class="form-control" placeholder="525512345678">
+                        </div>
+
+                        <!-- REDES SOCIALES (INSTAGRAM Y FACEBOOK) -->
+                        <div class="col-md-6">
+                            <label class="form-label">Instagram (URL o usuario):</label>
+                            <input type="text" id="config_instagram" class="form-control" placeholder="https://instagram.com/kromantra">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Facebook (URL o usuario):</label>
+                            <input type="text" id="config_facebook" class="form-control" placeholder="https://facebook.com/kromantra">
+                        </div>
+
+                        <!-- HORARIOS DE ATENCIÓN MULTILÍNEA -->
+                        <div class="col-12">
+                            <label class="form-label">Horarios de Atención (puedes escribir hacia abajo con ENTER):</label>
+                            <textarea id="config_horarios" class="form-control" rows="3" placeholder="Lunes a Viernes: 10:00 am - 7:00 pm&#10;Sábado: 10:00 am - 3:00 pm&#10;Domingo: Cerrado"></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">¿Quiénes Somos?:</label>
+                            <textarea id="config_quienesSomos" class="form-control" rows="2" placeholder="Descripción breve de tu empresa..."></textarea>
+                        </div>
+
+                        <!-- DATOS BANCARIOS -->
+                        <div class="col-md-4">
+                            <label class="form-label">Banco:</label>
+                            <input type="text" id="config_banco" class="form-control" placeholder="BBVA">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Número de Tarjeta / CLABE:</label>
+                            <input type="text" id="config_tarjeta" class="form-control" placeholder="4152 3140 6367 6335">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Titular de la Cuenta:</label>
+                            <input type="text" id="config_titular" class="form-control" placeholder="Carolina Pérez">
+                        </div>
                     </div>
-                    <div style="margin-bottom: 12px;"><label>Vista previa:</label><div id="preview-container"><span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span></div></div>
-                    
-                    <div class="section-sub">Precios y Descuentos por Mayoreo</div>
-                    <div class="form-grid-3"><div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="10"></div></div><div><label>Precio ($):</label><input type="number" id="precio1" required></div></div>
-                    <div class="form-grid-3"><div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="11"><input type="number" id="max2" value="99"></div></div><div><label>Precio ($):</label><input type="number" id="precio2" required></div></div>
-                    <div class="form-grid-3" style="margin-bottom: 15px;"><div><label>Rango 3 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min3" value="100"><input type="number" id="max3" value="1000"></div></div><div><label>Precio ($):</label><input type="number" id="precio3" required></div></div>
-                    
-                    <button type="submit" id="btn-submit">Guardar Producto 🚀</button>
-                    <button type="button" id="btn-cancelar" class="btn-secondary" style="display:none;" onclick="cancelarEdicion()">Cancelar Edición</button>
+
+                    <hr class="my-4">
+
+                    <!-- MATERIALES CON DESCRIPCIONES MULTILÍNEA -->
+                    <h6 class="fw-bold mb-3">🛠️ Materiales y Técnicas (4 Tarjetas)</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Mat 1 Título:</label>
+                            <input type="text" id="config_mat1_titulo" class="form-control" placeholder="Serigrafía">
+                            <label class="form-label mt-2">Mat 1 Desc (Escribir hacia abajo):</label>
+                            <textarea id="config_mat1_desc" class="form-control" rows="3" placeholder="Serigrafía Tradicional (1 Tinta)&#10;Impresión limpia, económica y de gran impacto visual."></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Mat 2 Título:</label>
+                            <input type="text" id="config_mat2_titulo" class="form-control" placeholder="DTF UV / Textil">
+                            <label class="form-label mt-2">Mat 2 Desc (Escribir hacia abajo):</label>
+                            <textarea id="config_mat2_desc" class="form-control" rows="3" placeholder="Impresión digital de alta adherencia&#10;Resistente al lavado y a la intemperie."></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Mat 3 Título:</label>
+                            <input type="text" id="config_mat3_titulo" class="form-control" placeholder="Grabado Láser">
+                            <label class="form-label mt-2">Mat 3 Desc (Escribir hacia abajo):</label>
+                            <textarea id="config_mat3_desc" class="form-control" rows="3" placeholder="Grabado indeleble en madera, termo o metal."></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Mat 4 Título:</label>
+                            <input type="text" id="config_mat4_titulo" class="form-control" placeholder="Sublimación">
+                            <label class="form-label mt-2">Mat 4 Desc (Escribir hacia abajo):</label>
+                            <textarea id="config_mat4_desc" class="form-control" rows="3" placeholder="Fotografías y diseños a todo color."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-primary font-weight-bold px-4">💾 Guardar Configuración General</button>
+                    </div>
                 </form>
             </div>
-            <div class="card"><h2>📦 Tus Productos</h2><div id="productos-container">Cargando catálogo...</div></div>
         </div>
 
-        <!-- SECCIÓN CONFIGURACIÓN -->
-        <div id="seccion-config" class="admin-seccion">
-            <div class="card">
-                <h2>⚙️ Configuración General y Textos del Negocio</h2>
-                <form onsubmit="guardarConfig(event)">
-                    <div class="form-grid">
-                        <div><label>Título del Negocio:</label><input type="text" id="cfg-titulo" required></div>
-                        <div><label>Subtítulo / Eslogan:</label><input type="text" id="cfg-subtitulo" required></div>
-                    </div>
-                    <div style="margin-bottom: 12px;"><label>Quiénes Somos:</label><textarea id="cfg-quienes" rows="3" required></textarea></div>
-                    <div class="form-grid-3">
-                        <div><label>WhatsApp:</label><input type="text" id="cfg-whatsapp" required></div>
-                        <div><label>Banco:</label><input type="text" id="cfg-banco" required></div>
-                        <div><label>Titular Tarjeta:</label><input type="text" id="cfg-titular" required></div>
-                    </div>
-                    <div style="margin-bottom: 12px;"><label>Número de Tarjeta:</label><input type="text" id="cfg-tarjeta" required></div>
-                    
-                    <div class="section-sub">Textos y Redes de la Portada</div>
-                    <div class="form-grid" style="margin-bottom: 12px;">
-                        <div><label>Tiempo Elaboración:</label><input type="text" id="cfg-tiempo"></div>
-                        <div><label>Horarios:</label><input type="text" id="cfg-horarios"></div>
-                    </div>
-                    <div class="form-grid" style="margin-bottom: 15px;">
-                        <div><label>Instagram:</label><input type="text" id="cfg-instagram"></div>
-                        <div><label>TikTok:</label><input type="text" id="cfg-tiktok"></div>
-                    </div>
-
-                    <div class="section-sub">🛠️ Materiales (4 Tarjetas)</div>
-                    <div class="form-grid"><div><label>Mat 1 Título:</label><input type="text" id="mat-t-0"></div><div><label>Mat 1 Desc:</label><input type="text" id="mat-d-0"></div></div>
-                    <div class="form-grid"><div><label>Mat 2 Título:</label><input type="text" id="mat-t-1"></div><div><label>Mat 2 Desc:</label><input type="text" id="mat-d-1"></div></div>
-                    <div class="form-grid"><div><label>Mat 3 Título:</label><input type="text" id="mat-t-2"></div><div><label>Mat 3 Desc:</label><input type="text" id="mat-d-2"></div></div>
-                    <div class="form-grid" style="margin-bottom: 15px;"><div><label>Mat 4 Título:</label><input type="text" id="mat-t-3"></div><div><label>Mat 4 Desc:</label><input type="text" id="mat-d-3"></div></div>
-
-                    <div class="section-sub">✨ Galería (3 Imágenes)</div>
-                    <div class="form-grid-3" style="margin-bottom: 15px;">
-                        <div><label>Imagen 1:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 0)"><input type="hidden" id="gal-0"><div id="preview-gal-0" style="margin-top:5px;"></div></div>
-                        <div><label>Imagen 2:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 1)"><input type="hidden" id="gal-1"><div id="preview-gal-1" style="margin-top:5px;"></div></div>
-                        <div><label>Imagen 3:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 2)"><input type="hidden" id="gal-2"><div id="preview-gal-2" style="margin-top:5px;"></div></div>
+        <!-- 2. GESTIÓN DE PRODUCTOS Y STOCK -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>📦 Gestión de Productos y Stock</span>
+                <button class="btn btn-success btn-sm" onclick="limpiarFormularioProducto()">+ Agregar Nuevo Producto</button>
+            </div>
+            <div class="card-body">
+                <!-- FORMULARIO DE PRODUCTO -->
+                <form id="form-producto" onsubmit="guardarProducto(event)" class="bg-light p-3 rounded border mb-4">
+                    <input type="hidden" id="prod_id">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Nombre del Producto:</label>
+                            <input type="text" id="prod_nombre" class="form-control" required placeholder="Ej. Taza Mágica 11oz">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Categoría:</label>
+                            <input type="text" id="prod_categoria" class="form-control" placeholder="Ej. Sublimación">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Stock Disponible (Piezas):</label>
+                            <input type="number" id="prod_stock" class="form-control" min="0" value="50" placeholder="Ej. 100">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">URL de Imagen:</label>
+                            <input type="text" id="prod_imagen" class="form-control" placeholder="https://...">
+                        </div>
                     </div>
 
-                    <button type="submit" style="background: #2563eb;">Guardar Configuración General 💾</button>
+                    <h6 class="fw-bold mt-3 mb-2" style="font-size: 13px;">Precios por Volumen (Mayoreo)</h6>
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-3"><input type="number" id="rango1_min" class="form-control form-control-sm" value="1" placeholder="Min 1"></div>
+                        <div class="col-md-3"><input type="number" id="rango1_max" class="form-control form-control-sm" value="11" placeholder="Max 11"></div>
+                        <div class="col-md-4"><input type="number" step="0.01" id="rango1_precio" class="form-control form-control-sm" placeholder="Precio Unitario $"></div>
+                    </div>
+                    <div class="row g-2 align-items-center mt-1">
+                        <div class="col-md-3"><input type="number" id="rango2_min" class="form-control form-control-sm" value="12" placeholder="Min 12"></div>
+                        <div class="col-md-3"><input type="number" id="rango2_max" class="form-control form-control-sm" value="50" placeholder="Max 50"></div>
+                        <div class="col-md-4"><input type="number" step="0.01" id="rango2_precio" class="form-control form-control-sm" placeholder="Precio Mayoreo $"></div>
+                    </div>
+
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-success btn-sm px-4">Guardar Producto</button>
+                    </div>
                 </form>
+
+                <!-- TABLA DE PRODUCTOS -->
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Stock</th>
+                                <th>Mayoreo Base</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-productos">
+                            <tr><td colspan="6" class="text-center">Cargando productos...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- SECCIÓN RESEÑAS -->
-        <div id="seccion-resenas" class="admin-seccion">
-            <div class="card">
-                <h2>⭐ Gestión de Reseñas de Clientes</h2>
-                <div id="admin-resenas-container" style="margin-top: 15px;">Cargando reseñas...</div>
+        <!-- 3. PEDIDOS RECIBIDOS -->
+        <div class="card">
+            <div class="card-header">📋 Historial de Pedidos y Estatus</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Folio</th>
+                                <th>Cliente</th>
+                                <th>Teléfono</th>
+                                <th>Método Pago</th>
+                                <th>Total</th>
+                                <th>Estatus</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-pedidos">
+                            <tr><td colspan="7" class="text-center">Cargando pedidos...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        let globalPedidos = [], filtroPedidoActual = 'todos', modoEdicion = false, totalPedidosAnterior = 0;
+        let productosList = [];
 
-        function cambiarSeccion(seccionId, btn) {
-            document.querySelectorAll('.admin-seccion').forEach(s => s.classList.remove('activo'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(seccionId).classList.add('activo');
-            btn.classList.add('active');
+        async function inicializarAdmin() {
+            await cargarConfiguracion();
+            await cargarProductos();
+            await cargarPedidos();
         }
 
-        async function cargarTodo() {
-            cargarConfig(); cargarProductos(); cargarPedidos(); cargarAdminResenas();
-            setInterval(cargarPedidosSilencioso, 15000);
-        }
-
-        async function cargarConfig() {
+        // CARGAR CONFIGURACIÓN AL ABRIR
+        async function cargarConfiguracion() {
             try {
                 const res = await fetch('/api/config');
                 const data = await res.json();
-                if (data) {
-                    document.getElementById('cfg-titulo').value = data.titulo || '';
-                    document.getElementById('cfg-subtitulo').value = data.subtitulo || '';
-                    document.getElementById('cfg-quienes').value = data.quienesSomos || '';
-                    document.getElementById('cfg-whatsapp').value = data.whatsapp || '';
-                    document.getElementById('cfg-banco').value = data.banco || '';
-                    document.getElementById('cfg-tarjeta').value = data.tarjeta || '';
-                    document.getElementById('cfg-titular').value = data.titular || '';
-                    document.getElementById('cfg-tiempo').value = data.tiempoElaboracion || '';
-                    document.getElementById('cfg-horarios').value = data.horarios || '';
-                    document.getElementById('cfg-instagram').value = data.instagram || '';
-                    document.getElementById('cfg-tiktok').value = data.tiktok || '';
-                    if (data.materiales) {
-                        data.materiales.forEach((m, i) => {
-                            if(document.getElementById(`mat-t-${i}`)) document.getElementById(`mat-t-${i}`).value = m.titulo || '';
-                            if(document.getElementById(`mat-d-${i}`)) document.getElementById(`mat-d-${i}`).value = m.descripcion || '';
-                        });
-                    }
-                    if (data.galeria) {
-                        data.galeria.forEach((img, i) => {
-                            if(img) {
-                                document.getElementById(`gal-${i}`).value = img;
-                                document.getElementById(`preview-gal-${i}`).innerHTML = `<img src="${img}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">`;
-                            }
-                        });
-                    }
+                if(!data) return;
+
+                document.getElementById('config_titulo').value = data.titulo || '';
+                document.getElementById('config_subtitulo').value = data.subtitulo || '';
+                document.getElementById('config_tiempoElaboracion').value = data.tiempoElaboracion || '';
+                document.getElementById('config_whatsapp').value = data.whatsapp || '';
+                document.getElementById('config_instagram').value = data.instagram || '';
+                document.getElementById('config_facebook').value = data.facebook || '';
+                document.getElementById('config_horarios').value = data.horarios || '';
+                document.getElementById('config_quienesSomos').value = data.quienesSomos || '';
+                document.getElementById('config_banco').value = data.banco || '';
+                document.getElementById('config_tarjeta').value = data.tarjeta || '';
+                document.getElementById('config_titular').value = data.titular || '';
+
+                if(data.materiales && data.materiales.length >= 4) {
+                    document.getElementById('config_mat1_titulo').value = data.materiales[0].titulo || '';
+                    document.getElementById('config_mat1_desc').value = data.materiales[0].descripcion || '';
+                    document.getElementById('config_mat2_titulo').value = data.materiales[1].titulo || '';
+                    document.getElementById('config_mat2_desc').value = data.materiales[1].descripcion || '';
+                    document.getElementById('config_mat3_titulo').value = data.materiales[2].titulo || '';
+                    document.getElementById('config_mat3_desc').value = data.materiales[2].descripcion || '';
+                    document.getElementById('config_mat4_titulo').value = data.materiales[3].titulo || '';
+                    document.getElementById('config_mat4_desc').value = data.materiales[3].descripcion || '';
                 }
-            } catch (e) { console.error("Error al cargar configuración"); }
+            } catch(e) { console.error("Error al cargar configuración", e); }
         }
 
-        function convertirGaleria(event, index) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById(`gal-${index}`).value = e.target.result;
-                    document.getElementById(`preview-gal-${index}`).innerHTML = `<img src="${e.target.result}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        async function guardarConfig(e) {
+        // GUARDAR CONFIGURACIÓN
+        async function guardarConfiguracion(e) {
             e.preventDefault();
-            let materiales = [];
-            for(let i=0; i<4; i++) {
-                materiales.push({ titulo: document.getElementById(`mat-t-${i}`).value.trim(), descripcion: document.getElementById(`mat-d-${i}`).value.trim() });
-            }
-            let galeria = [document.getElementById('gal-0').value, document.getElementById('gal-1').value, document.getElementById('gal-2').value];
-            const body = {
-                titulo: document.getElementById('cfg-titulo').value.trim(),
-                subtitulo: document.getElementById('cfg-subtitulo').value.trim(),
-                quienesSomos: document.getElementById('cfg-quienes').value.trim(),
-                whatsapp: document.getElementById('cfg-whatsapp').value.trim(),
-                banco: document.getElementById('cfg-banco').value.trim(),
-                tarjeta: document.getElementById('cfg-tarjeta').value.trim(),
-                titular: document.getElementById('cfg-titular').value.trim(),
-                tiempoElaboracion: document.getElementById('cfg-tiempo').value.trim(),
-                horarios: document.getElementById('cfg-horarios').value.trim(),
-                instagram: document.getElementById('cfg-instagram').value.trim(),
-                tiktok: document.getElementById('cfg-tiktok').value.trim(),
-                materiales, galeria
+            const configData = {
+                titulo: document.getElementById('config_titulo').value,
+                subtitulo: document.getElementById('config_subtitulo').value,
+                tiempoElaboracion: document.getElementById('config_tiempoElaboracion').value,
+                whatsapp: document.getElementById('config_whatsapp').value,
+                instagram: document.getElementById('config_instagram').value,
+                facebook: document.getElementById('config_facebook').value,
+                horarios: document.getElementById('config_horarios').value,
+                quienesSomos: document.getElementById('config_quienesSomos').value,
+                banco: document.getElementById('config_banco').value,
+                tarjeta: document.getElementById('config_tarjeta').value,
+                titular: document.getElementById('config_titular').value,
+                materiales: [
+                    { titulo: document.getElementById('config_mat1_titulo').value, descripcion: document.getElementById('config_mat1_desc').value },
+                    { titulo: document.getElementById('config_mat2_titulo').value, descripcion: document.getElementById('config_mat2_desc').value },
+                    { titulo: document.getElementById('config_mat3_titulo').value, descripcion: document.getElementById('config_mat3_desc').value },
+                    { titulo: document.getElementById('config_mat4_titulo').value, descripcion: document.getElementById('config_mat4_desc').value }
+                ]
             };
+
             try {
-                const res = await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-                const data = await res.json();
-                if (data.exito) alert('¡Configuración general guardada!');
-                else alert('Error al guardar.');
-            } catch (err) { alert('Error de conexión.'); }
+                const res = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(configData)
+                });
+                const resp = await res.json();
+                alert(resp.mensaje || '¡Configuración guardada correctamente!');
+            } catch(e) { alert('Error al guardar la configuración'); }
         }
 
-        function convertirImagen(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('prod-imagen').value = e.target.result;
-                    document.getElementById('preview-container').innerHTML = `<img src="${e.target.result}" class="preview-img">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
+        // CARGAR PRODUCTOS
         async function cargarProductos() {
             try {
-                const res = await fetch('/api/productos'); const prods = await res.json();
-                const div = document.getElementById('productos-container');
-                if (prods.length === 0) { div.innerHTML = '<p>No hay productos.</p>'; return; }
-                div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Imagen</th><th>Precios</th><th>Acciones</th></tr>` +
-                    prods.map(p => `
+                const res = await fetch('/api/productos');
+                productosList = await res.json();
+                const tbody = document.getElementById('tabla-productos');
+                if(productosList.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay productos registrados.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = productosList.map(p => {
+                    const precioBase = p.rangos && p.rangos.length > 0 ? `$${p.rangos[0].precio}` : 'N/A';
+                    const stockBadge = p.stock > 0 
+                        ? `<span class="badge bg-success">${p.stock} pzas</span>` 
+                        : `<span class="badge bg-danger">Agotado</span>`;
+                    return `
                         <tr>
-                            <td><b>${p.id}</b></td><td>${p.nombre}</td><td><span style="font-size:11px; background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:4px;">${p.categoria || 'Grabado láser'}</span></td>
-                            <td>${p.imagen ? `<img src="${p.imagen}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : 'Sin imagen'}</td>
-                            <td><ul style="margin:0; padding-left:15px; font-size:12px;">${(p.rangos || []).map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio}</b></li>`).join('')}</ul></td>
-                            <td><button class="btn-warning" onclick='prepararEdicion(${JSON.stringify(p)})'>✏️</button> <button class="btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button></td>
+                            <td><img src="${p.imagen || 'https://via.placeholder.com/50'}" class="img-preview"></td>
+                            <td><b>${p.nombre}</b></td>
+                            <td>${p.categoria || 'Sin Cat'}</td>
+                            <td>${stockBadge}</td>
+                            <td>${precioBase}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm me-1" onclick="editarProducto('${p.id}')">✏️</button>
+                                <button class="btn btn-danger btn-sm" onclick="eliminarProducto('${p.id}')">🗑️</button>
+                            </td>
                         </tr>
-                    `).join('') + `</table>`;
-            } catch (e) { document.getElementById('productos-container').innerHTML = 'Error al cargar.'; }
+                    `;
+                }).join('');
+            } catch(e) { console.error("Error al cargar productos", e); }
         }
 
-        function prepararEdicion(p) {
-            modoEdicion = true; document.getElementById('titulo-form').innerText = `✏️ Editando: ${p.id}`;
-            document.getElementById('btn-submit').innerText = 'Actualizar 🔄'; document.getElementById('btn-cancelar').style.display = 'block';
-            document.getElementById('prod-id').value = p.id; document.getElementById('prod-id').readOnly = true;
-            document.getElementById('prod-nombre').value = p.nombre; 
-            document.getElementById('prod-categoria').value = p.categoria || 'Grabado láser';
-            document.getElementById('prod-imagen').value = p.imagen || '';
-            document.getElementById('preview-container').innerHTML = p.imagen ? `<img src="${p.imagen}" class="preview-img">` : 'Sin imagen';
-            if (p.rangos) {
-                if (p.rangos[0]) { document.getElementById('min1').value = p.rangos[0].min; document.getElementById('max1').value = p.rangos[0].max; document.getElementById('precio1').value = p.rangos[0].precio; }
-                if (p.rangos[1]) { document.getElementById('min2').value = p.rangos[1].min; document.getElementById('max2').value = p.rangos[1].max; document.getElementById('precio2').value = p.rangos[1].precio; }
-                if (p.rangos[2]) { document.getElementById('min3').value = p.rangos[2].min; document.getElementById('max3').value = p.rangos[2].max; document.getElementById('precio3').value = p.rangos[2].precio; }
-            }
-            cambiarSeccion('seccion-productos', document.querySelectorAll('.nav-tab')[1]);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function cancelarEdicion() {
-            modoEdicion = false; document.getElementById('titulo-form').innerText = '➕ Agregar Producto Nuevo';
-            document.getElementById('btn-submit').innerText = 'Guardar Producto 🚀'; document.getElementById('btn-cancelar').style.display = 'none';
-            document.getElementById('form-producto').reset(); document.getElementById('prod-id').readOnly = false;
-            document.getElementById('prod-imagen').value = ''; document.getElementById('preview-container').innerHTML = 'Ninguna imagen seleccionada';
-        }
-
+        // GUARDAR O EDITAR PRODUCTO CON STOCK
         async function guardarProducto(e) {
             e.preventDefault();
-            const id = document.getElementById('prod-id').value.trim();
-            const nombre = document.getElementById('prod-nombre').value.trim();
-            const categoria = document.getElementById('prod-categoria').value.trim();
-            const imagen = document.getElementById('prod-imagen').value;
-            const rangos = [
-                { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
-                { min: parseInt(document.getElementById('min2').value), max: parseInt(document.getElementById('max2').value), precio: parseFloat(document.getElementById('precio2').value) },
-                { min: parseInt(document.getElementById('min3').value), max: parseInt(document.getElementById('max3').value), precio: parseFloat(document.getElementById('precio3').value) }
-            ];
-            const res = await fetch(modoEdicion ? `/api/productos/${id}` : '/api/productos', {
-                method: modoEdicion ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, nombre, categoria, imagen, rangos })
+            const id = document.getElementById('prod_id').value;
+            const productoData = {
+                id: id || Date.now().toString(),
+                nombre: document.getElementById('prod_nombre').value,
+                categoria: document.getElementById('prod_categoria').value,
+                stock: parseInt(document.getElementById('prod_stock').value) || 0,
+                imagen: document.getElementById('prod_imagen').value,
+                rangos: [
+                    { min: parseInt(document.getElementById('rango1_min').value), max: parseInt(document.getElementById('rango1_max').value), precio: parseFloat(document.getElementById('rango1_precio').value) || 0 },
+                    { min: parseInt(document.getElementById('rango2_min').value), max: parseInt(document.getElementById('rango2_max').value), precio: parseFloat(document.getElementById('rango2_precio').value) || 0 }
+                ]
+            };
+
+            await fetch('/api/productos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productoData)
             });
-            const data = await res.json();
-            if (data.exito) { alert('¡Producto guardado!'); cancelarEdicion(); cargarProductos(); }
-            else { alert('Error al guardar.'); }
+
+            limpiarFormularioProducto();
+            cargarProductos();
+        }
+
+        function editarProducto(id) {
+            const p = productosList.find(item => item.id === id);
+            if(!p) return;
+            document.getElementById('prod_id').value = p.id;
+            document.getElementById('prod_nombre').value = p.nombre;
+            document.getElementById('prod_categoria').value = p.categoria || '';
+            document.getElementById('prod_stock').value = p.stock !== undefined ? p.stock : 50;
+            document.getElementById('prod_imagen').value = p.imagen || '';
+            if(p.rangos && p.rangos.length >= 2) {
+                document.getElementById('rango1_precio').value = p.rangos[0].precio;
+                document.getElementById('rango2_precio').value = p.rangos[1].precio;
+            }
         }
 
         async function eliminarProducto(id) {
-            if (!confirm(`¿Eliminar producto ${id}?`)) return;
-            const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
-            if ((await res.json()).exito) cargarProductos();
+            if(!confirm('¿Seguro que deseas eliminar este producto?')) return;
+            await fetch(`/api/productos/${id}`, { method: 'DELETE' });
+            cargarProductos();
         }
 
-        async function cargarAdminResenas() {
-            try {
-                const res = await fetch('/api/resenas');
-                const resenas = await res.json();
-                const div = document.getElementById('admin-resenas-container');
-                if (resenas.length === 0) { div.innerHTML = '<p>No hay reseñas registradas.</p>'; return; }
-                div.innerHTML = `<table><tr><th>Cliente</th><th>Calificación</th><th>Comentario</th><th>Fecha</th><th>Acciones</th></tr>` +
-                    resenas.map(r => `
-                        <tr>
-                            <td><b>${r.nombre}</b></td>
-                            <td>⭐ ${r.estrellas}/5</td>
-                            <td>${r.comentario}</td>
-                            <td>${r.fecha}</td>
-                            <td><button class="btn-danger" onclick="eliminarResena('${r._id}')">🗑️</button></td>
-                        </tr>
-                    `).join('') + `</table>`;
-            } catch (e) { document.getElementById('admin-resenas-container').innerHTML = 'Error al cargar reseñas.'; }
+        function limpiarFormularioProducto() {
+            document.getElementById('form-producto').reset();
+            document.getElementById('prod_id').value = '';
         }
 
-        async function eliminarResena(id) {
-            if (!confirm('¿Eliminar esta reseña?')) return;
-            const res = await fetch(`/api/resenas/${id}`, { method: 'DELETE' });
-            if ((await res.json()).exito) cargarAdminResenas();
-        }
-
+        // CARGAR PEDIDOS
         async function cargarPedidos() {
             try {
-                const res = await fetch('/api/pedidos'); globalPedidos = await res.json();
-                totalPedidosAnterior = globalPedidos.length; aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
-            } catch (e) {}
-        }
-
-        async function cargarPedidosSilencioso() {
-            try {
-                const res = await fetch('/api/pedidos'); const nuevos = await res.json();
-                totalPedidosAnterior = nuevos.length; globalPedidos = nuevos;
-                aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
-            } catch (e) {}
-        }
-
-        function calcularMetricas(pedidos) {
-            document.getElementById('stat-ventas').innerText = `$${pedidos.reduce((acc, p) => acc + (p.total || 0), 0).toFixed(2)}`;
-            document.getElementById('stat-pendientes').innerText = pedidos.filter(p => p.estado === 'Pendiente').length;
-            document.getElementById('stat-total-pedidos').innerText = pedidos.length;
-        }
-
-        function cambiarFiltroPedido(estado, btn) {
-            filtroPedidoActual = estado; 
-            aplicarFiltrosYRenderizar();
-        }
-
-        function aplicarFiltrosYRenderizar() {
-            const t = document.getElementById('buscador').value.toLowerCase();
-            renderizarPedidos(globalPedidos.filter(p => (p.cliente.nombre.toLowerCase().includes(t) || p.cliente.telefono.toLowerCase().includes(t) || String(p.folio).includes(t)) && (filtroPedidoActual === 'todos' || p.estado === filtroPedidoActual)));
-        }
-
-        function filtrarPedidos() { aplicarFiltrosYRenderizar(); }
-
-        function renderizarPedidos(pedidos) {
-            const div = document.getElementById('pedidos-container');
-            if (pedidos.length === 0) { div.innerHTML = '<p>No hay pedidos.</p>'; return; }
-            div.innerHTML = pedidos.map(p => `
-                <div class="pedido-ticket">
-                    <div>
-                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:10px;">
-                            <b style="color:var(--primary);">Folio #${p.folio}</b><span style="font-size:11px; color:#64748b;">${p.fecha}</span>
-                        </div>
-                        <p style="margin:4px 0; font-size:13px;"><b>Cliente:</b> ${p.cliente.nombre}</p>
-                        <p style="margin:4px 0; font-size:13px;"><b>Teléfono:</b> ${p.cliente.telefono}</p>
-                        <p style="margin:4px 0; font-size:13px;"><b>Pago:</b> ${p.metodoPago || 'Efectivo'}</p>
-                        <hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;">
-                        <div style="font-size:13px;">${p.productos.map(prod => `<p style="margin:4px 0;"><b>${prod.cantidad}x</b> ${prod.nombre}</p>${prod.personalizacion ? `<div style="background:#f8fafc; border:1px solid var(--border); padding:6px; border-radius:6px; font-size:12px; margin:6px 0;">💬 ${prod.personalizacion}</div>` : ''}${prod.diseno ? `<div style="margin-top:8px;"><a href="${prod.diseno}" target="_blank"><img src="${prod.diseno}" style="width:100%; max-height:160px; object-fit:contain; border:1px solid var(--border); border-radius:6px;"></a></div>` : ''}`).join('')}</div>
-                    </div>
-                    <div>
-                        <p style="margin:12px 0 8px 0; font-size:14px;"><b>Total:</b> $${p.total.toFixed(2)}</p>
-                        <div style="display:flex; gap:8px;">
-                            <select onchange="cambiarEstado('${p.folio}', this.value)" style="padding:6px; font-size:12px; flex:1;">
-                                <option value="Pendiente" ${p.estado === 'Pendiente' ? 'selected' : ''}>🟡 Pendiente</option>
-                                <option value="En proceso" ${p.estado === 'En proceso' ? 'selected' : ''}>🔵 En Proceso</option>
-                                <option value="Entregado" ${p.estado === 'Entregado' ? 'selected' : ''}>🟢 Entregado</option>
+                const res = await fetch('/api/pedidos');
+                const pedidos = await res.json();
+                const tbody = document.getElementById('tabla-pedidos');
+                if(!pedidos || pedidos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay pedidos registrados.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = pedidos.map(p => `
+                    <tr>
+                        <td><b>#${p.folio}</b></td>
+                        <td>${p.cliente ? p.cliente.nombre : 'Anónimo'}</td>
+                        <td>${p.cliente ? p.cliente.telefono : '-'}</td>
+                        <td><small>${p.metodoPago || 'Efectivo'}</small></td>
+                        <td><b>$${p.total ? p.total.toFixed(2) : '0.00'}</b></td>
+                        <td><span class="badge bg-warning text-dark">${p.estado || 'Pendiente'}</span></td>
+                        <td>
+                            <select onchange="cambiarEstatusPedido('${p.folio}', this.value)" class="form-select form-select-sm">
+                                <option value="">Cambiar Estatus</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En Elaboración">En Elaboración</option>
+                                <option value="Listo para Entrega">Listo para Entrega</option>
+                                <option value="Entregado">Entregado</option>
                             </select>
-                            <button class="btn-danger" onclick="eliminarPedido('${p.folio}')">🗑</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+                        </td>
+                    </tr>
+                `).join('');
+            } catch(e) { console.error("Error al cargar pedidos", e); }
         }
 
-        async function cambiarEstado(folio, est) { await fetch(`/api/pedidos/${folio}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado: est }) }); cargarPedidosSilencioso(); }
-        async function eliminarPedido(folio) { if (confirm(`¿Eliminar #${folio}?`)) { await fetch(`/api/pedidos/${folio}`, { method: 'DELETE' }); cargarPedidos(); } }
+        async function cambiarEstatusPedido(folio, nuevoEstado) {
+            if(!nuevoEstado) return;
+            await fetch(`/api/pedidos/${folio}/estado`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estado: nuevoEstado })
+            });
+            cargarPedidos();
+        }
 
-        cargarTodo();
+        window.addEventListener('DOMContentLoaded', inicializarAdmin);
     </script>
 </body>
 </html>
