@@ -28,10 +28,12 @@ const pedidoSchema = new mongoose.Schema({
 });
 const Pedido = mongoose.model('Pedido', pedidoSchema);
 
+// CORRECCIÓN 1: Se agregó 'stock' dentro del esquema
 const productoSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
     nombre: String,
     categoria: { type: String, default: 'Grabado láser' },
+    stock: { type: Number, default: 0 }, // <-- AQUÍ ESTÁ EL STOCK
     imagen: String,
     rangos: Array
 });
@@ -73,14 +75,24 @@ app.get('/api/productos', async (req, res) => {
     catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// CORRECCIÓN 2: Se usa findOneAndUpdate con upsert para crear o actualizar sin error de clave duplicada
 app.post('/api/productos', async (req, res) => {
-    try { await new Producto(req.body).save(); res.json({ exito: true }); }
-    catch (err) { res.status(500).json({ exito: false, error: err.message }); }
+    try {
+        const { id, ...datos } = req.body;
+        await Producto.findOneAndUpdate(
+            { id: id },
+            { id, ...datos },
+            { upsert: true, new: true }
+        );
+        res.json({ exito: true });
+    } catch (err) { res.status(500).json({ exito: false, error: err.message }); }
 });
 
 app.put('/api/productos/:id', async (req, res) => {
-    try { await Producto.findOneAndUpdate({ id: req.params.id }, req.body, { new: true }); res.json({ exito: true }); }
-    catch (err) { res.status(500).json({ exito: false, error: err.message }); }
+    try { 
+        await Producto.findOneAndUpdate({ id: req.params.id }, req.body, { new: true, upsert: true }); 
+        res.json({ exito: true }); 
+    } catch (err) { res.status(500).json({ exito: false, error: err.message }); }
 });
 
 app.delete('/api/productos/:id', async (req, res) => {
