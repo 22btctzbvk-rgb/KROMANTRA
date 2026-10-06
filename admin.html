@@ -103,7 +103,7 @@
                     <div class="form-grid-3">
                         <div><label>ID único (ej. taza):</label><input type="text" id="prod-id" required placeholder="taza"></div>
                         <div><label>Nombre del Producto:</label><input type="text" id="prod-nombre" required placeholder="Taza personalizada"></div>
-                        <div><label>Stock Disponible (pzas):</label><input type="number" id="prod-stock" value="50" min="0" required></div>
+                        <div><label>Stock Disponible (pzas):</label><input type="number" id="prod-stock" value="0" min="0" required></div>
                     </div>
                     <div class="form-grid">
                         <div>
@@ -118,7 +118,6 @@
                     <div class="form-grid-3"><div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="50"></div></div><div><label>Precio ($):</label><input type="number" step="0.01" id="precio1" required></div></div>
                     <div class="form-grid-3"><div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="51"><input type="number" id="max2" value="99"></div></div><div><label>Precio ($):</label><input type="number" step="0.01" id="precio2" required></div></div>
                     
-                    <!-- RANGO 3 -->
                     <div class="form-grid-3" style="margin-bottom: 15px;">
                         <div>
                             <label>Rango 3 (Mínimo):</label>
@@ -324,7 +323,7 @@
                     prods.map(p => `
                         <tr>
                             <td><b>${p.id}</b></td><td>${p.nombre}</td><td><span style="font-size:11px; background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:4px;">${p.categoria || 'Grabado láser'}</span></td>
-                            <td><b style="color:${(p.stock || 0) > 0 ? '#16a34a' : '#dc2626'};">${p.stock !== undefined ? p.stock : 50} pzas</b></td>
+                            <td><b style="color:${(p.stock || 0) > 0 ? '#16a34a' : '#dc2626'};">${p.stock !== undefined ? p.stock : 0} pzas</b></td>
                             <td>${p.imagen ? `<img src="${p.imagen}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : 'Sin imagen'}</td>
                             <td><ul style="margin:0; padding-left:15px; font-size:12px;">${(p.rangos || []).map((r, idx) => `<li>${idx === (p.rangos.length - 1) || r.max >= 9999 ? `${r.min}+ pzas` : `${r.min}-${r.max} pzas`}: <b>$${r.precio}</b></li>`).join('')}</ul></td>
                             <td><button class="btn-warning" onclick='prepararEdicion(${JSON.stringify(p)})'>✏️</button> <button class="btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button></td>
@@ -339,7 +338,10 @@
             document.getElementById('prod-id').value = p.id; document.getElementById('prod-id').readOnly = true;
             document.getElementById('prod-nombre').value = p.nombre || ''; 
             document.getElementById('prod-categoria').value = p.categoria || 'Grabado láser';
-            document.getElementById('prod-stock').value = p.stock !== undefined ? p.stock : 50;
+            
+            // CARGA EL VALOR REAL DE STOCK
+            document.getElementById('prod-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 0;
+            
             document.getElementById('prod-imagen').value = p.imagen || '';
             document.getElementById('preview-container').innerHTML = p.imagen ? `<img src="${p.imagen}" class="preview-img">` : '<span style="font-size:12px; color:#94a3b8;">Sin imagen</span>';
             if (p.rangos) {
@@ -355,19 +357,18 @@
             modoEdicion = false; document.getElementById('titulo-form').innerText = '➕ Agregar Producto Nuevo';
             document.getElementById('btn-submit').innerText = 'Guardar Producto 🚀'; document.getElementById('btn-cancelar').style.display = 'none';
             document.getElementById('form-producto').reset(); document.getElementById('prod-id').readOnly = false;
-            document.getElementById('prod-stock').value = 50;
+            document.getElementById('prod-stock').value = 0;
             document.getElementById('min3').value = 100;
             document.getElementById('prod-imagen').value = ''; document.getElementById('preview-container').innerHTML = 'Ninguna imagen seleccionada';
         }
 
-        // FUNCIÓN DE GUARDADO/EDICIÓN COMPATIBLE CON TU SERVIDOR DE RENDER
         async function guardarProducto(e) {
             e.preventDefault();
             const id = document.getElementById('prod-id').value.trim();
             const nombre = document.getElementById('prod-nombre').value.trim();
             const categoria = document.getElementById('prod-categoria').value.trim();
             
-            const stockVal = parseInt(document.getElementById('prod-stock').value);
+            const stockVal = parseInt(document.getElementById('prod-stock').value, 10);
             const stock = isNaN(stockVal) ? 0 : stockVal;
             
             const imagen = document.getElementById('prod-imagen').value || 'https://via.placeholder.com/300';
@@ -381,33 +382,14 @@
             const payload = { id, nombre, categoria, stock, imagen, rangos };
 
             try {
-                let res;
-                // Intentamos con la ruta de edición por ID (PUT) o guardado central (POST)
-                if (modoEdicion) {
-                    res = await fetch(`/api/productos/${encodeURIComponent(id)}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                } else {
-                    res = await fetch('/api/productos', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                }
-
-                // Si la ruta PUT no existe en el servidor, reintenta automáticamente por POST
-                if (!res.ok) {
-                    res = await fetch('/api/productos', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                }
+                let res = await fetch('/api/productos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
                 const data = await res.json();
-                if (res.ok || data.exito || data.id || data.acknowledged) {
+                if (res.ok || data.exito || data.id) {
                     alert('¡Producto guardado correctamente!');
                     cancelarEdicion();
                     cargarProductos();
@@ -415,7 +397,7 @@
                     alert('Error al guardar el producto.');
                 }
             } catch (err) {
-                alert('Error de conexión al guardar el producto.');
+                alert('Error de conexión al guardar producto.');
             }
         }
 
