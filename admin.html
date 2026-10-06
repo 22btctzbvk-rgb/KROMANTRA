@@ -3,558 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Kromantra | Regalos y Mayoreo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Kromantra | Panel de Administración</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        header { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 20px; text-align: center; border-radius: 12px; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 22px; } p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
+        .container { max-width: 1050px; margin: 0 auto; }
+        .btn-volver { display: inline-block; margin-bottom: 15px; background: #e2e8f0; color: #1e293b; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 13px; }
         
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+        .nav-tab { background: white; border: 1px solid var(--border); padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: #475569; }
+        .nav-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .admin-seccion { display: none; }
+        .admin-seccion.activo { display: block; }
 
-        .announcement-bar { background: #1e293b; color: #f8fafc; font-size: 12px; text-align: center; padding: 8px 15px; font-weight: 500; }
-        .hero-section { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid #3b82f6; }
-        .hero-content { max-width: 800px; margin: 0 auto; animation: fadeIn 0.8s ease; }
-        .hero-section img { width: 90px; height: 90px; object-fit: contain; margin-bottom: 12px; border-radius: 50%; background: white; padding: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .hero-section h1 { font-size: 34px; font-weight: 800; margin: 0 0 8px 0; }
-        .hero-section p.subtitle { font-size: 17px; margin: 0 0 25px 0; opacity: 0.9; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
+        .stat-card h3 { margin: 0; font-size: 12px; color: #64748b; }
+        .stat-card p { font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 5px; }
+
+        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        h2 { font-size: 16px; margin-top: 0; color: #334155; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
         
-        .btn-grande { display: inline-block; background: white; color: var(--primary); padding: 14px 35px; border-radius: 30px; font-weight: 800; font-size: 17px; text-decoration: none; cursor: pointer; border: none; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .btn-grande:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
-
-        .rastreo-portada-box { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 12px 15px; border-radius: 10px; display: flex; gap: 10px; max-width: 500px; margin: 25px auto 0 auto; }
-        .rastreo-portada-box input { flex: 1; padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; }
-        .rastreo-portada-box button { padding: 8px 15px; background: #1e293b; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-
-        .info-container { max-width: 900px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
-        .info-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); animation: slideUp 0.6s ease; }
-        .info-card h2 { color: #1e3a8a; margin-top: 0; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { border: 1px solid var(--border); padding: 10px; text-align: left; vertical-align: middle; }
+        th { background: #f1f5f9; font-weight: 600; }
         
-        .materiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; text-align: center; }
-        .material-item { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .material-item b { display: block; font-size: 14px; color: #334155; margin-bottom: 4px; }
-        .material-item span { font-size: 12px; color: #64748b; white-space: pre-line; }
-
-        .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .galeria-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: #e2e8f0; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 13px; font-family: inherit; resize: vertical; }
         
-        .resenas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-        .resena-card { background: #f8fafc; border: 1px solid var(--border); padding: 15px; border-radius: 8px; font-size: 13px; }
+        button { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; width: 100%; }
+        button:hover { background: var(--primary-hover); }
+        .btn-danger { background: #e11d48; padding: 6px 12px; font-size: 12px; width: auto; color: white; border-radius: 6px; border: none; cursor: pointer; }
+        .btn-warning { background: #d97706; padding: 5px 10px; font-size: 12px; width: auto; color: white; border-radius: 6px; border: none; cursor: pointer; }
+        .btn-secondary { background: #64748b; margin-top: 5px; }
 
-        #vista-catalogo { display: none; max-width: 1200px; margin: 20px auto 40px auto; padding: 0 20px; gap: 30px; }
-        .catalogo-activo { display: grid !important; grid-template-columns: 1fr 380px; animation: fadeIn 0.4s ease; }
-        @media (max-width: 900px) { .catalogo-activo { grid-template-columns: 1fr; } }
-        
-        .btn-volver { background: #334155; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; }
-        #toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 3000; animation: slideUp 0.3s ease; }
-        
-        .categorias-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .cat-btn { background: #e2e8f0; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; color: #475569; transition: all 0.2s ease; }
-        .cat-btn.active { background: var(--primary); color: white; transform: scale(1.05); }
-
-        .main-content { display: flex; flex-direction: column; gap: 20px; }
-        .rastreo-box { background: white; border: 1px solid var(--border); padding: 15px 20px; border-radius: 10px; display: flex; gap: 10px; align-items: center; }
-        .rastreo-box input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
-        .rastreo-box button { padding: 8px 16px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-        
-        .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
-        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; background: #f1f5f9; }
-        .card h3 { margin: 6px 0 8px 0; font-size: 16px; color: #1e293b; }
-        .rango-box { font-size: 11px; color: #64748b; background: #f8fafc; padding: 8px; border-radius: 6px; margin-bottom: 12px; border: 1px solid var(--border); }
-        .rango-box ul { margin: 0; padding-left: 12px; }
-
-        .btn-personalizar { background: var(--primary); color: white; border: none; padding: 11px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; font-size: 13px; transition: background 0.2s, transform 0.2s; }
-        .btn-personalizar:hover { background: var(--primary-hover); transform: scale(1.02); }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2500; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.25s ease; }
-        .modal-content { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; box-shadow: 0 15px 30px rgba(0,0,0,0.25); position: relative; animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .modal-close { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; color: #475569; }
-
-        .form-mini { display: flex; flex-direction: column; gap: 10px; }
-        label { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 2px; display: block; }
-        input, textarea, select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12px; box-sizing: border-box; }
-        
-        .sidebar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: fit-content; position: sticky; top: 20px; }
-        .sidebar h2 { font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: #1e293b; }
-        .cart-item { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .cart-controls { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-        .cart-controls button { background: #e2e8f0; border: none; width: 22px; height: 22px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .cart-total { font-size: 18px; font-weight: 700; color: #1e293b; margin: 15px 0; text-align: right; }
-        .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
-        .info-pago-box { font-size: 11px; background: #eff6ff; padding: 12px; border-radius: 8px; border: 1px solid #bfdbfe; color: #1e3a8a; display: none; margin-top: 4px; }
-        .btn-checkout { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
-        #lbl-horarios, #lbl-quienes { white-space: pre-line; }
+        .search-box { width: 100%; padding: 8px 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; box-sizing: border-box; }
+        .section-sub { font-size: 13px; font-weight: 700; color: #475569; margin-top: 15px; margin-bottom: 8px; border-left: 3px solid var(--primary); padding-left: 8px; }
+        .preview-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); margin-top: 5px; }
+        .pedidos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; margin-top: 15px; }
+        .pedido-ticket { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; }
     </style>
 </head>
 <body>
-    <div id="toast">¡Producto agregado al carrito!</div>
+    <script>
+        (function verificarAccesoAdmin() {
+            const PIN_SECRETO = '4321'; 
+            if (localStorage.getItem('kromantra_admin_ok') !== PIN_SECRETO) {
+                const ingreso = prompt('🔒 Ingresa el PIN de administración:');
+                if (ingreso === PIN_SECRETO) { localStorage.setItem('kromantra_admin_ok', PIN_SECRETO); }
+                else { alert('PIN incorrecto.'); window.location.href = '/'; }
+            }
+        })();
+    </script>
 
-    <div class="announcement-bar">
-        <span id="lbl-tiempo">⏱ Tiempo de elaboración: 3 a 4 días hábiles</span>
-    </div>
+    <div class="container">
+        <a href="/" class="btn-volver">← Ir a la Tienda</a>
+        <header>
+            <h1>Panel de Administración Kromantra</h1>
+            <p>Control limpio y organizado por secciones</p>
+        </header>
 
-    <div id="vista-inicio">
-        <section class="hero-section">
-            <div class="hero-content">
-                <img src="logo.jpg" alt="Logo" onerror="this.style.display='none'">
-                <h1 id="lbl-titulo">Kromantra</h1>
-                <p class="subtitle" id="lbl-subtitulo">Regalos Personalizados y Mayoreo Inteligente</p>
-                <button class="btn-grande" onclick="abrirCatalogo()">Ir a la Tienda y Comprar 🛍️</button>
-                <div class="rastreo-portada-box">
-                    <input type="text" id="inputRastreoInicio" placeholder="🔍 Rastrear pedido por Folio o Teléfono...">
-                    <button onclick="consultarPedidoInicio()">Buscar</button>
-                </div>
-                <div id="resultadoRastreoInicio" style="margin-top: 10px; font-size: 13px;"></div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="cambiarSeccion('seccion-pedidos', this)">🛍️ Pedidos</button>
+            <button class="nav-tab" onclick="cambiarSeccion('seccion-productos', this)">📦 Productos y Catálogo</button>
+            <button class="nav-tab" onclick="cambiarSeccion('seccion-config', this)">⚙️ Configuración y Textos</button>
+            <button class="nav-tab" onclick="cambiarSeccion('seccion-resenas', this)">⭐ Reseñas</button>
+        </div>
+
+        <!-- SECCIÓN PEDIDOS -->
+        <div id="seccion-pedidos" class="admin-seccion activo">
+            <div class="stats-grid">
+                <div class="stat-card"><h3>Ventas Totales</h3><p id="stat-ventas">$0.00</p></div>
+                <div class="stat-card"><h3>Pendientes</h3><p id="stat-pendientes">0</p></div>
+                <div class="stat-card"><h3>Total Pedidos</h3><p id="stat-total-pedidos">0</p></div>
             </div>
-        </section>
-
-        <div class="info-container">
-            <div class="info-card">
-                <h2>👋 Nuestra Esencia</h2>
-                <p id="lbl-quienes" style="font-size: 15px; color: #475569; line-height: 1.6; margin: 0;">Somos un negocio dedicado a crear piezas personalizadas con alta precisión.</p>
-            </div>
-
-            <div class="info-card">
-                <h2>🛠️ Materiales y Precisión</h2>
-                <div class="materiales-grid" id="materiales-container">
-                    <div class="material-item"><b>Cargando...</b></div>
+            <div class="card">
+                <h2>Tickets de Pedidos</h2>
+                <div style="display: flex; gap: 8px; margin: 15px 0;">
+                    <button class="nav-tab active" onclick="cambiarFiltroPedido('todos', this)" style="padding:5px 10px; font-size:12px;">Todos</button>
+                    <button class="nav-tab" onclick="cambiarFiltroPedido('Pendiente', this)" style="padding:5px 10px; font-size:12px;">🟡 Pendientes</button>
+                    <button class="nav-tab" onclick="cambiarFiltroPedido('En proceso', this)" style="padding:5px 10px; font-size:12px;">🔵 En Proceso</button>
+                    <button class="nav-tab" onclick="cambiarFiltroPedido('Entregado', this)" style="padding:5px 10px; font-size:12px;">🟢 Entregados</button>
                 </div>
-            </div>
-
-            <div class="info-card">
-                <h2>✨ Galería de Trabajos</h2>
-                <div class="galeria-grid" id="galeria-container">
-                    <p style="color:#64748b; font-size:13px;">Cargando galería...</p>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px;">
-                    <h2 style="margin: 0; border: none; padding: 0;">⭐ Reseñas de Clientes</h2>
-                    <button onclick="abrirModalResena()" style="background:var(--primary); color:white; border:none; padding:6px 12px; border-radius:6px; font-size:12px; cursor:pointer; font-weight:600;">Dejar Reseña ✍️</button>
-                </div>
-                <div class="resenas-grid" id="resenas-container">
-                    <p style="color:#64748b; font-size:13px;">Cargando opiniones...</p>
-                </div>
-            </div>
-
-            <div class="info-card" style="text-align: center;">
-                <h2>🕒 Horarios de Atención</h2>
-                <div id="lbl-horarios" style="font-size: 16px; color: #475569; font-weight: 500; margin-top: 10px;">
-                    Lunes a Sábado: 10:00 am - 7:00 pm
-                </div>
-            </div>
-
-            <div class="info-card" style="text-align: center; padding: 20px;">
-                <h2 style="border: none; margin-bottom: 10px;">¡Síguenos en Redes!</h2>
-                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
-                    <a id="link-instagram" href="https://instagram.com" target="_blank" style="background:#f1f5f9; color:#334155; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">📸 Instagram</a>
-                    <a id="link-facebook" href="https://facebook.com" target="_blank" style="background:#f1f5f9; color:#334155; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">📘 Facebook</a>
-                </div>
+                <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar por cliente, teléfono o folio..." oninput="filtrarPedidos()">
+                <div id="pedidos-container" class="pedidos-grid">Cargando pedidos...</div>
             </div>
         </div>
-    </div>
 
-    <!-- MODAL DE RESEÑA -->
-    <div id="modal-resena" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2500; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
-        <div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:400px; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
-            <h3 style="margin-top:0; color:#1e293b;">Escribe tu Reseña</h3>
-            <form onsubmit="enviarResena(event)">
-                <div style="margin-bottom:10px;"><label>Tu Nombre:</label><input type="text" id="res-nombre" required></div>
-                <div style="margin-bottom:10px;"><label>Calificación:</label><select id="res-estrellas"><option value="5">⭐⭐⭐⭐⭐ (5/5)</option><option value="4">⭐⭐⭐⭐ (4/5)</option><option value="3">⭐⭐⭐ (3/5)</option></select></div>
-                <div style="margin-bottom:15px;"><label>Tu Comentario:</label><textarea id="res-comentario" rows="3" required></textarea></div>
-                <div style="display:flex; gap:10px;">
-                    <button type="submit" style="background:var(--primary); color:white; border:none; padding:10px; border-radius:6px; flex:1; font-weight:600; cursor:pointer;">Enviar</button>
-                    <button type="button" onclick="cerrarModalResena()" style="background:#e2e8f0; color:#334155; border:none; padding:10px; border-radius:6px; flex:1; font-weight:600; cursor:pointer;">Cancelar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL DE PERSONALIZACIÓN -->
-    <div id="modal-personalizar" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" onclick="cerrarModalPersonalizacion()">×</button>
-            <h3 id="modal-prod-nombre" style="margin-top:0; color:#1e293b; font-size:18px;">Personalizar Producto</h3>
-            <div id="modal-prod-info" style="font-size:12px; color:#64748b; margin-bottom:15px;"></div>
-            <div class="form-mini">
-                <div><label>Cantidad:</label><input type="number" id="modal-cant" value="1" min="1" oninput="actualizarPrecioModal()"></div>
-                <div><label>✍️ Texto Personalizado:</label><input type="text" id="modal-texto" placeholder="Ej. Nombre o fecha"></div>
-                <div><label>🎨 Estilo / Color:</label><input type="text" id="modal-estilo" placeholder="Ej. Mate o Negro"></div>
-                <div><label>🖼️ Subir Logotipo / Diseño:</label><input type="file" id="modal-archivo" accept="image/*" onchange="convertirArchivoModal(event)"><input type="hidden" id="modal-base64"></div>
-            </div>
-            <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid var(--border); margin:15px 0; text-align:center;">
-                <span style="font-size:11px; color:#64748b; display:block;">Total Calculado:</span>
-                <div id="modal-preview-precio" style="font-size:20px; font-weight:700; color:var(--primary);">$0.00</div>
-            </div>
-            <button class="btn-personalizar" onclick="agregarDesdeModal()">+ Agregar al Carrito 🛒</button>
-        </div>
-    </div>
-
-    <div id="vista-catalogo">
-        <div class="main-content">
-            <div><button class="btn-volver" onclick="cerrarCatalogo()">← Volver al Inicio</button></div>
-            <div class="rastreo-box"><input type="text" id="inputRastreo" placeholder="🔍 Folio o Teléfono..."><button onclick="consultarPedido()">Buscar</button></div>
-            
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                <h2 style="font-size: 18px; margin: 0; color: #334155;">📦 Catálogo Oficial</h2>
-            </div>
-            
-            <div class="categorias-bar" id="categorias-bar">
-                <button class="cat-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
-            </div>
-
-            <div id="catalogo" class="grid-productos"><p>Cargando productos...</p></div>
-        </div>
-        <div class="sidebar">
-            <h2>🛒 Tu Carrito</h2>
-            <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;"><p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p></div>
-            <div class="cart-total" id="cart-total-general">Total: $0.00</div>
-            <div class="checkout-form">
-                <h3 style="margin: 0 0 5px 0; font-size: 13px;">👤 Datos de Contacto</h3>
-                <div><label>Nombre:</label><input type="text" id="cli-nombre"></div>
-                <div><label>Teléfono:</label><input type="text" id="cli-telefono"></div>
-                <div><label>Método de Pago:</label><select id="cli-metodo-pago" onchange="mostrarDatosPago()"><option value="Efectivo / Al Recoger">💵 Efectivo / Al Recoger</option><option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia</option></select></div>
-                <div id="info-pago-div" class="info-pago-box">
-                    <div style="background: white; padding: 8px; border-radius: 6px; border: 1px solid #93c5fd; font-family: monospace; font-size: 11px;">
-                        <b>Banco:</b> <span id="banco-txt">BBVA</span><br>
-                        <b>Tarjeta:</b> <span id="tarjeta-txt">4152314063676335</span><br>
-                        <b>Titular:</b> <span id="titular-txt">Carolina Perez Mendez</span>
+        <!-- SECCIÓN PRODUCTOS -->
+        <div id="seccion-productos" class="admin-seccion">
+            <div class="card">
+                <h2 id="titulo-form">➕ Agregar Producto Nuevo</h2>
+                <form id="form-producto" onsubmit="guardarProducto(event)">
+                    <div class="form-grid-3">
+                        <div><label>ID único (ej. taza):</label><input type="text" id="prod-id" required placeholder="taza"></div>
+                        <div><label>Nombre del Producto:</label><input type="text" id="prod-nombre" required placeholder="Taza personalizada"></div>
+                        <div><label>Stock Disponible (pzas):</label><input type="number" id="prod-stock" value="50" min="0" required></div>
                     </div>
-                </div>
-                <button class="btn-checkout" onclick="enviarPedidoGeneral()">Finalizar y Enviar Pedido 🚀</button>
+                    <div class="form-grid">
+                        <div>
+                            <label>Categoría:</label>
+                            <input type="text" id="prod-categoria" required placeholder="Ej. Grabado láser, Sublimados">
+                        </div>
+                        <div><label>Imagen del Producto:</label><input type="file" id="prod-imagen-file" accept="image/*" onchange="convertirImagen(event)"><input type="hidden" id="prod-imagen"></div>
+                    </div>
+                    <div style="margin-bottom: 12px;"><label>Vista previa:</label><div id="preview-container"><span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span></div></div>
+                    
+                    <div class="section-sub">Precios y Descuentos por Mayoreo</div>
+                    <div class="form-grid-3"><div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="50"></div></div><div><label>Precio ($):</label><input type="number" step="0.01" id="precio1" required></div></div>
+                    <div class="form-grid-3"><div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="51"><input type="number" id="max2" value="99"></div></div><div><label>Precio ($):</label><input type="number" step="0.01" id="precio2" required></div></div>
+                    
+                    <!-- RANGO 3 CON 'EN ADELANTE' FIXEADO -->
+                    <div class="form-grid-3" style="margin-bottom: 15px;">
+                        <div>
+                            <label>Rango 3 (Mínimo):</label>
+                            <input type="number" id="min3" value="100" placeholder="Ej. 100">
+                        </div>
+                        <div>
+                            <label>Límite:</label>
+                            <input type="text" value="en adelante" disabled style="background:#f1f5f9; color:#475569; font-weight:600; text-align:center; cursor:not-allowed;">
+                        </div>
+                        <div>
+                            <label>Precio ($):</label>
+                            <input type="number" step="0.01" id="precio3" required placeholder="Precio c/u">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="btn-submit">Guardar Producto 🚀</button>
+                    <button type="button" id="btn-cancelar" class="btn-secondary" style="display:none;" onclick="cancelarEdicion()">Cancelar Edición</button>
+                </form>
+            </div>
+            <div class="card"><h2>📦 Tus Productos</h2><div id="productos-container">Cargando catálogo...</div></div>
+        </div>
+
+        <!-- SECCIÓN CONFIGURACIÓN -->
+        <div id="seccion-config" class="admin-seccion">
+            <div class="card">
+                <h2>⚙️ Configuración General y Textos del Negocio</h2>
+                <form onsubmit="guardarConfig(event)">
+                    <div class="form-grid">
+                        <div><label>Título del Negocio:</label><input type="text" id="cfg-titulo" required></div>
+                        <div><label>Subtítulo / Eslogan:</label><input type="text" id="cfg-subtitulo" required></div>
+                    </div>
+                    <div style="margin-bottom: 12px;"><label>Quiénes Somos:</label><textarea id="cfg-quienes" rows="3" required></textarea></div>
+                    <div class="form-grid-3">
+                        <div><label>WhatsApp:</label><input type="text" id="cfg-whatsapp" required></div>
+                        <div><label>Banco:</label><input type="text" id="cfg-banco" required></div>
+                        <div><label>Titular Tarjeta:</label><input type="text" id="cfg-titular" required></div>
+                    </div>
+                    <div style="margin-bottom: 12px;"><label>Número de Tarjeta:</label><input type="text" id="cfg-tarjeta" required></div>
+                    
+                    <div class="section-sub">Textos y Redes de la Portada</div>
+                    <div class="form-grid" style="margin-bottom: 12px;">
+                        <div><label>Tiempo Elaboración:</label><input type="text" id="cfg-tiempo"></div>
+                        <div><label>Instagram:</label><input type="text" id="cfg-instagram"></div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom: 12px;">
+                        <div><label>Facebook:</label><input type="text" id="cfg-facebook" placeholder="https://facebook.com/kromantra"></div>
+                        <div></div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label>Horarios de Atención (Escribir hacia abajo con Enter):</label>
+                        <textarea id="cfg-horarios" rows="3" placeholder="Lunes a Viernes: 09:00 am - 18:00 pm&#10;Sábado a Domingo: 09:00 am - 15:00 pm"></textarea>
+                    </div>
+
+                    <div class="section-sub">🛠️ Materiales (4 Tarjetas)</div>
+                    <div class="form-grid">
+                        <div><label>Mat 1 Título:</label><input type="text" id="mat-t-0"></div>
+                        <div><label>Mat 1 Desc (Escribir hacia abajo):</label><textarea id="mat-d-0" rows="3"></textarea></div>
+                    </div>
+                    <div class="form-grid">
+                        <div><label>Mat 2 Título:</label><input type="text" id="mat-t-1"></div>
+                        <div><label>Mat 2 Desc (Escribir hacia abajo):</label><textarea id="mat-d-1" rows="3"></textarea></div>
+                    </div>
+                    <div class="form-grid">
+                        <div><label>Mat 3 Título:</label><input type="text" id="mat-t-2"></div>
+                        <div><label>Mat 3 Desc (Escribir hacia abajo):</label><textarea id="mat-d-2" rows="3"></textarea></div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom: 15px;">
+                        <div><label>Mat 4 Título:</label><input type="text" id="mat-t-3"></div>
+                        <div><label>Mat 4 Desc (Escribir hacia abajo):</label><textarea id="mat-d-3" rows="3"></textarea></div>
+                    </div>
+
+                    <div class="section-sub">✨ Galería (3 Imágenes)</div>
+                    <div class="form-grid-3" style="margin-bottom: 15px;">
+                        <div><label>Imagen 1:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 0)"><input type="hidden" id="gal-0"><div id="preview-gal-0" style="margin-top:5px;"></div></div>
+                        <div><label>Imagen 2:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 1)"><input type="hidden" id="gal-1"><div id="preview-gal-1" style="margin-top:5px;"></div></div>
+                        <div><label>Imagen 3:</label><input type="file" accept="image/*" onchange="convertirGaleria(event, 2)"><input type="hidden" id="gal-2"><div id="preview-gal-2" style="margin-top:5px;"></div></div>
+                    </div>
+
+                    <button type="submit" style="background: #2563eb;">Guardar Configuración General 💾</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SECCIÓN RESEÑAS -->
+        <div id="seccion-resenas" class="admin-seccion">
+            <div class="card">
+                <h2>⭐ Gestión de Reseñas de Clientes</h2>
+                <div id="admin-resenas-container" style="margin-top: 15px;">Cargando reseñas...</div>
             </div>
         </div>
     </div>
 
     <script>
-        let configGlobal = { whatsapp: '525514494333', tarjeta: '4152314063676335', titular: 'Carolina Perez Mendez', banco: 'BBVA' };
-        let carrito = [], productosGlobal = [], categoriaSeleccionada = 'todos', productoSeleccionadoIndex = null;
+        let globalPedidos = [], filtroPedidoActual = 'todos', modoEdicion = false, totalPedidosAnterior = 0;
 
-        async function inicializar() {
-            cargarConfiguracion();
-            cargarCatalogo();
-            cargarResenas();
-
-            setInterval(async () => {
-                try {
-                    const res = await fetch('/api/productos');
-                    const nuevos = await res.json();
-                    if (JSON.stringify(nuevos) !== JSON.stringify(productosGlobal)) {
-                        productosGlobal = nuevos;
-                        actualizarBarraCategorias();
-                        if (document.getElementById('modal-personalizar').style.display !== 'flex') {
-                            renderizarProductosFiltrados();
-                        }
-                    }
-                } catch (e) {}
-            }, 10000);
+        function cambiarSeccion(seccionId, btn) {
+            document.querySelectorAll('.admin-seccion').forEach(s => s.classList.remove('activo'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(seccionId).classList.add('activo');
+            btn.classList.add('active');
         }
 
-        async function cargarConfiguracion() {
+        async function cargarTodo() {
+            cargarConfig(); cargarProductos(); cargarPedidos(); cargarAdminResenas();
+            setInterval(cargarPedidosSilencioso, 15000);
+        }
+
+        async function cargarConfig() {
             try {
                 const res = await fetch('/api/config');
                 const data = await res.json();
-                if(data && Object.keys(data).length > 0) {
-                    configGlobal = data;
-                    if(data.titulo) { document.getElementById('page-title').innerText = `${data.titulo} | Regalos y Mayoreo`; document.getElementById('lbl-titulo').innerText = data.titulo; }
-                    if(data.subtitulo) document.getElementById('lbl-subtitulo').innerText = data.subtitulo;
-                    if(data.quienesSomos) document.getElementById('lbl-quienes').innerText = data.quienesSomos;
-                    if(data.banco) document.getElementById('banco-txt').innerText = data.banco;
-                    if(data.tarjeta) document.getElementById('tarjeta-txt').innerText = data.tarjeta;
-                    if(data.titular) document.getElementById('titular-txt').innerText = data.titular;
-                    if(data.tiempoElaboracion) document.getElementById('lbl-tiempo').innerText = `⏱ Tiempo de elaboración: ${data.tiempoElaboracion}`;
-                    if(data.horarios) document.getElementById('lbl-horarios').innerText = data.horarios;
-                    if(data.instagram) document.getElementById('link-instagram').href = data.instagram;
-                    if(data.facebook || data.tiktok) document.getElementById('link-facebook').href = data.facebook || data.tiktok;
-                    if (data.materiales && data.materiales.length > 0) {
-                        document.getElementById('materiales-container').innerHTML = data.materiales.map(m => `<div class="material-item"><b>${m.titulo || ''}</b><span>${m.descripcion || ''}</span></div>`).join('');
+                if (data) {
+                    document.getElementById('cfg-titulo').value = data.titulo || '';
+                    document.getElementById('cfg-subtitulo').value = data.subtitulo || '';
+                    document.getElementById('cfg-quienes').value = data.quienesSomos || '';
+                    document.getElementById('cfg-whatsapp').value = data.whatsapp || '';
+                    document.getElementById('cfg-banco').value = data.banco || '';
+                    document.getElementById('cfg-tarjeta').value = data.tarjeta || '';
+                    document.getElementById('cfg-titular').value = data.titular || '';
+                    document.getElementById('cfg-tiempo').value = data.tiempoElaboracion || '';
+                    document.getElementById('cfg-horarios').value = data.horarios || '';
+                    document.getElementById('cfg-instagram').value = data.instagram || '';
+                    document.getElementById('cfg-facebook').value = data.facebook || data.tiktok || '';
+                    if (data.materiales) {
+                        data.materiales.forEach((m, i) => {
+                            if(document.getElementById(`mat-t-${i}`)) document.getElementById(`mat-t-${i}`).value = m.titulo || '';
+                            if(document.getElementById(`mat-d-${i}`)) document.getElementById(`mat-d-${i}`).value = m.descripcion || '';
+                        });
                     }
-                    if (data.galeria && data.galeria.length > 0) {
-                        document.getElementById('galeria-container').innerHTML = data.galeria.map(url => `<img src="${url || 'https://via.placeholder.com/400'}" alt="Trabajo" class="galeria-img" onerror="this.src='https://via.placeholder.com/400?text=Sin+Imagen'">`).join('');
+                    if (data.galeria) {
+                        data.galeria.forEach((img, i) => {
+                            if(img) {
+                                document.getElementById(`gal-${i}`).value = img;
+                                document.getElementById(`preview-gal-${i}`).innerHTML = `<img src="${img}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">`;
+                            }
+                        });
                     }
                 }
-            } catch (e) {}
+            } catch (e) { console.error("Error al cargar configuración"); }
         }
 
-        async function cargarResenas() {
-            try {
-                const res = await fetch('/api/resenas');
-                const resenas = await res.json();
-                const container = document.getElementById('resenas-container');
-                if(resenas.length === 0) { container.innerHTML = '<p style="color:#64748b; font-size:13px;">Aún no hay reseñas registradas.</p>'; return; }
-                container.innerHTML = resenas.map(r => `
-                    <div class="resena-card">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                            <b>${r.nombre}</b>
-                            <span style="color:#eab308;">${'⭐'.repeat(r.estrellas)}</span>
-                        </div>
-                        <p style="margin:0; color:#475569;">"${r.comentario}"</p>
-                        <span style="font-size:10px; color:#94a3b8; display:block; margin-top:6px;">${r.fecha}</span>
-                    </div>
-                `).join('');
-            } catch (e) { document.getElementById('resenas-container').innerHTML = '<p style="color:red; font-size:13px;">Error al cargar reseñas.</p>'; }
-        }
-
-        function abrirModalResena() { document.getElementById('modal-resena').style.display = 'flex'; }
-        function cerrarModalResena() { document.getElementById('modal-resena').style.display = 'none'; }
-
-        async function enviarResena(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('res-nombre').value.trim();
-            const estrellas = parseInt(document.getElementById('res-estrellas').value);
-            const comentario = document.getElementById('res-comentario').value.trim();
-            try {
-                const res = await fetch('/api/resenas', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre, estrellas, comentario }) });
-                const data = await res.json();
-                if(data.exito) {
-                    alert('¡Gracias por tu reseña!');
-                    cerrarModalResena();
-                    document.getElementById('res-nombre').value = '';
-                    document.getElementById('res-comentario').value = '';
-                    cargarResenas();
-                } else { alert('Error al enviar reseña.'); }
-            } catch (err) { alert('Error de conexión.'); }
-        }
-
-        function abrirCatalogo() { 
-            document.getElementById('vista-inicio').style.display = 'none'; 
-            document.getElementById('vista-catalogo').classList.add('catalogo-activo'); 
-            cargarConfiguracion();
-            cargarCatalogo();
-            window.scrollTo(0, 0); 
-        }
-
-        function cerrarCatalogo() { document.getElementById('vista-catalogo').classList.remove('catalogo-activo'); document.getElementById('vista-inicio').style.display = 'block'; window.scrollTo(0, 0); }
-
-        async function cargarCatalogo() {
-            try {
-                const res = await fetch('/api/productos'); 
-                productosGlobal = await res.json();
-                actualizarBarraCategorias();
-                renderizarProductosFiltrados();
-            } catch (err) { document.getElementById('catalogo').innerHTML = '<p style="color:red;">Error al cargar tienda.</p>'; }
-        }
-
-        function actualizarBarraCategorias() {
-            const mapCategorias = new Map();
-            productosGlobal.forEach(p => {
-                const catOriginal = (p.categoria || 'Grabado láser').trim();
-                const catKey = catOriginal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                if (!mapCategorias.has(catKey)) {
-                    mapCategorias.set(catKey, catOriginal);
-                }
-            });
-
-            const bar = document.getElementById('categorias-bar');
-            let html = `<button class="cat-btn ${categoriaSeleccionada === 'todos' ? 'active' : ''}" onclick="filtrarCategoria('todos', this)">Todos</button>`;
-            
-            mapCategorias.forEach((displayLabel, catKey) => {
-                const isActive = categoriaSeleccionada === catKey ? 'active' : '';
-                html += `<button class="cat-btn ${isActive}" onclick="filtrarCategoria('${catKey}', this)">${displayLabel}</button>`;
-            });
-            bar.innerHTML = html;
-        }
-
-        function filtrarCategoria(cat, btn) {
-            categoriaSeleccionada = cat;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderizarProductosFiltrados();
-        }
-
-        function renderizarProductosFiltrados() {
-            const container = document.getElementById('catalogo');
-            const filtrados = categoriaSeleccionada === 'todos' ? productosGlobal : productosGlobal.filter(p => {
-                const catOriginal = (p.categoria || 'Grabado láser').trim();
-                const catKey = catOriginal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                return catKey === categoriaSeleccionada;
-            });
-            
-            if (filtrados.length === 0) { container.innerHTML = '<p>No hay productos en esta categoría.</p>'; return; }
-            
-            container.innerHTML = filtrados.map((p) => {
-                const index = productosGlobal.findIndex(prod => prod.id === p.id);
-                const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map((r, i) => {
-                    const textoRango = (i === p.rangos.length - 1 || r.max >= 9999) ? `${r.min}+ pzas` : `${r.min}-${r.max} pzas`;
-                    return `<li>${textoRango}: <b>$${r.precio} c/u</b></li>`;
-                }).join('') : '';
-
-                return `
-                    <div class="card">
-                        <div>
-                            <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
-                            <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria ? p.categoria.trim() : 'Grabado láser'}</span>
-                            <h3 style="margin-top:6px;">${p.nombre}</h3>
-                            <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
-                        </div>
-                        <div>
-                            <button class="btn-personalizar" onclick="abrirModalPersonalizacion(${index})">✨ Personalizar y Agregar</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function abrirModalPersonalizacion(index) {
-            productoSeleccionadoIndex = index;
-            const producto = productosGlobal[index];
-            document.getElementById('modal-prod-nombre').innerText = producto.nombre;
-            document.getElementById('modal-prod-info').innerText = `Categoría: ${producto.categoria || 'Grabado láser'}`;
-            document.getElementById('modal-cant').value = 1;
-            document.getElementById('modal-texto').value = '';
-            document.getElementById('modal-estilo').value = '';
-            document.getElementById('modal-archivo').value = '';
-            document.getElementById('modal-base64').value = '';
-            actualizarPrecioModal();
-            document.getElementById('modal-personalizar').style.display = 'flex';
-        }
-
-        function cerrarModalPersonalizacion() {
-            document.getElementById('modal-personalizar').style.display = 'none';
-        }
-
-        function convertirArchivoModal(event) {
+        function convertirGaleria(event, index) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) { document.getElementById('modal-base64').value = e.target.result; };
+                reader.onload = function(e) {
+                    document.getElementById(`gal-${index}`).value = e.target.result;
+                    document.getElementById(`preview-gal-${index}`).innerHTML = `<img src="${e.target.result}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">`;
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        function calcularSubtotalProducto(producto, cantidad) {
-            if (producto.rangos && producto.rangos.length > 0) {
-                const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
-                let rangoAplicable = rangos[0];
-                for (let r of rangos) { if (cantidad >= r.min && cantidad <= r.max) { rangoAplicable = r; break; } else if (cantidad > r.max) { rangoAplicable = r; } }
-                return { precioUnitario: rangoAplicable.precio, total: cantidad * rangoAplicable.precio };
+        async function guardarConfig(e) {
+            e.preventDefault();
+            let materiales = [];
+            for(let i=0; i<4; i++) {
+                materiales.push({ titulo: document.getElementById(`mat-t-${i}`).value.trim(), descripcion: document.getElementById(`mat-d-${i}`).value.trim() });
             }
-            return { precioUnitario: 0, total: 0 };
+            let galeria = [document.getElementById('gal-0').value, document.getElementById('gal-1').value, document.getElementById('gal-2').value];
+            const facebookVal = document.getElementById('cfg-facebook').value.trim();
+            const body = {
+                titulo: document.getElementById('cfg-titulo').value.trim(),
+                subtitulo: document.getElementById('cfg-subtitulo').value.trim(),
+                quienesSomos: document.getElementById('cfg-quienes').value.trim(),
+                whatsapp: document.getElementById('cfg-whatsapp').value.trim(),
+                banco: document.getElementById('cfg-banco').value.trim(),
+                tarjeta: document.getElementById('cfg-tarjeta').value.trim(),
+                titular: document.getElementById('cfg-titular').value.trim(),
+                tiempoElaboracion: document.getElementById('cfg-tiempo').value.trim(),
+                horarios: document.getElementById('cfg-horarios').value.trim(),
+                instagram: document.getElementById('cfg-instagram').value.trim(),
+                facebook: facebookVal,
+                tiktok: facebookVal,
+                materiales, galeria
+            };
+            try {
+                const res = await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+                const data = await res.json();
+                if (data.exito) alert('¡Configuración general guardada!');
+                else alert('Error al guardar.');
+            } catch (err) { alert('Error de conexión.'); }
         }
 
-        function actualizarPrecioModal() {
-            if (productoSeleccionadoIndex === null) return;
-            const producto = productosGlobal[productoSeleccionadoIndex];
-            const cantidad = parseInt(document.getElementById('modal-cant').value) || 1;
-            const calculo = calcularSubtotalProducto(producto, cantidad);
-            document.getElementById('modal-preview-precio').innerText = `$${calculo.total.toFixed(2)} ($${calculo.precioUnitario} c/u)`;
-        }
-
-        function mostrarToast(mensaje) {
-            const toast = document.getElementById('toast'); toast.innerText = mensaje; toast.style.display = 'block'; toast.style.opacity = '1';
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => { toast.style.display = 'none'; }, 300); }, 2000);
-        }
-
-        function mostrarDatosPago() {
-            const metodo = document.getElementById('cli-metodo-pago').value;
-            document.getElementById('info-pago-div').style.display = metodo.includes('Tarjeta') ? 'block' : 'none';
-        }
-
-        function agregarDesdeModal() {
-            if (productoSeleccionadoIndex === null) return;
-            const producto = productosGlobal[productoSeleccionadoIndex];
-            const cantidadAgregada = parseInt(document.getElementById('modal-cant').value) || 1;
-            const texto = document.getElementById('modal-texto').value.trim();
-            const estilo = document.getElementById('modal-estilo').value.trim();
-            const diseno = document.getElementById('modal-base64').value;
-            
-            let especificaciones = '';
-            if (texto) especificaciones += `Texto: "${texto}" `;
-            if (estilo) especificaciones += `| Estilo: ${estilo}`;
-            if (!especificaciones) especificaciones = 'Estándar';
-
-            const indexExistente = carrito.findIndex(item => item.id === producto.id && item.personalizacion === especificaciones);
-            let nuevaCantidadTotal = cantidadAgregada;
-            if (indexExistente !== -1) nuevaCantidadTotal += carrito[indexExistente].cantidad;
-
-            const calculo = calcularSubtotalProducto(producto, nuevaCantidadTotal);
-            if (indexExistente !== -1) {
-                carrito[indexExistente].cantidad = nuevaCantidadTotal;
-                carrito[indexExistente].subtotal = calculo.total;
-            } else {
-                carrito.push({ id: producto.id, nombre: producto.nombre, cantidad: cantidadAgregada, personalizacion: especificaciones, diseno: diseno, subtotal: calculo.total });
+        function convertirImagen(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('prod-imagen').value = e.target.result;
+                    document.getElementById('preview-container').innerHTML = `<img src="${e.target.result}" class="preview-img">`;
+                };
+                reader.readAsDataURL(file);
             }
-            renderizarCarrito(); 
-            cerrarModalPersonalizacion();
-            mostrarToast(`¡${producto.nombre} agregado!`);
         }
 
-        function cambiarCantidad(idx, delta) {
-            const item = carrito[idx];
-            const producto = productosGlobal.find(p => p.id === item.id);
-            if (!producto) return;
-            const nuevaCantidad = item.cantidad + delta;
-            if (nuevaCantidad <= 0) { eliminarDelCarrito(idx); return; }
-            item.cantidad = nuevaCantidad; item.subtotal = calcularSubtotalProducto(producto, nuevaCantidad).total;
-            renderizarCarrito();
+        async function cargarProductos() {
+            try {
+                const res = await fetch('/api/productos'); const prods = await res.json();
+                const div = document.getElementById('productos-container');
+                if (prods.length === 0) { div.innerHTML = '<p>No hay productos.</p>'; return; }
+                div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Stock</th><th>Imagen</th><th>Precios</th><th>Acciones</th></tr>` +
+                    prods.map(p => `
+                        <tr>
+                            <td><b>${p.id}</b></td><td>${p.nombre}</td><td><span style="font-size:11px; background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:4px;">${p.categoria || 'Grabado láser'}</span></td>
+                            <td><b style="color:${(p.stock || 0) > 0 ? '#16a34a' : '#dc2626'};">${p.stock !== undefined ? p.stock : 50} pzas</b></td>
+                            <td>${p.imagen ? `<img src="${p.imagen}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : 'Sin imagen'}</td>
+                            <td><ul style="margin:0; padding-left:15px; font-size:12px;">${(p.rangos || []).map((r, idx) => `<li>${idx === (p.rangos.length - 1) || r.max >= 9999 ? `${r.min}+ pzas` : `${r.min}-${r.max} pzas`}: <b>$${r.precio}</b></li>`).join('')}</ul></td>
+                            <td><button class="btn-warning" onclick='prepararEdicion(${JSON.stringify(p)})'>✏️</button> <button class="btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button></td>
+                        </tr>
+                    `).join('') + `</table>`;
+            } catch (e) { document.getElementById('productos-container').innerHTML = 'Error al cargar.'; }
         }
 
-        function renderizarCarrito() {
-            const lista = document.getElementById('carrito-lista');
-            if (carrito.length === 0) { lista.innerHTML = '<p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>'; document.getElementById('cart-total-general').innerText = 'Total: $0.00'; return; }
-            let totalGeneral = 0;
-            lista.innerHTML = carrito.map((item, idx) => {
-                totalGeneral += item.subtotal;
-                return `
-                    <div class="cart-item">
-                        <div>
-                            <b>${item.nombre}</b><br><span style="color:#64748b; font-size:11px;">${item.personalizacion}</span>
-                            <div class="cart-controls"><button onclick="cambiarCantidad(${idx}, -1)">-</button><span style="font-weight:600;">${item.cantidad} pzas</span><button onclick="cambiarCantidad(${idx}, 1)">+</button></div>
-                        </div>
-                        <div style="text-align: right;"><b>$${item.subtotal.toFixed(2)}</b><br><button onclick="eliminarDelCarrito(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:11px; padding:0; margin-top:4px;">Eliminar</button></div>
-                    </div>`;
-            }).join('');
-            document.getElementById('cart-total-general').innerText = `Total: $${totalGeneral.toFixed(2)}`;
+        function prepararEdicion(p) {
+            modoEdicion = true; document.getElementById('titulo-form').innerText = `✏️ Editando: ${p.id}`;
+            document.getElementById('btn-submit').innerText = 'Actualizar 🔄'; document.getElementById('btn-cancelar').style.display = 'block';
+            document.getElementById('prod-id').value = p.id; document.getElementById('prod-id').readOnly = true;
+            document.getElementById('prod-nombre').value = p.nombre || ''; 
+            document.getElementById('prod-categoria').value = p.categoria || 'Grabado láser';
+            document.getElementById('prod-stock').value = p.stock !== undefined ? p.stock : 50;
+            document.getElementById('prod-imagen').value = p.imagen || '';
+            document.getElementById('preview-container').innerHTML = p.imagen ? `<img src="${p.imagen}" class="preview-img">` : '<span style="font-size:12px; color:#94a3b8;">Sin imagen</span>';
+            if (p.rangos) {
+                if (p.rangos[0]) { document.getElementById('min1').value = p.rangos[0].min; document.getElementById('max1').value = p.rangos[0].max; document.getElementById('precio1').value = p.rangos[0].precio; }
+                if (p.rangos[1]) { document.getElementById('min2').value = p.rangos[1].min; document.getElementById('max2').value = p.rangos[1].max; document.getElementById('precio2').value = p.rangos[1].precio; }
+                if (p.rangos[2]) { document.getElementById('min3').value = p.rangos[2].min; document.getElementById('precio3').value = p.rangos[2].precio; }
+            }
+            cambiarSeccion('seccion-productos', document.querySelectorAll('.nav-tab')[1]);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function eliminarDelCarrito(idx) { carrito.splice(idx, 1); renderizarCarrito(); }
+        function cancelarEdicion() {
+            modoEdicion = false; document.getElementById('titulo-form').innerText = '➕ Agregar Producto Nuevo';
+            document.getElementById('btn-submit').innerText = 'Guardar Producto 🚀'; document.getElementById('btn-cancelar').style.display = 'none';
+            document.getElementById('form-producto').reset(); document.getElementById('prod-id').readOnly = false;
+            document.getElementById('prod-stock').value = 50;
+            document.getElementById('min3').value = 100;
+            document.getElementById('prod-imagen').value = ''; document.getElementById('preview-container').innerHTML = 'Ninguna imagen seleccionada';
+        }
 
-        async function enviarPedidoGeneral() {
-            if (carrito.length === 0) { alert('Tu carrito está vacío.'); return; }
-            const nombre = document.getElementById('cli-nombre').value.trim();
-            const telefono = document.getElementById('cli-telefono').value.trim();
-            const metodoPago = document.getElementById('cli-metodo-pago').value;
-            if (!nombre || !telefono) { alert('Ingresa tu Nombre y Teléfono.'); return; }
-            const totalGeneral = carrito.reduce((acc, item) => acc + item.subtotal, 0);
+        async function guardarProducto(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value.trim();
+            const nombre = document.getElementById('prod-nombre').value.trim();
+            const categoria = document.getElementById('prod-categoria').value.trim();
+            const stock = parseInt(document.getElementById('prod-stock').value) || 0;
+            const imagen = document.getElementById('prod-imagen').value;
+            const rangos = [
+                { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
+                { min: parseInt(document.getElementById('min2').value), max: parseInt(document.getElementById('max2').value), precio: parseFloat(document.getElementById('precio2').value) },
+                { min: parseInt(document.getElementById('min3').value) || 100, max: 999999, precio: parseFloat(document.getElementById('precio3').value) }
+            ];
+
+            const payload = { id, nombre, categoria, stock, imagen, rangos };
 
             try {
-                const res = await fetch('/api/pedido', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cliente: { nombre, telefono }, productos: carrito, total: totalGeneral, metodoPago: metodoPago }) });
+                const res = await fetch('/api/productos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
                 const data = await res.json();
                 if (data.exito) {
-                    let detalle = carrito.map(i => `• ${i.cantidad}x ${i.nombre} (${i.personalizacion}) - $${i.subtotal.toFixed(2)}`).join('\n');
-                    let textoWp = `Hola Kromantra, acabo de realizar mi pedido.\n\n*Folio:* #${data.folio}\n*Cliente:* ${nombre}\n*Teléfono:* ${telefono}\n*Método de Pago:* ${metodoPago}\n\n*Productos:*\n${detalle}\n\n*Total:* $${totalGeneral.toFixed(2)}`;
-                    if (confirm(`¡Pedido #${data.folio} guardado!\n¿Deseas abrir WhatsApp para enviarlo?`)) {
-                        window.open(`https://wa.me/${configGlobal.whatsapp}?text=${encodeURIComponent(textoWp)}`, '_blank');
-                    }
-                    carrito = []; renderizarCarrito();
-                    document.getElementById('cli-nombre').value = ''; document.getElementById('cli-telefono').value = '';
-                } else { alert('Error al guardar pedido.'); }
-            } catch (e) { alert('Error de conexión.'); }
+                    alert('¡Producto guardado y actualizado con éxito!');
+                    cancelarEdicion();
+                    cargarProductos();
+                } else {
+                    alert('Error al guardar producto.');
+                }
+            } catch (err) { alert('Error de conexión al guardar producto.'); }
         }
 
-        async function consultarPedidoInicio() {
-            const q = document.getElementById('inputRastreoInicio').value.trim();
-            const resDiv = document.getElementById('resultadoRastreoInicio');
-            if (!q) { resDiv.innerHTML = "<span style='color:#fca5a5;'>Escribe tu folio o teléfono.</span>"; return; }
-            const res = await fetch(`/api/rastreo?q=${q}`); const data = await res.json();
-            if (data.length === 0) { resDiv.innerHTML = "<span style='color:#fca5a5;'>No se encontró el pedido.</span>"; return; }
-            resDiv.innerHTML = data.map(p => `<div style="background:rgba(255,255,255,0.2); padding:8px; border-radius:6px; margin-top:5px; text-align:left;"><b>Folio #${p.folio}</b> | Estatus: <b style="color:#fde047;">${p.estado}</b></div>`).join('');
+        async function eliminarProducto(id) {
+            if (!confirm(`¿Eliminar producto ${id}?`)) return;
+            const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
+            if ((await res.json()).exito) cargarProductos();
         }
 
-        async function consultarPedido() {
-            const q = document.getElementById('inputRastreo').value.trim();
-            const resDiv = document.getElementById('resultadoRastreo');
-            if (!q) { resDiv.innerHTML = "<p style='color:red;'>Escribe tu folio o teléfono.</p>"; return; }
-            const res = await fetch(`/api/rastreo?q=${q}`); const data = await res.json();
-            if (data.length === 0) { resDiv.innerHTML = "<p style='color:red;'>No se encontró el pedido.</p>"; return; }
-            resDiv.innerHTML = data.map(p => `<div style="background:#f1f5f9; padding:10px; border-radius:6px; margin-top:10px; font-size:13px;"><b>Folio #${p.folio}</b> - Estatus: <b style="color:#2563eb;">${p.estado}</b></div>`).join('');
+        async function cargarAdminResenas() {
+            try {
+                const res = await fetch('/api/resenas');
+                const resenas = await res.json();
+                const div = document.getElementById('admin-resenas-container');
+                if (resenas.length === 0) { div.innerHTML = '<p>No hay reseñas registradas.</p>'; return; }
+                div.innerHTML = `<table><tr><th>Cliente</th><th>Calificación</th><th>Comentario</th><th>Fecha</th><th>Acciones</th></tr>` +
+                    resenas.map(r => `
+                        <tr>
+                            <td><b>${r.nombre}</b></td>
+                            <td>⭐ ${r.estrellas}/5</td>
+                            <td>${r.comentario}</td>
+                            <td>${r.fecha}</td>
+                            <td><button class="btn-danger" onclick="eliminarResena('${r._id}')">🗑️</button></td>
+                        </tr>
+                    `).join('') + `</table>`;
+            } catch (e) { document.getElementById('admin-resenas-container').innerHTML = 'Error al cargar reseñas.'; }
         }
 
-        window.addEventListener('DOMContentLoaded', inicializar);
+        async function eliminarResena(id) {
+            if (!confirm('¿Eliminar esta reseña?')) return;
+            const res = await fetch(`/api/resenas/${id}`, { method: 'DELETE' });
+            if ((await res.json()).exito) cargarAdminResenas();
+        }
+
+        async function cargarPedidos() {
+            try {
+                const res = await fetch('/api/pedidos'); globalPedidos = await res.json();
+                totalPedidosAnterior = globalPedidos.length; aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
+            } catch (e) {}
+        }
+
+        async function cargarPedidosSilencioso() {
+            try {
+                const res = await fetch('/api/pedidos'); const nuevos = await res.json();
+                totalPedidosAnterior = nuevos.length; globalPedidos = nuevos;
+                aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
+            } catch (e) {}
+        }
+
+        function calcularMetricas(pedidos) {
+            document.getElementById('stat-ventas').innerText = `$${pedidos.reduce((acc, p) => acc + (p.total || 0), 0).toFixed(2)}`;
+            document.getElementById('stat-pendientes').innerText = pedidos.filter(p => p.estado === 'Pendiente').length;
+            document.getElementById('stat-total-pedidos').innerText = pedidos.length;
+        }
+
+        function cambiarFiltroPedido(estado, btn) {
+            filtroPedidoActual = estado; 
+            aplicarFiltrosYRenderizar();
+        }
+
+        function aplicarFiltrosYRenderizar() {
+            const t = document.getElementById('buscador').value.toLowerCase();
+            renderizarPedidos(globalPedidos.filter(p => (p.cliente.nombre.toLowerCase().includes(t) || p.cliente.telefono.toLowerCase().includes(t) || String(p.folio).includes(t)) && (filtroPedidoActual === 'todos' || p.estado === filtroPedidoActual)));
+        }
+
+        function filtrarPedidos() { aplicarFiltrosYRenderizar(); }
+
+        function renderizarPedidos(pedidos) {
+            const div = document.getElementById('pedidos-container');
+            if (pedidos.length === 0) { div.innerHTML = '<p>No hay pedidos.</p>'; return; }
+            div.innerHTML = pedidos.map(p => `
+                <div class="pedido-ticket">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:10px;">
+                            <b style="color:var(--primary);">Folio #${p.folio}</b><span style="font-size:11px; color:#64748b;">${p.fecha}</span>
+                        </div>
+                        <p style="margin:4px 0; font-size:13px;"><b>Cliente:</b> ${p.cliente.nombre}</p>
+                        <p style="margin:4px 0; font-size:13px;"><b>Teléfono:</b> ${p.cliente.telefono}</p>
+                        <p style="margin:4px 0; font-size:13px;"><b>Pago:</b> ${p.metodoPago || 'Efectivo'}</p>
+                        <hr style="border:0; border-top:1px dashed var(--border); margin:10px 0;">
+                        <div style="font-size:13px;">${p.productos.map(prod => `<p style="margin:4px 0;"><b>${prod.cantidad}x</b> ${prod.nombre}</p>${prod.personalizacion ? `<div style="background:#f8fafc; border:1px solid var(--border); padding:6px; border-radius:6px; font-size:12px; margin:6px 0;">💬 ${prod.personalizacion}</div>` : ''}${prod.diseno ? `<div style="margin-top:8px;"><a href="${prod.diseno}" target="_blank"><img src="${prod.diseno}" style="width:100%; max-height:160px; object-fit:contain; border:1px solid var(--border); border-radius:6px;"></a></div>` : ''}`).join('')}</div>
+                    </div>
+                    <div>
+                        <p style="margin:12px 0 8px 0; font-size:14px;"><b>Total:</b> $${p.total.toFixed(2)}</p>
+                        <div style="display:flex; gap:8px;">
+                            <select onchange="cambiarEstado('${p.folio}', this.value)" style="padding:6px; font-size:12px; flex:1;">
+                                <option value="Pendiente" ${p.estado === 'Pendiente' ? 'selected' : ''}>🟡 Pendiente</option>
+                                <option value="En proceso" ${p.estado === 'En proceso' ? 'selected' : ''}>🔵 En Proceso</option>
+                                <option value="Entregado" ${p.estado === 'Entregado' ? 'selected' : ''}>🟢 Entregado</option>
+                            </select>
+                            <button class="btn-danger" onclick="eliminarPedido('${p.folio}')">🗑</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function cambiarEstado(folio, est) { await fetch(`/api/pedidos/${folio}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado: est }) }); cargarPedidosSilencioso(); }
+        async function eliminarPedido(folio) { if (confirm(`¿Eliminar #${folio}?`)) { await fetch(`/api/pedidos/${folio}`, { method: 'DELETE' }); cargarPedidos(); } }
+
+        cargarTodo();
     </script>
 </body>
 </html>
