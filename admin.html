@@ -333,7 +333,7 @@
         }
 
         function prepararEdicion(p) {
-            modoEdicion = true; document.getElementById('titulo-form').innerText = `✏️ Editando: ${p.id}`;
+            modoEdicion = true; document.getElementById('titulo-form').innerText = `✏️️ Editando: ${p.id}`;
             document.getElementById('btn-submit').innerText = 'Actualizar 🔄'; document.getElementById('btn-cancelar').style.display = 'block';
             document.getElementById('prod-id').value = p.id; document.getElementById('prod-id').readOnly = true;
             document.getElementById('prod-nombre').value = p.nombre || ''; 
@@ -343,10 +343,21 @@
             
             document.getElementById('prod-imagen').value = p.imagen || '';
             document.getElementById('preview-container').innerHTML = p.imagen ? `<img src="${p.imagen}" class="preview-img">` : '<span style="font-size:12px; color:#94a3b8;">Sin imagen</span>';
-            if (p.rangos) {
-                if (p.rangos[0]) { document.getElementById('min1').value = p.rangos[0].min; document.getElementById('max1').value = p.rangos[0].max; document.getElementById('precio1').value = p.rangos[0].precio; }
-                if (p.rangos[1]) { document.getElementById('min2').value = p.rangos[1].min; document.getElementById('max2').value = p.rangos[1].max; document.getElementById('precio2').value = p.rangos[1].precio; }
-                if (p.rangos[2]) { document.getElementById('min3').value = p.rangos[2].min; document.getElementById('precio3').value = p.rangos[2].precio; }
+            if (p.rangos && Array.isArray(p.rangos)) {
+                if (p.rangos[0]) { 
+                    document.getElementById('min1').value = p.rangos[0].min !== undefined ? p.rangos[0].min : 1; 
+                    document.getElementById('max1').value = p.rangos[0].max !== undefined ? p.rangos[0].max : 50; 
+                    document.getElementById('precio1').value = p.rangos[0].precio !== undefined ? p.rangos[0].precio : 0; 
+                }
+                if (p.rangos[1]) { 
+                    document.getElementById('min2').value = p.rangos[1].min !== undefined ? p.rangos[1].min : 51; 
+                    document.getElementById('max2').value = p.rangos[1].max !== undefined ? p.rangos[1].max : 99; 
+                    document.getElementById('precio2').value = p.rangos[1].precio !== undefined ? p.rangos[1].precio : 0; 
+                }
+                if (p.rangos[2]) { 
+                    document.getElementById('min3').value = p.rangos[2].min !== undefined ? p.rangos[2].min : 100; 
+                    document.getElementById('precio3').value = p.rangos[2].precio !== undefined ? p.rangos[2].precio : 0; 
+                }
             }
             cambiarSeccion('seccion-productos', document.querySelectorAll('.nav-tab')[1]);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -357,6 +368,10 @@
             document.getElementById('btn-submit').innerText = 'Guardar Producto 🚀'; document.getElementById('btn-cancelar').style.display = 'none';
             document.getElementById('form-producto').reset(); document.getElementById('prod-id').readOnly = false;
             document.getElementById('prod-stock').value = 0;
+            document.getElementById('min1').value = 1;
+            document.getElementById('max1').value = 50;
+            document.getElementById('min2').value = 51;
+            document.getElementById('max2').value = 99;
             document.getElementById('min3').value = 100;
             document.getElementById('prod-imagen').value = ''; document.getElementById('preview-container').innerHTML = 'Ninguna imagen seleccionada';
         }
@@ -372,31 +387,75 @@
             
             const imagen = document.getElementById('prod-imagen').value || '';
 
+            const p1 = parseFloat(document.getElementById('precio1').value);
+            const p2 = parseFloat(document.getElementById('precio2').value);
+            const p3 = parseFloat(document.getElementById('precio3').value);
+
             const rangos = [
-                { min: parseInt(document.getElementById('min1').value) || 1, max: parseInt(document.getElementById('max1').value) || 50, precio: parseFloat(document.getElementById('precio1').value) || 0 },
-                { min: parseInt(document.getElementById('min2').value) || 51, max: parseInt(document.getElementById('max2').value) || 99, precio: parseFloat(document.getElementById('precio2').value) || 0 },
-                { min: parseInt(document.getElementById('min3').value) || 100, max: 999999, precio: parseFloat(document.getElementById('precio3').value) || 0 }
+                { min: parseInt(document.getElementById('min1').value, 10) || 1, max: parseInt(document.getElementById('max1').value, 10) || 50, precio: isNaN(p1) ? 0 : p1 },
+                { min: parseInt(document.getElementById('min2').value, 10) || 51, max: parseInt(document.getElementById('max2').value, 10) || 99, precio: isNaN(p2) ? 0 : p2 },
+                { min: parseInt(document.getElementById('min3').value, 10) || 100, max: 999999, precio: isNaN(p3) ? 0 : p3 }
             ];
 
             const payload = { id, nombre, categoria, stock, imagen, rangos };
 
             try {
-                // Siempre realiza POST a /api/productos que gestiona el upsert en MongoDB
-                const res = await fetch('/api/productos', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+                let res;
+                if (modoEdicion) {
+                    // Intento 1: PUT a /api/productos/:id
+                    res = await fetch(`/api/productos/${encodeURIComponent(id)}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
 
-                if (res.ok) {
+                    // Intento 2: Si el endpoint PUT :id no existe (404/405), reintenta por POST
+                    if (!res.ok && (res.status === 404 || res.status === 405)) {
+                        res = await fetch('/api/productos', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                    }
+
+                    // Intento 3: Si no existe POST, reintenta PUT /api/productos
+                    if (!res.ok && (res.status === 404 || res.status === 405)) {
+                        res = await fetch('/api/productos', {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                    }
+                } else {
+                    // Creación de producto nuevo
+                    res = await fetch('/api/productos', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!res.ok && (res.status === 404 || res.status === 405)) {
+                        res = await fetch('/api/productos', {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                    }
+                }
+
+                let data = {};
+                try { data = await res.json(); } catch(err) {}
+
+                if (res.ok || data.exito || data.id || data.acknowledged) {
                     alert('¡Producto guardado correctamente!');
                     cancelarEdicion();
                     cargarProductos();
                 } else {
-                    alert('Error al guardar el producto.');
+                    const detalle = data.error || data.mensaje || data.message || `Código ${res.status}`;
+                    alert('Error al guardar el producto: ' + detalle);
                 }
             } catch (err) {
-                alert('Error de conexión al guardar producto.');
+                alert('Error de conexión al guardar producto: ' + err.message);
             }
         }
 
