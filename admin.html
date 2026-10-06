@@ -118,7 +118,7 @@
                     <div class="form-grid-3"><div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="50"></div></div><div><label>Precio ($):</label><input type="number" step="0.01" id="precio1" required></div></div>
                     <div class="form-grid-3"><div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="51"><input type="number" id="max2" value="99"></div></div><div><label>Precio ($):</label><input type="number" step="0.01" id="precio2" required></div></div>
                     
-                    <!-- RANGO 3 CON 'EN ADELANTE' FIXEADO -->
+                    <!-- RANGO 3 MANTENIENDO CASILLA DE "EN ADELANTE" -->
                     <div class="form-grid-3" style="margin-bottom: 15px;">
                         <div>
                             <label>Rango 3 (Mínimo):</label>
@@ -172,7 +172,7 @@
                         <textarea id="cfg-horarios" rows="3" placeholder="Lunes a Viernes: 09:00 am - 18:00 pm&#10;Sábado a Domingo: 09:00 am - 15:00 pm"></textarea>
                     </div>
 
-                    <div class="section-sub">🛠️ Materiales (4 Tarjetas)</div>
+                    <div class="section-sub">🛠️️ Materiales (4 Tarjetas)</div>
                     <div class="form-grid">
                         <div><label>Mat 1 Título:</label><input type="text" id="mat-t-0"></div>
                         <div><label>Mat 1 Desc (Escribir hacia abajo):</label><textarea id="mat-d-0" rows="3"></textarea></div>
@@ -365,31 +365,39 @@
             const id = document.getElementById('prod-id').value.trim();
             const nombre = document.getElementById('prod-nombre').value.trim();
             const categoria = document.getElementById('prod-categoria').value.trim();
-            const stock = parseInt(document.getElementById('prod-stock').value) || 0;
-            const imagen = document.getElementById('prod-imagen').value;
+            
+            const stockVal = parseInt(document.getElementById('prod-stock').value);
+            const stock = isNaN(stockVal) ? 50 : stockVal;
+            
+            const imagen = document.getElementById('prod-imagen').value || '';
+
             const rangos = [
-                { min: parseInt(document.getElementById('min1').value), max: parseInt(document.getElementById('max1').value), precio: parseFloat(document.getElementById('precio1').value) },
-                { min: parseInt(document.getElementById('min2').value), max: parseInt(document.getElementById('max2').value), precio: parseFloat(document.getElementById('precio2').value) },
-                { min: parseInt(document.getElementById('min3').value) || 100, max: 999999, precio: parseFloat(document.getElementById('precio3').value) }
+                { min: parseInt(document.getElementById('min1').value) || 1, max: parseInt(document.getElementById('max1').value) || 50, precio: parseFloat(document.getElementById('precio1').value) || 0 },
+                { min: parseInt(document.getElementById('min2').value) || 51, max: parseInt(document.getElementById('max2').value) || 99, precio: parseFloat(document.getElementById('precio2').value) || 0 },
+                { min: parseInt(document.getElementById('min3').value) || 100, max: 999999, precio: parseFloat(document.getElementById('precio3').value) || 0 }
             ];
 
             const payload = { id, nombre, categoria, stock, imagen, rangos };
 
             try {
+                // Guarda mediante POST que procesa tanto la creación como actualización en la DB
                 const res = await fetch('/api/productos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+                
                 const data = await res.json();
-                if (data.exito) {
-                    alert('¡Producto guardado y actualizado con éxito!');
+                if (res.ok || data.exito || data.id) {
+                    alert('¡Producto guardado correctamente!');
                     cancelarEdicion();
                     cargarProductos();
                 } else {
-                    alert('Error al guardar producto.');
+                    alert('Error al guardar el producto.');
                 }
-            } catch (err) { alert('Error de conexión al guardar producto.'); }
+            } catch (err) {
+                alert('Error de conexión al guardar producto.');
+            }
         }
 
         async function eliminarProducto(id) {
@@ -411,7 +419,7 @@
                             <td>⭐ ${r.estrellas}/5</td>
                             <td>${r.comentario}</td>
                             <td>${r.fecha}</td>
-                            <td><button class="btn-danger" onclick="eliminarResena('${r._id}')">🗑️</button></td>
+                            <td><button class="btn-danger" onclick="eliminarResena('${r._id}')">🗑</button></td>
                         </tr>
                     `).join('') + `</table>`;
             } catch (e) { document.getElementById('admin-resenas-container').innerHTML = 'Error al cargar reseñas.'; }
