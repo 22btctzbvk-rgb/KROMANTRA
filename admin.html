@@ -339,7 +339,6 @@
             document.getElementById('prod-nombre').value = p.nombre || ''; 
             document.getElementById('prod-categoria').value = p.categoria || 'Grabado láser';
             
-            // CARGA EL VALOR REAL DE STOCK
             document.getElementById('prod-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 0;
             
             document.getElementById('prod-imagen').value = p.imagen || '';
@@ -371,7 +370,7 @@
             const stockVal = parseInt(document.getElementById('prod-stock').value, 10);
             const stock = isNaN(stockVal) ? 0 : stockVal;
             
-            const imagen = document.getElementById('prod-imagen').value || 'https://via.placeholder.com/300';
+            const imagen = document.getElementById('prod-imagen').value || '';
 
             const rangos = [
                 { min: parseInt(document.getElementById('min1').value) || 1, max: parseInt(document.getElementById('max1').value) || 50, precio: parseFloat(document.getElementById('precio1').value) || 0 },
@@ -382,14 +381,14 @@
             const payload = { id, nombre, categoria, stock, imagen, rangos };
 
             try {
-                let res = await fetch('/api/productos', {
+                // Siempre realiza POST a /api/productos que gestiona el upsert en MongoDB
+                const res = await fetch('/api/productos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                const data = await res.json();
-                if (res.ok || data.exito || data.id) {
+                if (res.ok) {
                     alert('¡Producto guardado correctamente!');
                     cancelarEdicion();
                     cargarProductos();
