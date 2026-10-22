@@ -238,7 +238,6 @@
             cargarCatalogo();
             cargarResenas();
 
-            // Sincronización automática en segundo plano cada 10 segundos
             setInterval(async () => {
                 try {
                     const res = await fetch('/api/productos');
@@ -250,9 +249,7 @@
                             renderizarProductosFiltrados();
                         }
                     }
-                } catch (e) {
-                    // Silencioso
-                }
+                } catch (e) {}
             }, 10000);
         }
 
@@ -380,15 +377,24 @@
             
             container.innerHTML = filtrados.map((p) => {
                 const index = productosGlobal.findIndex(prod => prod.id === p.id);
-                const precioBase = p.rangos && p.rangos.length > 0 ? p.rangos[0].precio : 0;
-                const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map(r => `<li>${r.min}-${r.max} pzas: <b>$${r.precio} c/u</b></li>`).join('') : '';
+                const rangosHTML = p.rangos && p.rangos.length > 0 ? p.rangos.map((r, idx) => {
+                    let etiquetaRango = (idx === (p.rangos.length - 1) || r.max >= 9999) ? `${r.min}+ pzas` : `${r.min}-${r.max} pzas`;
+                    let valPrecio = typeof r.precio === 'number' ? `$${r.precio} c/u` : r.precio;
+                    return `<li>${etiquetaRango}: <b>${valPrecio}</b></li>`;
+                }).join('') : '';
+
+                const stockNum = p.stock !== undefined ? p.stock : 0;
+                
                 return `
                     <div class="card">
                         <div>
                             <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
-                            <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria ? p.categoria.trim() : 'Grabado láser'}</span>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria ? p.categoria.trim() : 'Grabado láser'}</span>
+                                <span style="font-size:10px; background:${stockNum > 0 ? '#d1fae5' : '#fee2e2'}; color:${stockNum > 0 ? '#065f46' : '#991b1b'}; padding:2px 6px; border-radius:4px; font-weight:600;">${stockNum} disp.</span>
+                            </div>
                             <h3 style="margin-top:6px;">${p.nombre}</h3>
-                            <div class="rango-box"><b>Mayoreo:</b><ul>${rangosHTML}</ul></div>
+                            <div class="rango-box"><b>Mayoreo / Precios:</b><ul>${rangosHTML}</ul></div>
                         </div>
                         <div>
                             <button class="btn-personalizar" onclick="abrirModalPersonalizacion(${index})">✨ Personalizar y Agregar</button>
@@ -429,10 +435,20 @@
             if (producto.rangos && producto.rangos.length > 0) {
                 const rangos = [...producto.rangos].sort((a, b) => a.min - b.min);
                 let rangoAplicable = rangos[0];
-                for (let r of rangos) { if (cantidad >= r.min && cantidad <= r.max) { rangoAplicable = r; break; } else if (cantidad > r.max) { rangoAplicable = r; } }
-                return { precioUnitario: rangoAplicable.precio, total: cantidad * rangoAplicable.precio };
+                for (let r of rangos) { 
+                    if (cantidad >= r.min && cantidad <= r.max) { rangoAplicable = r; break; } 
+                    else if (cantidad > r.max) { rangoAplicable = r; } 
+                }
+                const esTexto = typeof rangoAplicable.precio === 'string';
+                const precioNum = esTexto ? 0 : Number(rangoAplicable.precio);
+                return { 
+                    precioUnitario: precioNum, 
+                    total: cantidad * precioNum, 
+                    esTexto: esTexto, 
+                    textoPrecio: rangoAplicable.precio 
+                };
             }
-            return { precioUnitario: 0, total: 0 };
+            return { precioUnitario: 0, total: 0, esTexto: false, textoPrecio: '' };
         }
 
         function actualizarPrecioModal() {
@@ -440,7 +456,12 @@
             const producto = productosGlobal[productoSeleccionadoIndex];
             const cantidad = parseInt(document.getElementById('modal-cant').value) || 1;
             const calculo = calcularSubtotalProducto(producto, cantidad);
-            document.getElementById('modal-preview-precio').innerText = `$${calculo.total.toFixed(2)} ($${calculo.precioUnitario} c/u)`;
+            
+            if (calculo.esTexto) {
+                document.getElementById('modal-preview-precio').innerText = `${calculo.textoPrecio}`;
+            } else {
+                document.getElementById('modal-preview-precio').innerText = `$${calculo.total.toFixed(2)} ($${calculo.precioUnitario} c/u)`;
+            }
         }
 
         function mostrarToast(mensaje) {
@@ -456,104 +477,190 @@
         function agregarDesdeModal() {
             if (productoSeleccionadoIndex === null) return;
             const producto = productosGlobal[productoSeleccionadoIndex];
-            const cantidadAgregada = parseInt(document.getElementById('modal-cant').value) || 1;
+            const cantidad = parseInt(document.getElementById('modal-cant').value) || 1;
             const texto = document.getElementById('modal-texto').value.trim();
             const estilo = document.getElementById('modal-estilo').value.trim();
             const diseno = document.getElementById('modal-base64').value;
-            
-            let especificaciones = '';
-            if (texto) especificaciones += `Texto: "${texto}" `;
-            if (estilo) especificaciones += `| Estilo: ${estilo}`;
-            if (!especificaciones) especificaciones = 'Estándar';
 
-            const indexExistente = carrito.findIndex(item => item.id === producto.id && item.personalizacion === especificaciones);
-            let nuevaCantidadTotal = cantidadAgregada;
-            if (indexExistente !== -1) nuevaCantidadTotal += carrito[indexExistente].cantidad;
+            const calculo = calcularSubtotalProducto(producto, cantidad);
 
-            const calculo = calcularSubtotalProducto(producto, nuevaCantidadTotal);
-            if (indexExistente !== -1) {
-                carrito[indexExistente].cantidad = nuevaCantidadTotal;
-                carrito[indexExistente].subtotal = calculo.total;
-            } else {
-                carrito.push({ id: producto.id, nombre: producto.nombre, cantidad: cantidadAgregada, personalizacion: especificaciones, diseno: diseno, subtotal: calculo.total });
-            }
-            renderizarCarrito(); 
+            let personalizacionStr = '';
+            if (texto) personalizacionStr += `Texto: ${texto}. `;
+            if (estilo) personalizacionStr += `Estilo: ${estilo}.`;
+
+            carrito.push({
+                id: producto.id,
+                nombre: producto.nombre,
+                cantidad: cantidad,
+                precioUnitario: calculo.precioUnitario,
+                total: calculo.total,
+                esTextoPrecio: calculo.esTexto,
+                textoPrecio: calculo.textoPrecio,
+                personalizacion: personalizacionStr.trim(),
+                diseno: diseno
+            });
+
             cerrarModalPersonalizacion();
-            mostrarToast(`¡${producto.nombre} agregado!`);
+            actualizarCarrito();
+            mostrarToast('¡Producto agregado al carrito!');
         }
 
-        function cambiarCantidad(idx, delta) {
-            const item = carrito[idx];
-            const producto = productosGlobal.find(p => p.id === item.id);
-            if (!producto) return;
-            const nuevaCantidad = item.cantidad + delta;
-            if (nuevaCantidad <= 0) { eliminarDelCarrito(idx); return; }
-            item.cantidad = nuevaCantidad; item.subtotal = calcularSubtotalProducto(producto, nuevaCantidad).total;
-            renderizarCarrito();
-        }
+        function actualizarCarrito() {
+            const container = document.getElementById('carrito-lista');
+            if (carrito.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>';
+                document.getElementById('cart-total-general').innerText = 'Total: $0.00';
+                return;
+            }
 
-        function renderizarCarrito() {
-            const lista = document.getElementById('carrito-lista');
-            if (carrito.length === 0) { lista.innerHTML = '<p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>'; document.getElementById('cart-total-general').innerText = 'Total: $0.00'; return; }
-            let totalGeneral = 0;
-            lista.innerHTML = carrito.map((item, idx) => {
-                totalGeneral += item.subtotal;
+            let sumaTotal = 0;
+            container.innerHTML = carrito.map((item, idx) => {
+                sumaTotal += item.total;
+                let precioDisplay = item.esTextoPrecio ? item.textoPrecio : `$${item.total.toFixed(2)}`;
                 return `
                     <div class="cart-item">
                         <div>
-                            <b>${item.nombre}</b><br><span style="color:#64748b; font-size:11px;">${item.personalizacion}</span>
-                            <div class="cart-controls"><button onclick="cambiarCantidad(${idx}, -1)">-</button><span style="font-weight:600;">${item.cantidad} pzas</span><button onclick="cambiarCantidad(${idx}, 1)">+</button></div>
+                            <b>${item.cantidad}x ${item.nombre}</b><br>
+                            <small style="color:#64748b;">${item.personalizacion}</small>
                         </div>
-                        <div style="text-align: right;"><b>$${item.subtotal.toFixed(2)}</b><br><button onclick="eliminarDelCarrito(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:11px; padding:0; margin-top:4px;">Eliminar</button></div>
-                    </div>`;
+                        <div style="text-align: right;">
+                            <div>${precioDisplay}</div>
+                            <div class="cart-controls">
+                                <button onclick="cambiarCantidad(${idx}, -1)">-</button>
+                                <span>${item.cantidad}</span>
+                                <button onclick="cambiarCantidad(${idx}, 1)">+</button>
+                                <button onclick="eliminarDelCarrito(${idx})" style="background:#fee2e2; color:#ef4444;">×</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }).join('');
-            document.getElementById('cart-total-general').innerText = `Total: $${totalGeneral.toFixed(2)}`;
+
+            document.getElementById('cart-total-general').innerText = `Total: $${sumaTotal.toFixed(2)}`;
         }
 
-        function eliminarDelCarrito(idx) { carrito.splice(idx, 1); renderizarCarrito(); }
+        function cambiarCantidad(idx, delta) {
+            carrito[idx].cantidad += delta;
+            if (carrito[idx].cantidad <= 0) {
+                carrito.splice(idx, 1);
+            } else {
+                const producto = productosGlobal.find(p => p.id === carrito[idx].id);
+                if (producto) {
+                    const calculo = calcularSubtotalProducto(producto, carrito[idx].cantidad);
+                    carrito[idx].precioUnitario = calculo.precioUnitario;
+                    carrito[idx].total = calculo.total;
+                    carrito[idx].esTextoPrecio = calculo.esTexto;
+                    carrito[idx].textoPrecio = calculo.textoPrecio;
+                }
+            }
+            actualizarCarrito();
+        }
+
+        function eliminarDelCarrito(idx) {
+            carrito.splice(idx, 1);
+            actualizarCarrito();
+        }
 
         async function enviarPedidoGeneral() {
-            if (carrito.length === 0) { alert('Tu carrito está vacío.'); return; }
             const nombre = document.getElementById('cli-nombre').value.trim();
             const telefono = document.getElementById('cli-telefono').value.trim();
             const metodoPago = document.getElementById('cli-metodo-pago').value;
-            if (!nombre || !telefono) { alert('Ingresa tu Nombre y Teléfono.'); return; }
-            const totalGeneral = carrito.reduce((acc, item) => acc + item.subtotal, 0);
+
+            if (!nombre || !telefono) {
+                alert('Por favor ingresa tu nombre y teléfono de contacto.');
+                return;
+            }
+            if (carrito.length === 0) {
+                alert('Tu carrito está vacío.');
+                return;
+            }
+
+            let totalGeneral = carrito.reduce((acc, item) => acc + item.total, 0);
+
+            const payload = {
+                cliente: { nombre, telefono, direccion: 'Tienda / Recoger' },
+                productos: carrito,
+                total: totalGeneral,
+                metodoPago: metodoPago
+            };
 
             try {
-                const res = await fetch('/api/pedido', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cliente: { nombre, telefono }, productos: carrito, total: totalGeneral, metodoPago: metodoPago }) });
+                const res = await fetch('/api/pedidos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
                 const data = await res.json();
-                if (data.exito) {
-                    let detalle = carrito.map(i => `• ${i.cantidad}x ${i.nombre} (${i.personalizacion}) - $${i.subtotal.toFixed(2)}`).join('\n');
-                    let textoWp = `Hola Kromantra, acabo de realizar mi pedido.\n\n*Folio:* #${data.folio}\n*Cliente:* ${nombre}\n*Teléfono:* ${telefono}\n*Método de Pago:* ${metodoPago}\n\n*Productos:*\n${detalle}\n\n*Total:* $${totalGeneral.toFixed(2)}`;
-                    if (confirm(`¡Pedido #${data.folio} guardado!\n¿Deseas abrir WhatsApp para enviarlo?`)) {
-                        window.open(`https://wa.me/${configGlobal.whatsapp}?text=${encodeURIComponent(textoWp)}`, '_blank');
-                    }
-                    carrito = []; renderizarCarrito();
-                    document.getElementById('cli-nombre').value = ''; document.getElementById('cli-telefono').value = '';
-                } else { alert('Error al guardar pedido.'); }
-            } catch (e) { alert('Error de conexión.'); }
-        }
 
-        async function consultarPedidoInicio() {
-            const q = document.getElementById('inputRastreoInicio').value.trim();
-            const resDiv = document.getElementById('resultadoRastreoInicio');
-            if (!q) { resDiv.innerHTML = "<span style='color:#fca5a5;'>Escribe tu folio o teléfono.</span>"; return; }
-            const res = await fetch(`/api/rastreo?q=${q}`); const data = await res.json();
-            if (data.length === 0) { resDiv.innerHTML = "<span style='color:#fca5a5;'>No se encontró el pedido.</span>"; return; }
-            resDiv.innerHTML = data.map(p => `<div style="background:rgba(255,255,255,0.2); padding:8px; border-radius:6px; margin-top:5px; text-align:left;"><b>Folio #${p.folio}</b> | Estatus: <b style="color:#fde047;">${p.estado}</b></div>`).join('');
+                if (data.exito) {
+                    alert(`¡Pedido #${data.folio} registrado con éxito!`);
+                    
+                    let mensaje = `Hola, quiero confirmar mi pedido *#${data.folio}*:\n\n`;
+                    mensaje += `👤 *Cliente:* ${nombre}\n`;
+                    mensaje += `📞 *Teléfono:* ${telefono}\n`;
+                    mensaje += `💳 *Pago:* ${metodoPago}\n\n`;
+                    mensaje += `🛍️ *Productos:* \n`;
+                    carrito.forEach(i => {
+                        let pDisplay = i.esTextoPrecio ? i.textoPrecio : `$${i.total.toFixed(2)}`;
+                        mensaje += `- ${i.cantidad}x ${i.nombre} (${pDisplay})\n`;
+                        if(i.personalizacion) mensaje += `  💬 ${i.personalizacion}\n`;
+                    });
+                    mensaje += `\n💰 *Total:* $${totalGeneral.toFixed(2)}`;
+
+                    const urlWp = `https://api.whatsapp.com/send?phone=${configGlobal.whatsapp || '525514494333'}&text=${encodeURIComponent(mensaje)}`;
+                    window.open(urlWp, '_blank');
+
+                    carrito = [];
+                    actualizarCarrito();
+                    document.getElementById('cli-nombre').value = '';
+                    document.getElementById('cli-telefono').value = '';
+                } else {
+                    alert('Error al registrar el pedido.');
+                }
+            } catch (err) {
+                alert('Error de conexión al enviar el pedido.');
+            }
         }
 
         async function consultarPedido() {
             const q = document.getElementById('inputRastreo').value.trim();
-            const resDiv = document.getElementById('resultadoRastreo');
-            if (!q) { resDiv.innerHTML = "<p style='color:red;'>Escribe tu folio o teléfono.</p>"; return; }
-            const res = await fetch(`/api/rastreo?q=${q}`); const data = await res.json();
-            if (data.length === 0) { resDiv.innerHTML = "<p style='color:red;'>No se encontró el pedido.</p>"; return; }
-            resDiv.innerHTML = data.map(p => `<div style="background:#f1f5f9; padding:10px; border-radius:6px; margin-top:10px; font-size:13px;"><b>Folio #${p.folio}</b> - Estatus: <b style="color:#2563eb;">${p.estado}</b></div>`).join('');
+            if(!q) return;
+            try {
+                const res = await fetch(`/api/rastreo?q=${encodeURIComponent(q)}`);
+                const pedidos = await res.json();
+                if(pedidos.length === 0) {
+                    alert('No se encontraron pedidos con ese Folio o Teléfono.');
+                    return;
+                }
+                let msg = pedidos.map(p => `Folio #${p.folio} - Estado: *${p.estado}* - Total: $${p.total}`).join('\n');
+                alert(msg);
+            } catch(e) {
+                alert('Error al consultar rastreo.');
+            }
         }
 
-        window.addEventListener('DOMContentLoaded', inicializar);
+        async function consultarPedidoInicio() {
+            const q = document.getElementById('inputRastreoInicio').value.trim();
+            if(!q) return;
+            try {
+                const res = await fetch(`/api/rastreo?q=${encodeURIComponent(q)}`);
+                const pedidos = await res.json();
+                const container = document.getElementById('resultadoRastreoInicio');
+                if(pedidos.length === 0) {
+                    container.innerHTML = '<span style="color: #ef4444;">No se encontró ningún pedido con ese dato.</span>';
+                    return;
+                }
+                container.innerHTML = pedidos.map(p => `
+                    <div style="background:rgba(255,255,255,0.2); padding:8px; border-radius:6px; margin-top:5px;">
+                        <b>Folio #${p.folio}</b> | Estado: <b>${p.estado}</b> | Total: $${p.total.toFixed(2)}
+                    </div>
+                `).join('');
+            } catch(e) {
+                alert('Error al buscar pedido.');
+            }
+        }
+
+        inicializar();
     </script>
 </body>
 </html>
