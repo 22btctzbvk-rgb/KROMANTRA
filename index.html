@@ -59,23 +59,39 @@
         .rastreo-box button { padding: 8px 16px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
         
         .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
         .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; background: #f1f5f9; }
         .card h3 { margin: 6px 0 8px 0; font-size: 16px; color: #1e293b; }
         .rango-box { font-size: 11px; color: #64748b; background: #f8fafc; padding: 8px; border-radius: 6px; margin-bottom: 12px; border: 1px solid var(--border); }
         .rango-box ul { margin: 0; padding-left: 12px; }
 
+        /* Badge / Etiqueta destacada en la tarjeta */
+        .badge-etiqueta { position: absolute; top: 12px; left: 12px; background: #f59e0b; color: white; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.15); text-transform: uppercase; }
+
         .btn-personalizar { background: var(--primary); color: white; border: none; padding: 11px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; font-size: 13px; transition: background 0.2s, transform 0.2s; }
         .btn-personalizar:hover { background: var(--primary-hover); transform: scale(1.02); }
 
+        /* MODAL MEJORADO */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2500; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.25s ease; }
-        .modal-content { background: white; padding: 25px; border-radius: 16px; width: 90%; max-width: 420px; box-shadow: 0 15px 30px rgba(0,0,0,0.25); position: relative; animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .modal-close { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; color: #475569; }
+        .modal-content { background: white; padding: 28px; border-radius: 20px; width: 90%; max-width: 440px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; max-height: 90vh; overflow-y: auto; animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-close { position: absolute; top: 18px; right: 18px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 18px; color: #64748b; transition: all 0.2s; }
+        .modal-close:hover { background: #e2e8f0; color: #0f172a; }
 
-        .form-mini { display: flex; flex-direction: column; gap: 10px; }
-        label { font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 2px; display: block; }
-        input, textarea, select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12px; box-sizing: border-box; }
+        .form-mini { display: flex; flex-direction: column; gap: 12px; }
+        .form-mini label { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+        .form-mini input[type="text"], .form-mini input[type="number"], .form-mini select, .form-mini textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 13px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .form-mini input:focus, .form-mini select:focus, .form-mini textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
+        
+        .color-options-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+        .color-btn { background: #f1f5f9; border: 1.5px solid var(--border); padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; }
+        .color-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .color-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .file-upload-box { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 10px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; }
+        .file-upload-box:hover { border-color: var(--primary); background: #eff6ff; }
+
+        .preview-precio-box { background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 14px; border-radius: 12px; border: 1px solid var(--border); margin: 15px 0; text-align: center; }
         
         .sidebar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: fit-content; position: sticky; top: 20px; }
         .sidebar h2 { font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: #1e293b; }
@@ -173,23 +189,75 @@
         </div>
     </div>
 
-    <!-- MODAL DE PERSONALIZACIÓN -->
+    <!-- MODAL DE PERSONALIZACIÓN COMPLETO -->
     <div id="modal-personalizar" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close" onclick="cerrarModalPersonalizacion()">×</button>
-            <h3 id="modal-prod-nombre" style="margin-top:0; color:#1e293b; font-size:18px;">Personalizar Producto</h3>
-            <div id="modal-prod-info" style="font-size:12px; color:#64748b; margin-bottom:15px;"></div>
+            <h3 id="modal-prod-nombre" style="margin:0 0 4px 0; color:#0f172a; font-size:20px; font-weight:800;">Personalizar Producto</h3>
+            <div id="modal-prod-info" style="font-size:12px; font-weight:600; color:var(--primary); margin-bottom:12px;"></div>
+            
             <div class="form-mini">
-                <div><label>Cantidad:</label><input type="number" id="modal-cant" value="1" min="1" oninput="actualizarPrecioModal()"></div>
-                <div><label>✍️ Texto Personalizado:</label><input type="text" id="modal-texto" placeholder="Ej. Nombre o fecha"></div>
-                <div><label>🎨 Estilo / Color:</label><input type="text" id="modal-estilo" placeholder="Ej. Mate o Negro"></div>
-                <div><label>🖼️ Subir Logotipo / Diseño:</label><input type="file" id="modal-archivo" accept="image/*" onchange="convertirArchivoModal(event)"><input type="hidden" id="modal-base64"></div>
+                <div>
+                    <label>📦 Cantidad deseada:</label>
+                    <input type="number" id="modal-cant" value="1" min="1" oninput="actualizarPrecioModal()">
+                    <div id="modal-stock-aviso" style="font-size:11px; margin-top:3px; font-weight:600;"></div>
+                </div>
+
+                <div>
+                    <label>✍️ Texto Personalizado: <span id="contador-caracteres" style="color:#64748b; font-weight:normal;">0/30</span></label>
+                    <input type="text" id="modal-texto" maxlength="30" placeholder="Ej. Nombre o fecha" oninput="actualizarContadorTexto(this)">
+                </div>
+
+                <!-- 1. VISTA PREVIA DE TIPOGRAFÍA -->
+                <div>
+                    <label>🔤 Estilo de Tipografía:</label>
+                    <select id="modal-fuente" onchange="actualizarVistaPreviaTipografia()">
+                        <option value="sans-serif">Moderna / Limpia</option>
+                        <option value="Georgia, serif">Elegante / Clásica</option>
+                        <option value="Courier New, monospace">Vintage / Máquina</option>
+                        <option value="Brush Script MT, cursive">Cursiva / Artística</option>
+                    </select>
+                    <div id="preview-tipografia-box" style="margin-top:5px; padding:8px; background:#f8fafc; border:1px solid var(--border); border-radius:6px; text-align:center;">
+                        <span id="texto-preview-salida" style="font-size:14px; color:#334155;">Vista previa del texto</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label>🎨 Color / Acabado:</label>
+                    <div class="color-options-grid">
+                        <button type="button" class="color-btn" onclick="seleccionarColorOption('Negro Mate', this)">⚫ Negro</button>
+                        <button type="button" class="color-btn" onclick="seleccionarColorOption('Plata / Acero', this)">🔘 Plata</button>
+                        <button type="button" class="color-btn" onclick="seleccionarColorOption('Blanco', this)">⚪ Blanco</button>
+                        <button type="button" class="color-btn" onclick="seleccionarColorOption('Otro', this)">✏️ Otro</button>
+                    </div>
+                    <input type="text" id="modal-estilo" placeholder="Escribe el color o acabado..." style="margin-top: 6px; display: none;">
+                </div>
+
+                <!-- 5. INSTRUCCIONES ESPECIALES PARA EL DISEÑADOR -->
+                <div>
+                    <label>📝 Instrucciones especiales para el taller:</label>
+                    <textarea id="modal-notas" rows="2" placeholder="Ej. Centrar el logotipo, usar tipografía grande..."></textarea>
+                </div>
+
+                <div>
+                    <label>🖼️ Logotipo o Imagen de referencia:</label>
+                    <div class="file-upload-box" onclick="document.getElementById('modal-archivo').click()">
+                        <span id="txt-archivo-status" style="font-size:11px; color:#64748b; font-weight:600;">📁 Haz clic aquí para adjuntar archivo</span>
+                        <input type="file" id="modal-archivo" accept="image/*" style="display:none;" onchange="convertirArchivoModal(event)">
+                    </div>
+                    <input type="hidden" id="modal-base64">
+                </div>
             </div>
-            <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid var(--border); margin:15px 0; text-align:center;">
-                <span style="font-size:11px; color:#64748b; display:block;">Total Calculado:</span>
-                <div id="modal-preview-precio" style="font-size:20px; font-weight:700; color:var(--primary);">$0.00</div>
+
+            <div class="preview-precio-box">
+                <span style="font-size:10px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:2px;">Total Calculado</span>
+                <div id="modal-preview-precio" style="font-size:20px; font-weight:800; color:var(--primary);">$0.00</div>
+                <div id="modal-rango-info" style="font-size:11px; color:#64748b; margin-top:2px; font-weight:600;"></div>
             </div>
-            <button class="btn-personalizar" onclick="agregarDesdeModal()">+ Agregar al Carrito 🛒</button>
+
+            <button id="btn-agregar-carrito" class="btn-personalizar" onclick="agregarDesdeModal()" style="padding:12px; font-size:14px; border-radius:10px;">
+                🛒 Agregar al Carrito
+            </button>
         </div>
     </div>
 
@@ -232,6 +300,7 @@
     <script>
         let configGlobal = { whatsapp: '525514494333', tarjeta: '4152314063676335', titular: 'Carolina Perez Mendez', banco: 'BBVA' };
         let carrito = [], productosGlobal = [], categoriaSeleccionada = 'todos', productoSeleccionadoIndex = null;
+        let colorSeleccionadoModal = '';
 
         async function inicializar() {
             cargarConfiguracion();
@@ -384,9 +453,12 @@
                 }).join('') : '';
 
                 const stockNum = p.stock !== undefined ? p.stock : 0;
+                // 4. ETIQUETA / BADGE (Si el producto incluye badge o si se define por stock/popularidad opcional)
+                const badgeHTML = p.badge ? `<span class="badge-etiqueta">${p.badge}</span>` : '';
                 
                 return `
                     <div class="card">
+                        ${badgeHTML}
                         <div>
                             <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
@@ -404,6 +476,35 @@
             }).join('');
         }
 
+        function seleccionarColorOption(color, btn) {
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const inputEstilo = document.getElementById('modal-estilo');
+            if (color === 'Otro') {
+                colorSeleccionadoModal = '';
+                inputEstilo.style.display = 'block';
+                inputEstilo.value = '';
+                inputEstilo.focus();
+            } else {
+                colorSeleccionadoModal = color;
+                inputEstilo.style.display = 'none';
+                inputEstilo.value = color;
+            }
+        }
+
+        // 1. FUNCIONES PARA LA VISTA PREVIA DE TIPOGRAFÍA
+        function actualizarContadorTexto(input) {
+            const txt = input.value;
+            document.getElementById('contador-caracteres').innerText = `${txt.length}/30`;
+            const salida = document.getElementById('texto-preview-salida');
+            salida.innerText = txt.trim() === '' ? 'Vista previa del texto' : txt;
+        }
+
+        function actualizarVistaPreviaTipografia() {
+            const fuenteSeleccionada = document.getElementById('modal-fuente').value;
+            document.getElementById('texto-preview-salida').style.fontFamily = fuenteSeleccionada;
+        }
+
         function abrirModalPersonalizacion(index) {
             productoSeleccionadoIndex = index;
             const producto = productosGlobal[index];
@@ -411,9 +512,20 @@
             document.getElementById('modal-prod-info').innerText = `Categoría: ${producto.categoria || 'Grabado láser'}`;
             document.getElementById('modal-cant').value = 1;
             document.getElementById('modal-texto').value = '';
+            document.getElementById('contador-caracteres').innerText = '0/30';
+            document.getElementById('texto-preview-salida').innerText = 'Vista previa del texto';
+            document.getElementById('modal-fuente').selectedIndex = 0;
+            document.getElementById('texto-preview-salida').style.fontFamily = 'sans-serif';
+            document.getElementById('modal-notas').value = '';
             document.getElementById('modal-estilo').value = '';
             document.getElementById('modal-archivo').value = '';
             document.getElementById('modal-base64').value = '';
+            document.getElementById('txt-archivo-status').innerText = '📁 Haz clic aquí para adjuntar archivo';
+            
+            colorSeleccionadoModal = '';
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('modal-estilo').style.display = 'none';
+
             actualizarPrecioModal();
             document.getElementById('modal-personalizar').style.display = 'flex';
         }
@@ -425,6 +537,7 @@
         function convertirArchivoModal(event) {
             const file = event.target.files[0];
             if (file) {
+                document.getElementById('txt-archivo-status').innerText = `✅ Archivo: ${file.name}`;
                 const reader = new FileReader();
                 reader.onload = function(e) { document.getElementById('modal-base64').value = e.target.result; };
                 reader.readAsDataURL(file);
@@ -445,22 +558,42 @@
                     precioUnitario: precioNum, 
                     total: cantidad * precioNum, 
                     esTexto: esTexto, 
-                    textoPrecio: rangoAplicable.precio 
+                    textoPrecio: rangoAplicable.precio,
+                    rangoTexto: rangoAplicable.max >= 9999 ? `${rangoAplicable.min}+ pzas` : `${rangoAplicable.min}-${rangoAplicable.max} pzas`
                 };
             }
-            return { precioUnitario: 0, total: 0, esTexto: false, textoPrecio: '' };
+            return { precioUnitario: 0, total: 0, esTexto: false, textoPrecio: '', rangoTexto: 'Precio general' };
         }
 
         function actualizarPrecioModal() {
             if (productoSeleccionadoIndex === null) return;
             const producto = productosGlobal[productoSeleccionadoIndex];
             const cantidad = parseInt(document.getElementById('modal-cant').value) || 1;
+            const stockDisponible = producto.stock !== undefined ? producto.stock : 0;
+            
+            const avisoStock = document.getElementById('modal-stock-aviso');
+            const btnAgregar = document.getElementById('btn-agregar-carrito');
+
+            if (stockDisponible > 0 && cantidad > stockDisponible) {
+                avisoStock.innerText = `⚠️ Solo hay ${stockDisponible} piezas disponibles en stock.`;
+                avisoStock.style.color = '#dc2626';
+                btnAgregar.style.opacity = '0.5';
+                btnAgregar.style.pointerEvents = 'none';
+            } else {
+                avisoStock.innerText = stockDisponible > 0 ? `✅ Stock disponible (${stockDisponible} pzas)` : '';
+                avisoStock.style.color = '#16a34a';
+                btnAgregar.style.opacity = '1';
+                btnAgregar.style.pointerEvents = 'auto';
+            }
+
             const calculo = calcularSubtotalProducto(producto, cantidad);
             
             if (calculo.esTexto) {
                 document.getElementById('modal-preview-precio').innerText = `${calculo.textoPrecio}`;
+                document.getElementById('modal-rango-info').innerText = `Rango aplicado: ${calculo.rangoTexto}`;
             } else {
                 document.getElementById('modal-preview-precio').innerText = `$${calculo.total.toFixed(2)} ($${calculo.precioUnitario} c/u)`;
+                document.getElementById('modal-rango-info').innerText = `Rango aplicado: ${calculo.rangoTexto}`;
             }
         }
 
@@ -478,15 +611,25 @@
             if (productoSeleccionadoIndex === null) return;
             const producto = productosGlobal[productoSeleccionadoIndex];
             const cantidad = parseInt(document.getElementById('modal-cant').value) || 1;
+            const stockDisponible = producto.stock !== undefined ? producto.stock : 0;
+
+            if (stockDisponible > 0 && cantidad > stockDisponible) {
+                alert(`Lo sentimos, solo hay ${stockDisponible} piezas disponibles en stock.`);
+                return;
+            }
+
             const texto = document.getElementById('modal-texto').value.trim();
+            const fuente = document.getElementById('modal-fuente').options[document.getElementById('modal-fuente').selectedIndex].text;
             const estilo = document.getElementById('modal-estilo').value.trim();
+            const notas = document.getElementById('modal-notas').value.trim();
             const diseno = document.getElementById('modal-base64').value;
 
             const calculo = calcularSubtotalProducto(producto, cantidad);
 
             let personalizacionStr = '';
-            if (texto) personalizacionStr += `Texto: ${texto}. `;
-            if (estilo) personalizacionStr += `Estilo: ${estilo}.`;
+            if (texto) personalizacionStr += `Texto: "${texto}" (${fuente}). `;
+            if (estilo) personalizacionStr += `Color/Acabado: ${estilo}. `;
+            if (notas) personalizacionStr += `Notas Taller: ${notas}.`;
 
             carrito.push({
                 id: producto.id,
