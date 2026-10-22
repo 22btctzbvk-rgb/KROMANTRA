@@ -174,30 +174,30 @@
                         <div><label>Instagram:</label><input type="text" id="cfg-instagram"></div>
                     </div>
                     <div class="form-grid" style="margin-bottom: 12px;">
-                        <div><label>Facebook:</label><input type="text" id="cfg-facebook" placeholder="https://facebook.com/kromantra"></div>
+                        <div><label>Facebook / TikTok:</label><input type="text" id="cfg-facebook"></div>
                         <div></div>
                     </div>
                     <div style="margin-bottom: 15px;">
-                        <label>Horarios de Atención (Escribir hacia abajo con Enter):</label>
-                        <textarea id="cfg-horarios" rows="3" placeholder="Lunes a Viernes: 09:00 am - 18:00 pm&#10;Sábado a Domingo: 09:00 am - 15:00 pm"></textarea>
+                        <label>Horarios de Atención:</label>
+                        <textarea id="cfg-horarios" rows="3"></textarea>
                     </div>
 
                     <div class="section-sub">🛠️ Materiales (4 Tarjetas)</div>
                     <div class="form-grid">
                         <div><label>Mat 1 Título:</label><input type="text" id="mat-t-0"></div>
-                        <div><label>Mat 1 Desc (Escribir hacia abajo):</label><textarea id="mat-d-0" rows="3"></textarea></div>
+                        <div><label>Mat 1 Desc:</label><textarea id="mat-d-0" rows="3"></textarea></div>
                     </div>
                     <div class="form-grid">
                         <div><label>Mat 2 Título:</label><input type="text" id="mat-t-1"></div>
-                        <div><label>Mat 2 Desc (Escribir hacia abajo):</label><textarea id="mat-d-1" rows="3"></textarea></div>
+                        <div><label>Mat 2 Desc:</label><textarea id="mat-d-1" rows="3"></textarea></div>
                     </div>
                     <div class="form-grid">
                         <div><label>Mat 3 Título:</label><input type="text" id="mat-t-2"></div>
-                        <div><label>Mat 3 Desc (Escribir hacia abajo):</label><textarea id="mat-d-2" rows="3"></textarea></div>
+                        <div><label>Mat 3 Desc:</label><textarea id="mat-d-2" rows="3"></textarea></div>
                     </div>
                     <div class="form-grid" style="margin-bottom: 15px;">
                         <div><label>Mat 4 Título:</label><input type="text" id="mat-t-3"></div>
-                        <div><label>Mat 4 Desc (Escribir hacia abajo):</label><textarea id="mat-d-3" rows="3"></textarea></div>
+                        <div><label>Mat 4 Desc:</label><textarea id="mat-d-3" rows="3"></textarea></div>
                     </div>
 
                     <div class="section-sub">✨ Galería (3 Imágenes)</div>
@@ -222,7 +222,7 @@
     </div>
 
     <script>
-        let globalPedidos = [], filtroPedidoActual = 'todos', modoEdicion = false, totalPedidosAnterior = 0;
+        let globalPedidos = [], filtroPedidoActual = 'todos', modoEdicion = false;
 
         function cambiarSeccion(seccionId, btn) {
             document.querySelectorAll('.admin-seccion').forEach(s => s.classList.remove('activo'));
@@ -267,7 +267,7 @@
                         });
                     }
                 }
-            } catch (e) { console.error("Error al cargar configuración"); }
+            } catch (e) {}
         }
 
         function convertirGaleria(event, index) {
@@ -308,7 +308,7 @@
             try {
                 const res = await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
                 const data = await res.json();
-                if (data.exito) alert('¡Configuración general guardada!');
+                if (data.exito) alert('¡Configuración guardada!');
                 else alert('Error al guardar.');
             } catch (err) { alert('Error de conexión.'); }
         }
@@ -354,15 +354,11 @@
             document.getElementById('prod-id').value = p.id; document.getElementById('prod-id').readOnly = true;
             document.getElementById('prod-nombre').value = p.nombre || ''; 
             document.getElementById('prod-categoria').value = p.categoria || 'Grabado láser';
-            
             document.getElementById('prod-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 0;
-            
             document.getElementById('prod-imagen').value = p.imagen || '';
             document.getElementById('preview-container').innerHTML = p.imagen ? `<img src="${p.imagen}" class="preview-img">` : '<span style="font-size:12px; color:#94a3b8;">Sin imagen</span>';
             
-            document.getElementById('precio1').value = '';
-            document.getElementById('precio2').value = '';
-            document.getElementById('precio3').value = '';
+            document.getElementById('precio1').value = ''; document.getElementById('precio2').value = ''; document.getElementById('precio3').value = '';
 
             if (p.rangos && Array.isArray(p.rangos)) {
                 if (p.rangos[0]) { 
@@ -400,10 +396,8 @@
             const id = document.getElementById('prod-id').value.trim();
             const nombre = document.getElementById('prod-nombre').value.trim();
             const categoria = document.getElementById('prod-categoria').value.trim();
-            
             const stockVal = parseInt(document.getElementById('prod-stock').value, 10);
             const stock = isNaN(stockVal) ? 0 : stockVal;
-            
             const imagen = document.getElementById('prod-imagen').value || '';
 
             const p1 = document.getElementById('precio1').value.trim();
@@ -503,14 +497,13 @@
         async function cargarPedidos() {
             try {
                 const res = await fetch('/api/pedidos'); globalPedidos = await res.json();
-                totalPedidosAnterior = globalPedidos.length; aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
+                aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
             } catch (e) {}
         }
 
         async function cargarPedidosSilencioso() {
             try {
-                const res = await fetch('/api/pedidos'); const nuevos = await res.json();
-                totalPedidosAnterior = nuevos.length; globalPedidos = nuevos;
+                const res = await fetch('/api/pedidos'); globalPedidos = await res.json();
                 aplicarFiltrosYRenderizar(); calcularMetricas(globalPedidos);
             } catch (e) {}
         }
