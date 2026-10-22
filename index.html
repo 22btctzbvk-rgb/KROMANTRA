@@ -6,105 +6,195 @@
     <title id="page-title">Kromantra | Regalos y Mayoreo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #6366f1; --primary-hover: #4f46e5; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; }
+        :root { 
+            --primary: #6366f1; 
+            --primary-hover: #4f46e5; 
+            --bg: #f8fafc; 
+            --card-bg: #ffffff; 
+            --text: #0f172a; 
+            --text-muted: #64748b;
+            --border: #e2e8f0; 
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.03);
+            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.01);
+            --shadow-lg: 0 20px 30px -10px rgba(0,0,0,0.15);
+        }
+
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; scroll-behavior: smooth; }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes scaleUp { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes scaleUp { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .announcement-bar { background: #1e293b; color: #f8fafc; font-size: 12px; text-align: center; padding: 8px 15px; font-weight: 500; }
-        .hero-section { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; padding: 50px 20px; text-align: center; border-bottom: 5px solid #3b82f6; }
-        .hero-content { max-width: 800px; margin: 0 auto; animation: fadeIn 0.8s ease; }
-        .hero-section img { width: 90px; height: 90px; object-fit: contain; margin-bottom: 12px; border-radius: 50%; background: white; padding: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .hero-section h1 { font-size: 34px; font-weight: 800; margin: 0 0 8px 0; }
-        .hero-section p.subtitle { font-size: 17px; margin: 0 0 25px 0; opacity: 0.9; }
+        /* PANTALLA DE CARGA INICIAL (SPLASH SCREEN) */
+        #pantalla-carga {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #4f46e5, #8b5cf6, #d946ef);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #pantalla-carga img {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            animation: pulseLogo 1.5s infinite ease-in-out;
+        }
+
+        #pantalla-carga h2 {
+            color: white;
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes pulseLogo {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+
+        /* BANNER Y HERO */
+        .announcement-bar { background: #1e293b; color: #f8fafc; font-size: 12.5px; text-align: center; padding: 9px 15px; font-weight: 500; letter-spacing: 0.2px; }
         
-        .btn-grande { display: inline-block; background: white; color: var(--primary); padding: 14px 35px; border-radius: 30px; font-weight: 800; font-size: 17px; text-decoration: none; cursor: pointer; border: none; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .btn-grande:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+        .hero-section { background: linear-gradient(135deg, #4f46e5, #8b5cf6, #d946ef); color: white; padding: 60px 20px; text-align: center; border-bottom: 4px solid rgba(255,255,255,0.2); }
+        .hero-content { max-width: 800px; margin: 0 auto; animation: fadeIn 0.8s ease; }
+        .hero-section img { width: 95px; height: 95px; object-fit: contain; margin-bottom: 15px; border-radius: 50%; background: white; padding: 5px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .hero-section h1 { font-size: 38px; font-weight: 800; margin: 0 0 10px 0; letter-spacing: -0.5px; }
+        .hero-section p.subtitle { font-size: 18px; margin: 0 0 28px 0; opacity: 0.95; font-weight: 400; }
+        
+        .btn-grande { display: inline-block; background: white; color: var(--primary); padding: 15px 38px; border-radius: 40px; font-weight: 800; font-size: 16px; text-decoration: none; cursor: pointer; border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+        .btn-grande:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,0.25); background: #f8fafc; }
 
-        .rastreo-portada-box { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 12px 15px; border-radius: 10px; display: flex; gap: 10px; max-width: 500px; margin: 25px auto 0 auto; }
-        .rastreo-portada-box input { flex: 1; padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; }
-        .rastreo-portada-box button { padding: 8px 15px; background: #1e293b; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .rastreo-portada-box { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); padding: 10px; border-radius: 14px; display: flex; gap: 8px; max-width: 480px; margin: 28px auto 0 auto; backdrop-filter: blur(10px); }
+        .rastreo-portada-box input { flex: 1; padding: 10px 14px; border: none; border-radius: 10px; font-size: 13px; outline: none; background: white; }
+        .rastreo-portada-box button { padding: 10px 18px; background: #0f172a; color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-size: 13px; }
+        .rastreo-portada-box button:hover { background: #1e293b; }
 
-        .info-container { max-width: 900px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 30px; }
-        .info-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); animation: slideUp 0.6s ease; }
-        .info-card h2 { color: #1e3a8a; margin-top: 0; font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px; }
+        /* SECCIONES DE INFORMACIÓN */
+        .info-container { max-width: 950px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 28px; }
+        .info-card { background: white; border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); animation: slideUp 0.6s ease; }
+        .info-card h2 { color: var(--text); margin-top: 0; font-size: 20px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 20px; }
         
         .materiales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; text-align: center; }
-        .material-item { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .material-item b { display: block; font-size: 14px; color: #334155; margin-bottom: 4px; }
-        .material-item span { font-size: 12px; color: #64748b; }
+        .material-item { background: #f8fafc; padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+        .material-item b { display: block; font-size: 14px; color: var(--text); margin-bottom: 5px; }
+        .material-item span { font-size: 12px; color: var(--text-muted); }
 
         .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .galeria-img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: #e2e8f0; }
+        .galeria-img { width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--border); background: #e2e8f0; transition: transform 0.3s; }
+        .galeria-img:hover { transform: scale(1.03); }
         
         .resenas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-        .resena-card { background: #f8fafc; border: 1px solid var(--border); padding: 15px; border-radius: 8px; font-size: 13px; }
+        .resena-card { background: #f8fafc; border: 1px solid var(--border); padding: 16px; border-radius: var(--radius-md); font-size: 13px; }
 
-        #vista-catalogo { display: none; max-width: 1200px; margin: 20px auto 40px auto; padding: 0 20px; gap: 30px; }
+        /* CATÁLOGO Y TIENDA */
+        #vista-catalogo { display: none; max-width: 1250px; margin: 25px auto 50px auto; padding: 0 20px; gap: 30px; }
         .catalogo-activo { display: grid !important; grid-template-columns: 1fr 380px; animation: fadeIn 0.4s ease; }
-        @media (max-width: 900px) { .catalogo-activo { grid-template-columns: 1fr; } }
+        @media (max-width: 950px) { .catalogo-activo { grid-template-columns: 1fr; } }
         
-        .btn-volver { background: #334155; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; }
-        #toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; z-index: 3000; animation: slideUp 0.3s ease; }
+        .btn-volver { background: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; transition: background 0.2s; }
+        .btn-volver:hover { background: #1e293b; }
+
+        #toast { position: fixed; bottom: 25px; right: 25px; background: #10b981; color: white; padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 13.5px; box-shadow: 0 10px 25px rgba(16,185,129,0.3); display: none; z-index: 3000; animation: slideUp 0.3s ease; }
         
-        .categorias-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .cat-btn { background: #e2e8f0; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; color: #475569; transition: all 0.2s ease; }
-        .cat-btn.active { background: var(--primary); color: white; transform: scale(1.05); }
+        .categorias-bar { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .cat-btn { background: white; border: 1.5px solid var(--border); padding: 9px 18px; border-radius: 30px; font-weight: 700; font-size: 12.5px; cursor: pointer; color: var(--text-muted); transition: all 0.2s ease; box-shadow: var(--shadow-sm); }
+        .cat-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.04); box-shadow: 0 4px 12px rgba(99,102,241,0.25); }
 
         .main-content { display: flex; flex-direction: column; gap: 20px; }
-        .rastreo-box { background: white; border: 1px solid var(--border); padding: 15px 20px; border-radius: 10px; display: flex; gap: 10px; align-items: center; }
-        .rastreo-box input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
-        .rastreo-box button { padding: 8px 16px; background: #334155; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .rastreo-box { background: white; border: 1px solid var(--border); padding: 16px 22px; border-radius: var(--radius-md); display: flex; gap: 10px; align-items: center; box-shadow: var(--shadow-sm); }
+        .rastreo-box input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
+        .rastreo-box input:focus { border-color: var(--primary); }
+        .rastreo-box button { padding: 10px 18px; background: #0f172a; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; }
         
-        .grid-productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
-        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; background: #f1f5f9; }
-        .card h3 { margin: 6px 0 8px 0; font-size: 16px; color: #1e293b; }
-        .rango-box { font-size: 11px; color: #64748b; background: #f8fafc; padding: 8px; border-radius: 6px; margin-bottom: 12px; border: 1px solid var(--border); }
-        .rango-box ul { margin: 0; padding-left: 12px; }
-
-        /* Badge / Etiqueta destacada en la tarjeta */
-        .badge-etiqueta { position: absolute; top: 12px; left: 12px; background: #f59e0b; color: white; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.15); text-transform: uppercase; }
-
-        .btn-personalizar { background: var(--primary); color: white; border: none; padding: 11px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; font-size: 13px; transition: background 0.2s, transform 0.2s; }
-        .btn-personalizar:hover { background: var(--primary-hover); transform: scale(1.02); }
-
-        /* MODAL MEJORADO */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2500; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.25s ease; }
-        .modal-content { background: white; padding: 28px; border-radius: 20px; width: 90%; max-width: 440px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; max-height: 90vh; overflow-y: auto; animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .modal-close { position: absolute; top: 18px; right: 18px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 18px; color: #64748b; transition: all 0.2s; }
-        .modal-close:hover { background: #e2e8f0; color: #0f172a; }
-
-        .form-mini { display: flex; flex-direction: column; gap: 12px; }
-        .form-mini label { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-        .form-mini input[type="text"], .form-mini input[type="number"], .form-mini select, .form-mini textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 13px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
-        .form-mini input:focus, .form-mini select:focus, .form-mini textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
+        /* TARJETAS DE PRODUCTOS REDISEÑADAS */
+        .grid-productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 22px; }
         
-        .color-options-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-        .color-btn { background: #f1f5f9; border: 1.5px solid var(--border); padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; }
-        .color-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .color-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .card { 
+            background: var(--card-bg); 
+            border-radius: var(--radius-lg); 
+            padding: 16px; 
+            border: 1px solid var(--border); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            box-shadow: var(--shadow-sm); 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
+        
+        .card-img-wrapper { position: relative; width: 100%; height: 190px; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 14px; background: #f1f5f9; }
+        .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .card:hover .card-img-wrapper img { transform: scale(1.05); }
 
-        .file-upload-box { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 10px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; }
+        .card h3 { margin: 8px 0; font-size: 16.5px; font-weight: 800; color: var(--text); line-height: 1.3; }
+        
+        .rango-box { font-size: 11.5px; color: var(--text-muted); background: #f8fafc; padding: 10px 12px; border-radius: 8px; margin-bottom: 14px; border: 1px solid var(--border); }
+        .rango-box ul { margin: 4px 0 0 0; padding-left: 14px; }
+        .rango-box li { margin-bottom: 2px; }
+
+        .badge-etiqueta { position: absolute; top: 12px; left: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 20px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.15); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .btn-personalizar { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%; font-size: 13.5px; transition: all 0.2s; box-shadow: 0 4px 10px rgba(99,102,241,0.2); }
+        .btn-personalizar:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 15px rgba(99,102,241,0.3); }
+
+        /* MODAL CON GLASSMORPHISM Y DISEÑO PULIDO */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 2500; align-items: center; justify-content: center; backdrop-filter: blur(8px); animation: fadeIn 0.25s ease; }
+        .modal-content { background: white; padding: 30px; border-radius: 24px; width: 90%; max-width: 450px; box-shadow: var(--shadow-lg); position: relative; max-height: 88vh; overflow-y: auto; animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid var(--border); }
+        
+        .modal-close { position: absolute; top: 20px; right: 20px; background: #f1f5f9; border: none; width: 34px; height: 34px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 18px; color: #64748b; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { background: #e2e8f0; color: #0f172a; transform: rotate(90deg); }
+
+        .form-mini { display: flex; flex-direction: column; gap: 14px; }
+        .form-mini label { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+        .form-mini input[type="text"], .form-mini input[type="number"], .form-mini select, .form-mini textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 13px; box-sizing: border-box; outline: none; transition: all 0.2s; background: #f8fafc; }
+        .form-mini input:focus, .form-mini select:focus, .form-mini textarea:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12); }
+
+        .file-upload-box { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 14px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; }
         .file-upload-box:hover { border-color: var(--primary); background: #eff6ff; }
 
-        .preview-precio-box { background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 14px; border-radius: 12px; border: 1px solid var(--border); margin: 15px 0; text-align: center; }
+        .preview-precio-box { background: linear-gradient(135deg, #f8fafc, #e0e7ff); padding: 16px; border-radius: 14px; border: 1px solid #c7d2fe; margin: 18px 0; text-align: center; }
         
-        .sidebar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: fit-content; position: sticky; top: 20px; }
-        .sidebar h2 { font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: #1e293b; }
-        .cart-item { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .cart-controls { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-        .cart-controls button { background: #e2e8f0; border: none; width: 22px; height: 22px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .cart-total { font-size: 18px; font-weight: 700; color: #1e293b; margin: 15px 0; text-align: right; }
-        .checkout-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; }
-        .info-pago-box { font-size: 11px; background: #eff6ff; padding: 12px; border-radius: 8px; border: 1px solid #bfdbfe; color: #1e3a8a; display: none; margin-top: 4px; }
-        .btn-checkout { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 14px; }
+        /* SIDEBAR CARRITO */
+        .sidebar { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; height: fit-content; position: sticky; top: 20px; box-shadow: var(--shadow-sm); }
+        .sidebar h2 { font-size: 17px; font-weight: 800; margin-top: 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; color: var(--text); }
+        .cart-item { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; display: flex; justify-content: space-between; align-items: center; }
+        .cart-controls { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+        .cart-controls button { background: #f1f5f9; border: 1px solid var(--border); width: 24px; height: 24px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .cart-controls button:hover { background: #e2e8f0; }
+        .cart-total { font-size: 20px; font-weight: 800; color: var(--text); margin: 18px 0; text-align: right; }
+        
+        .checkout-form { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; border-top: 2px solid #f1f5f9; padding-top: 15px; }
+        .info-pago-box { font-size: 11.5px; background: #eff6ff; padding: 12px; border-radius: 10px; border: 1px solid #bfdbfe; color: #1e3a8a; display: none; margin-top: 4px; }
+        .btn-checkout { background: #10b981; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; font-size: 14.5px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(16,185,129,0.25); }
+        .btn-checkout:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(16,185,129,0.35); }
     </style>
 </head>
 <body>
+    <!-- PANTALLA DE CARGA INICIAL -->
+    <div id="pantalla-carga">
+        <img src="logo.jpg" alt="Kromantra Logo" onerror="this.style.display='none'">
+        <h2>Kromantra</h2>
+    </div>
+
     <div id="toast">¡Producto agregado al carrito!</div>
 
     <div class="announcement-bar">
@@ -149,7 +239,7 @@
             <div class="info-card">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 20px;">
                     <h2 style="margin: 0; border: none; padding: 0;">⭐ Reseñas de Clientes</h2>
-                    <button onclick="abrirModalResena()" style="background:var(--primary); color:white; border:none; padding:6px 12px; border-radius:6px; font-size:12px; cursor:pointer; font-weight:600;">Dejar Reseña ✍️</button>
+                    <button onclick="abrirModalResena()" style="background:var(--primary); color:white; border:none; padding:8px 14px; border-radius:8px; font-size:12px; cursor:pointer; font-weight:700;">Dejar Reseña ✍️</button>
                 </div>
                 <div class="resenas-grid" id="resenas-container">
                     <p style="color:#64748b; font-size:13px;">Cargando opiniones...</p>
@@ -166,8 +256,8 @@
             <div class="info-card" style="text-align: center; padding: 20px;">
                 <h2 style="border: none; margin-bottom: 10px;">¡Síguenos en Redes!</h2>
                 <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
-                    <a id="link-instagram" href="https://instagram.com" target="_blank" style="background:#f1f5f9; color:#334155; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">📸 Instagram</a>
-                    <a id="link-tiktok" href="https://tiktok.com" target="_blank" style="background:#f1f5f9; color:#334155; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:600; font-size:13px;">🎵 TikTok</a>
+                    <a id="link-instagram" href="https://instagram.com" target="_blank" style="background:#f1f5f9; color:#334155; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:700; font-size:13px;">📸 Instagram</a>
+                    <a id="link-tiktok" href="https://tiktok.com" target="_blank" style="background:#f1f5f9; color:#334155; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:700; font-size:13px;">🎵 TikTok</a>
                 </div>
             </div>
         </div>
@@ -175,26 +265,26 @@
 
     <!-- MODAL DE RESEÑA -->
     <div id="modal-resena" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2500; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
-        <div style="background:white; padding:25px; border-radius:12px; width:90%; max-width:400px; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
-            <h3 style="margin-top:0; color:#1e293b;">Escribe tu Reseña</h3>
+        <div style="background:white; padding:25px; border-radius:16px; width:90%; max-width:400px; box-shadow:var(--shadow-lg);">
+            <h3 style="margin-top:0; color:#1e293b; font-size:18px;">Escribe tu Reseña</h3>
             <form onsubmit="enviarResena(event)">
-                <div style="margin-bottom:10px;"><label>Tu Nombre:</label><input type="text" id="res-nombre" required></div>
-                <div style="margin-bottom:10px;"><label>Calificación:</label><select id="res-estrellas"><option value="5">⭐⭐⭐⭐⭐ (5/5)</option><option value="4">⭐⭐⭐⭐ (4/5)</option><option value="3">⭐⭐⭐ (3/5)</option></select></div>
-                <div style="margin-bottom:15px;"><label>Tu Comentario:</label><textarea id="res-comentario" rows="3" required></textarea></div>
+                <div style="margin-bottom:10px;"><label>Tu Nombre:</label><input type="text" id="res-nombre" required style="width:100%; padding:9px; border:1px solid var(--border); border-radius:8px;"></div>
+                <div style="margin-bottom:10px;"><label>Calificación:</label><select id="res-estrellas" style="width:100%; padding:9px; border:1px solid var(--border); border-radius:8px;"><option value="5">⭐⭐⭐⭐⭐ (5/5)</option><option value="4">⭐⭐⭐⭐ (4/5)</option><option value="3">⭐⭐⭐ (3/5)</option></select></div>
+                <div style="margin-bottom:15px;"><label>Tu Comentario:</label><textarea id="res-comentario" rows="3" required style="width:100%; padding:9px; border:1px solid var(--border); border-radius:8px;"></textarea></div>
                 <div style="display:flex; gap:10px;">
-                    <button type="submit" style="background:var(--primary); color:white; border:none; padding:10px; border-radius:6px; flex:1; font-weight:600; cursor:pointer;">Enviar</button>
-                    <button type="button" onclick="cerrarModalResena()" style="background:#e2e8f0; color:#334155; border:none; padding:10px; border-radius:6px; flex:1; font-weight:600; cursor:pointer;">Cancelar</button>
+                    <button type="submit" style="background:var(--primary); color:white; border:none; padding:10px; border-radius:8px; flex:1; font-weight:700; cursor:pointer;">Enviar</button>
+                    <button type="button" onclick="cerrarModalResena()" style="background:#e2e8f0; color:#334155; border:none; padding:10px; border-radius:8px; flex:1; font-weight:700; cursor:pointer;">Cancelar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL DE PERSONALIZACIÓN COMPLETO -->
+    <!-- MODAL DE PERSONALIZACIÓN -->
     <div id="modal-personalizar" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close" onclick="cerrarModalPersonalizacion()">×</button>
             <h3 id="modal-prod-nombre" style="margin:0 0 4px 0; color:#0f172a; font-size:20px; font-weight:800;">Personalizar Producto</h3>
-            <div id="modal-prod-info" style="font-size:12px; font-weight:600; color:var(--primary); margin-bottom:12px;"></div>
+            <div id="modal-prod-info" style="font-size:12px; font-weight:700; color:var(--primary); margin-bottom:14px;"></div>
             
             <div class="form-mini">
                 <div>
@@ -208,7 +298,6 @@
                     <input type="text" id="modal-texto" maxlength="30" placeholder="Ej. Nombre o fecha" oninput="actualizarContadorTexto(this)">
                 </div>
 
-                <!-- 1. VISTA PREVIA DE TIPOGRAFÍA -->
                 <div>
                     <label>🔤 Estilo de Tipografía:</label>
                     <select id="modal-fuente" onchange="actualizarVistaPreviaTipografia()">
@@ -217,23 +306,11 @@
                         <option value="Courier New, monospace">Vintage / Máquina</option>
                         <option value="Brush Script MT, cursive">Cursiva / Artística</option>
                     </select>
-                    <div id="preview-tipografia-box" style="margin-top:5px; padding:8px; background:#f8fafc; border:1px solid var(--border); border-radius:6px; text-align:center;">
-                        <span id="texto-preview-salida" style="font-size:14px; color:#334155;">Vista previa del texto</span>
+                    <div id="preview-tipografia-box" style="margin-top:6px; padding:10px; background:#ffffff; border:1.5px solid var(--border); border-radius:10px; text-align:center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
+                        <span id="texto-preview-salida" style="font-size:15px; color:#1e293b; font-weight:600;">Vista previa del texto</span>
                     </div>
                 </div>
 
-                <div>
-                    <label>🎨 Color / Acabado:</label>
-                    <div class="color-options-grid">
-                        <button type="button" class="color-btn" onclick="seleccionarColorOption('Negro Mate', this)">⚫ Negro</button>
-                        <button type="button" class="color-btn" onclick="seleccionarColorOption('Plata / Acero', this)">🔘 Plata</button>
-                        <button type="button" class="color-btn" onclick="seleccionarColorOption('Blanco', this)">⚪ Blanco</button>
-                        <button type="button" class="color-btn" onclick="seleccionarColorOption('Otro', this)">✏️ Otro</button>
-                    </div>
-                    <input type="text" id="modal-estilo" placeholder="Escribe el color o acabado..." style="margin-top: 6px; display: none;">
-                </div>
-
-                <!-- 5. INSTRUCCIONES ESPECIALES PARA EL DISEÑADOR -->
                 <div>
                     <label>📝 Instrucciones especiales para el taller:</label>
                     <textarea id="modal-notas" rows="2" placeholder="Ej. Centrar el logotipo, usar tipografía grande..."></textarea>
@@ -242,7 +319,7 @@
                 <div>
                     <label>🖼️ Logotipo o Imagen de referencia:</label>
                     <div class="file-upload-box" onclick="document.getElementById('modal-archivo').click()">
-                        <span id="txt-archivo-status" style="font-size:11px; color:#64748b; font-weight:600;">📁 Haz clic aquí para adjuntar archivo</span>
+                        <span id="txt-archivo-status" style="font-size:12px; color:#64748b; font-weight:600;">📁 Haz clic aquí para adjuntar archivo</span>
                         <input type="file" id="modal-archivo" accept="image/*" style="display:none;" onchange="convertirArchivoModal(event)">
                     </div>
                     <input type="hidden" id="modal-base64">
@@ -250,12 +327,12 @@
             </div>
 
             <div class="preview-precio-box">
-                <span style="font-size:10px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:2px;">Total Calculado</span>
-                <div id="modal-preview-precio" style="font-size:20px; font-weight:800; color:var(--primary);">$0.00</div>
-                <div id="modal-rango-info" style="font-size:11px; color:#64748b; margin-top:2px; font-weight:600;"></div>
+                <span style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.8px; display:block; margin-bottom:2px;">Total Calculado</span>
+                <div id="modal-preview-precio" style="font-size:24px; font-weight:800; color:var(--primary);">$0.00</div>
+                <div id="modal-rango-info" style="font-size:11.5px; color:#64748b; margin-top:2px; font-weight:600;"></div>
             </div>
 
-            <button id="btn-agregar-carrito" class="btn-personalizar" onclick="agregarDesdeModal()" style="padding:12px; font-size:14px; border-radius:10px;">
+            <button id="btn-agregar-carrito" class="btn-personalizar" onclick="agregarDesdeModal()" style="padding:14px; font-size:14.5px; border-radius:12px;">
                 🛒 Agregar al Carrito
             </button>
         </div>
@@ -267,7 +344,7 @@
             <div class="rastreo-box"><input type="text" id="inputRastreo" placeholder="🔍 Folio o Teléfono..."><button onclick="consultarPedido()">Buscar</button></div>
             
             <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                <h2 style="font-size: 18px; margin: 0; color: #334155;">📦 Catálogo Oficial</h2>
+                <h2 style="font-size: 20px; font-weight: 800; margin: 0; color: var(--text);">📦 Catálogo Oficial</h2>
             </div>
             
             <div class="categorias-bar" id="categorias-bar">
@@ -278,15 +355,15 @@
         </div>
         <div class="sidebar">
             <h2>🛒 Tu Carrito</h2>
-            <div id="carrito-lista" style="max-height: 250px; overflow-y: auto;"><p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p></div>
+            <div id="carrito-lista" style="max-height: 260px; overflow-y: auto;"><p style="color: #64748b; font-size: 12.5px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p></div>
             <div class="cart-total" id="cart-total-general">Total: $0.00</div>
             <div class="checkout-form">
-                <h3 style="margin: 0 0 5px 0; font-size: 13px;">👤 Datos de Contacto</h3>
-                <div><label>Nombre:</label><input type="text" id="cli-nombre"></div>
-                <div><label>Teléfono:</label><input type="text" id="cli-telefono"></div>
-                <div><label>Método de Pago:</label><select id="cli-metodo-pago" onchange="mostrarDatosPago()"><option value="Efectivo / Al Recoger">💵 Efectivo / Al Recoger</option><option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia</option></select></div>
+                <h3 style="margin: 0 0 5px 0; font-size: 13.5px; font-weight:700;">👤 Datos de Contacto</h3>
+                <div><label style="font-size:12px; font-weight:600; color:#475569;">Nombre:</label><input type="text" id="cli-nombre" style="width:100%; padding:9px; border:1px solid var(--border); border-radius:8px; outline:none;"></div>
+                <div><label style="font-size:12px; font-weight:600; color:#475569;">Teléfono:</label><input type="text" id="cli-telefono" style="width:100%; padding:9px; border:1px solid var(--border); border-radius:8px; outline:none;"></div>
+                <div><label style="font-size:12px; font-weight:600; color:#475569;">Método de Pago:</label><select id="cli-metodo-pago" onchange="mostrarDatosPago()" style="width:100%; padding:9px; border:1px solid var(--border); border-radius:8px; outline:none;"><option value="Efectivo / Al Recoger">💵 Efectivo / Al Recoger</option><option value="Tarjeta / Transferencia">💳 Tarjeta / Transferencia</option></select></div>
                 <div id="info-pago-div" class="info-pago-box">
-                    <div style="background: white; padding: 8px; border-radius: 6px; border: 1px solid #93c5fd; font-family: monospace; font-size: 11px;">
+                    <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #bfdbfe; font-family: monospace; font-size: 11px;">
                         <b>Banco:</b> <span id="banco-txt">BBVA</span><br>
                         <b>Tarjeta:</b> <span id="tarjeta-txt">4152314063676335</span><br>
                         <b>Titular:</b> <span id="titular-txt">Carolina Perez Mendez</span>
@@ -300,7 +377,17 @@
     <script>
         let configGlobal = { whatsapp: '525514494333', tarjeta: '4152314063676335', titular: 'Carolina Perez Mendez', banco: 'BBVA' };
         let carrito = [], productosGlobal = [], categoriaSeleccionada = 'todos', productoSeleccionadoIndex = null;
-        let colorSeleccionadoModal = '';
+
+        // Ocultar pantalla de carga inicial al cargar la página
+        window.addEventListener('load', () => {
+            const pantallaCarga = document.getElementById('pantalla-carga');
+            if (pantallaCarga) {
+                setTimeout(() => {
+                    pantallaCarga.style.opacity = '0';
+                    pantallaCarga.style.visibility = 'hidden';
+                }, 800);
+            }
+        });
 
         async function inicializar() {
             cargarConfiguracion();
@@ -442,7 +529,7 @@
                 return catKey === categoriaSeleccionada;
             });
             
-            if (filtrados.length === 0) { container.innerHTML = '<p>No hay productos en esta categoría.</p>'; return; }
+            if (filtrados.length === 0) { container.innerHTML = '<p style="color:#64748b;">No hay productos en esta categoría.</p>'; return; }
             
             container.innerHTML = filtrados.map((p) => {
                 const index = productosGlobal.findIndex(prod => prod.id === p.id);
@@ -453,19 +540,20 @@
                 }).join('') : '';
 
                 const stockNum = p.stock !== undefined ? p.stock : 0;
-                // 4. ETIQUETA / BADGE (Si el producto incluye badge o si se define por stock/popularidad opcional)
                 const badgeHTML = p.badge ? `<span class="badge-etiqueta">${p.badge}</span>` : '';
                 
                 return `
                     <div class="card">
                         ${badgeHTML}
                         <div>
-                            <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                                <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:4px; font-weight:600;">${p.categoria ? p.categoria.trim() : 'Grabado láser'}</span>
-                                <span style="font-size:10px; background:${stockNum > 0 ? '#d1fae5' : '#fee2e2'}; color:${stockNum > 0 ? '#065f46' : '#991b1b'}; padding:2px 6px; border-radius:4px; font-weight:600;">${stockNum} disp.</span>
+                            <div class="card-img-wrapper">
+                                <img src="${p.imagen || 'https://via.placeholder.com/300'}" alt="${p.nombre}">
                             </div>
-                            <h3 style="margin-top:6px;">${p.nombre}</h3>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <span style="font-size:10px; background:#e0e7ff; color:#3730a3; padding:3px 8px; border-radius:6px; font-weight:700;">${p.categoria ? p.categoria.trim() : 'Grabado láser'}</span>
+                                <span style="font-size:10px; background:${stockNum > 0 ? '#d1fae5' : '#fee2e2'}; color:${stockNum > 0 ? '#065f46' : '#991b1b'}; padding:3px 8px; border-radius:6px; font-weight:700;">${stockNum} disp.</span>
+                            </div>
+                            <h3>${p.nombre}</h3>
                             <div class="rango-box"><b>Mayoreo / Precios:</b><ul>${rangosHTML}</ul></div>
                         </div>
                         <div>
@@ -476,23 +564,6 @@
             }).join('');
         }
 
-        function seleccionarColorOption(color, btn) {
-            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            const inputEstilo = document.getElementById('modal-estilo');
-            if (color === 'Otro') {
-                colorSeleccionadoModal = '';
-                inputEstilo.style.display = 'block';
-                inputEstilo.value = '';
-                inputEstilo.focus();
-            } else {
-                colorSeleccionadoModal = color;
-                inputEstilo.style.display = 'none';
-                inputEstilo.value = color;
-            }
-        }
-
-        // 1. FUNCIONES PARA LA VISTA PREVIA DE TIPOGRAFÍA
         function actualizarContadorTexto(input) {
             const txt = input.value;
             document.getElementById('contador-caracteres').innerText = `${txt.length}/30`;
@@ -517,14 +588,9 @@
             document.getElementById('modal-fuente').selectedIndex = 0;
             document.getElementById('texto-preview-salida').style.fontFamily = 'sans-serif';
             document.getElementById('modal-notas').value = '';
-            document.getElementById('modal-estilo').value = '';
             document.getElementById('modal-archivo').value = '';
             document.getElementById('modal-base64').value = '';
             document.getElementById('txt-archivo-status').innerText = '📁 Haz clic aquí para adjuntar archivo';
-            
-            colorSeleccionadoModal = '';
-            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('modal-estilo').style.display = 'none';
 
             actualizarPrecioModal();
             document.getElementById('modal-personalizar').style.display = 'flex';
@@ -620,7 +686,6 @@
 
             const texto = document.getElementById('modal-texto').value.trim();
             const fuente = document.getElementById('modal-fuente').options[document.getElementById('modal-fuente').selectedIndex].text;
-            const estilo = document.getElementById('modal-estilo').value.trim();
             const notas = document.getElementById('modal-notas').value.trim();
             const diseno = document.getElementById('modal-base64').value;
 
@@ -628,7 +693,6 @@
 
             let personalizacionStr = '';
             if (texto) personalizacionStr += `Texto: "${texto}" (${fuente}). `;
-            if (estilo) personalizacionStr += `Color/Acabado: ${estilo}. `;
             if (notas) personalizacionStr += `Notas Taller: ${notas}.`;
 
             carrito.push({
@@ -651,7 +715,7 @@
         function actualizarCarrito() {
             const container = document.getElementById('carrito-lista');
             if (carrito.length === 0) {
-                container.innerHTML = '<p style="color: #64748b; font-size: 12px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>';
+                container.innerHTML = '<p style="color: #64748b; font-size: 12.5px; text-align: center; margin: 20px 0;">Tu carrito está vacío</p>';
                 document.getElementById('cart-total-general').innerText = 'Total: $0.00';
                 return;
             }
@@ -672,7 +736,7 @@
                                 <button onclick="cambiarCantidad(${idx}, -1)">-</button>
                                 <span>${item.cantidad}</span>
                                 <button onclick="cambiarCantidad(${idx}, 1)">+</button>
-                                <button onclick="eliminarDelCarrito(${idx})" style="background:#fee2e2; color:#ef4444;">×</button>
+                                <button onclick="eliminarDelCarrito(${idx})" style="background:#fee2e2; color:#ef4444; border:none;">×</button>
                             </div>
                         </div>
                     </div>
