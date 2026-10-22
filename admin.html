@@ -114,10 +114,21 @@
                     </div>
                     <div style="margin-bottom: 12px;"><label>Vista previa:</label><div id="preview-container"><span style="font-size:12px; color:#94a3b8;">Ninguna imagen seleccionada</span></div></div>
                     
-                    <div class="section-sub">Precios y Descuentos por Mayoreo</div>
-                    <div class="form-grid-3"><div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="50"></div></div><div><label>Precio ($):</label><input type="number" step="0.01" id="precio1" required></div></div>
-                    <div class="form-grid-3"><div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="51"><input type="number" id="max2" value="99"></div></div><div><label>Precio ($):</label><input type="number" step="0.01" id="precio2" required></div></div>
+                    <div class="section-sub">Precios y Descuentos por Mayoreo (Opcionales)</div>
                     
+                    <!-- RANGO 1 (Opcional y texto libre) -->
+                    <div class="form-grid-3">
+                        <div><label>Rango 1 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min1" value="1"><input type="number" id="max1" value="50"></div></div>
+                        <div><label>Precio o Nota:</label><input type="text" id="precio1" placeholder="Ej. 100 o texto libre"></div>
+                    </div>
+                    
+                    <!-- RANGO 2 (Opcional y texto libre) -->
+                    <div class="form-grid-3">
+                        <div><label>Rango 2 (Min-Max):</label><div style="display:flex; gap:5px;"><input type="number" id="min2" value="51"><input type="number" id="max2" value="99"></div></div>
+                        <div><label>Precio o Nota:</label><input type="text" id="precio2" placeholder="Ej. 85 o texto libre"></div>
+                    </div>
+                    
+                    <!-- RANGO 3 (Opcional y texto libre) -->
                     <div class="form-grid-3" style="margin-bottom: 15px;">
                         <div>
                             <label>Rango 3 (Mínimo):</label>
@@ -128,8 +139,8 @@
                             <input type="text" value="en adelante" disabled style="background:#f1f5f9; color:#475569; font-weight:600; text-align:center; cursor:not-allowed;">
                         </div>
                         <div>
-                            <label>Precio ($):</label>
-                            <input type="number" step="0.01" id="precio3" required placeholder="Precio c/u">
+                            <label>Precio o Nota:</label>
+                            <input type="text" id="precio3" placeholder="Ej. 40 o 'Depende del diseño'">
                         </div>
                     </div>
                     
@@ -316,16 +327,21 @@
 
         async function cargarProductos() {
             try {
-                const res = await fetch('/api/productos'); const prods = await res.json();
+                const res = await fetch(`/api/productos?t=${Date.now()}`); 
+                const prods = await res.json();
                 const div = document.getElementById('productos-container');
                 if (prods.length === 0) { div.innerHTML = '<p>No hay productos.</p>'; return; }
                 div.innerHTML = `<table><tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Stock</th><th>Imagen</th><th>Precios</th><th>Acciones</th></tr>` +
                     prods.map(p => `
                         <tr>
                             <td><b>${p.id}</b></td><td>${p.nombre}</td><td><span style="font-size:11px; background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:4px;">${p.categoria || 'Grabado láser'}</span></td>
-                            <td><b style="color:${(p.stock || 0) > 0 ? '#16a34a' : '#dc2626'};">${p.stock !== undefined ? p.stock : 0} pzas</b></td>
+                            <td><b style="color:${(p.stock !== undefined ? p.stock : 0) > 0 ? '#16a34a' : '#dc2626'};">${p.stock !== undefined ? p.stock : 0} pzas</b></td>
                             <td>${p.imagen ? `<img src="${p.imagen}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : 'Sin imagen'}</td>
-                            <td><ul style="margin:0; padding-left:15px; font-size:12px;">${(p.rangos || []).map((r, idx) => `<li>${idx === (p.rangos.length - 1) || r.max >= 9999 ? `${r.min}+ pzas` : `${r.min}-${r.max} pzas`}: <b>$${r.precio}</b></li>`).join('')}</ul></td>
+                            <td><ul style="margin:0; padding-left:15px; font-size:12px;">${(p.rangos || []).map((r, idx) => {
+                                let etiquetaRango = idx === 2 ? `${r.min}+ pzas` : `${r.min}-${r.max} pzas`;
+                                let valPrecio = typeof r.precio === 'number' ? `$${r.precio}` : r.precio;
+                                return `<li>${etiquetaRango}: <b>${valPrecio}</b></li>`;
+                            }).join('')}</ul></td>
                             <td><button class="btn-warning" onclick='prepararEdicion(${JSON.stringify(p)})'>✏️</button> <button class="btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button></td>
                         </tr>
                     `).join('') + `</table>`;
@@ -333,7 +349,7 @@
         }
 
         function prepararEdicion(p) {
-            modoEdicion = true; document.getElementById('titulo-form').innerText = `✏️️ Editando: ${p.id}`;
+            modoEdicion = true; document.getElementById('titulo-form').innerText = `✏️ Editando: ${p.id}`;
             document.getElementById('btn-submit').innerText = 'Actualizar 🔄'; document.getElementById('btn-cancelar').style.display = 'block';
             document.getElementById('prod-id').value = p.id; document.getElementById('prod-id').readOnly = true;
             document.getElementById('prod-nombre').value = p.nombre || ''; 
@@ -343,20 +359,26 @@
             
             document.getElementById('prod-imagen').value = p.imagen || '';
             document.getElementById('preview-container').innerHTML = p.imagen ? `<img src="${p.imagen}" class="preview-img">` : '<span style="font-size:12px; color:#94a3b8;">Sin imagen</span>';
+            
+            // Limpiar valores previos
+            document.getElementById('precio1').value = '';
+            document.getElementById('precio2').value = '';
+            document.getElementById('precio3').value = '';
+
             if (p.rangos && Array.isArray(p.rangos)) {
                 if (p.rangos[0]) { 
                     document.getElementById('min1').value = p.rangos[0].min !== undefined ? p.rangos[0].min : 1; 
                     document.getElementById('max1').value = p.rangos[0].max !== undefined ? p.rangos[0].max : 50; 
-                    document.getElementById('precio1').value = p.rangos[0].precio !== undefined ? p.rangos[0].precio : 0; 
+                    document.getElementById('precio1').value = p.rangos[0].precio !== undefined ? p.rangos[0].precio : ''; 
                 }
                 if (p.rangos[1]) { 
                     document.getElementById('min2').value = p.rangos[1].min !== undefined ? p.rangos[1].min : 51; 
                     document.getElementById('max2').value = p.rangos[1].max !== undefined ? p.rangos[1].max : 99; 
-                    document.getElementById('precio2').value = p.rangos[1].precio !== undefined ? p.rangos[1].precio : 0; 
+                    document.getElementById('precio2').value = p.rangos[1].precio !== undefined ? p.rangos[1].precio : ''; 
                 }
                 if (p.rangos[2]) { 
                     document.getElementById('min3').value = p.rangos[2].min !== undefined ? p.rangos[2].min : 100; 
-                    document.getElementById('precio3').value = p.rangos[2].precio !== undefined ? p.rangos[2].precio : 0; 
+                    document.getElementById('precio3').value = p.rangos[2].precio !== undefined ? p.rangos[2].precio : ''; 
                 }
             }
             cambiarSeccion('seccion-productos', document.querySelectorAll('.nav-tab')[1]);
@@ -368,10 +390,8 @@
             document.getElementById('btn-submit').innerText = 'Guardar Producto 🚀'; document.getElementById('btn-cancelar').style.display = 'none';
             document.getElementById('form-producto').reset(); document.getElementById('prod-id').readOnly = false;
             document.getElementById('prod-stock').value = 0;
-            document.getElementById('min1').value = 1;
-            document.getElementById('max1').value = 50;
-            document.getElementById('min2').value = 51;
-            document.getElementById('max2').value = 99;
+            document.getElementById('min1').value = 1; document.getElementById('max1').value = 50;
+            document.getElementById('min2').value = 51; document.getElementById('max2').value = 99;
             document.getElementById('min3').value = 100;
             document.getElementById('prod-imagen').value = ''; document.getElementById('preview-container').innerHTML = 'Ninguna imagen seleccionada';
         }
@@ -387,60 +407,51 @@
             
             const imagen = document.getElementById('prod-imagen').value || '';
 
-            const p1 = parseFloat(document.getElementById('precio1').value);
-            const p2 = parseFloat(document.getElementById('precio2').value);
-            const p3 = parseFloat(document.getElementById('precio3').value);
+            const p1 = document.getElementById('precio1').value.trim();
+            const p2 = document.getElementById('precio2').value.trim();
+            const p3 = document.getElementById('precio3').value.trim();
 
-            const rangos = [
-                { min: parseInt(document.getElementById('min1').value, 10) || 1, max: parseInt(document.getElementById('max1').value, 10) || 50, precio: isNaN(p1) ? 0 : p1 },
-                { min: parseInt(document.getElementById('min2').value, 10) || 51, max: parseInt(document.getElementById('max2').value, 10) || 99, precio: isNaN(p2) ? 0 : p2 },
-                { min: parseInt(document.getElementById('min3').value, 10) || 100, max: 999999, precio: isNaN(p3) ? 0 : p3 }
-            ];
+            let rangos = [];
+
+            if (p1 !== '') {
+                rangos.push({ 
+                    min: parseInt(document.getElementById('min1').value, 10) || 1, 
+                    max: parseInt(document.getElementById('max1').value, 10) || 50, 
+                    precio: !isNaN(p1) && p1 !== '' ? Number(p1) : p1 
+                });
+            }
+
+            if (p2 !== '') {
+                rangos.push({ 
+                    min: parseInt(document.getElementById('min2').value, 10) || 51, 
+                    max: parseInt(document.getElementById('max2').value, 10) || 99, 
+                    precio: !isNaN(p2) && p2 !== '' ? Number(p2) : p2 
+                });
+            }
+
+            if (p3 !== '') {
+                rangos.push({ 
+                    min: parseInt(document.getElementById('min3').value, 10) || 100, 
+                    max: 999999, 
+                    precio: !isNaN(p3) && p3 !== '' ? Number(p3) : p3 
+                });
+            }
 
             const payload = { id, nombre, categoria, stock, imagen, rangos };
 
             try {
-                let res;
-                if (modoEdicion) {
-                    // Intento 1: PUT a /api/productos/:id
+                let res = await fetch('/api/productos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok && (res.status === 404 || res.status === 405)) {
                     res = await fetch(`/api/productos/${encodeURIComponent(id)}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-
-                    // Intento 2: Si el endpoint PUT :id no existe (404/405), reintenta por POST
-                    if (!res.ok && (res.status === 404 || res.status === 405)) {
-                        res = await fetch('/api/productos', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                    }
-
-                    // Intento 3: Si no existe POST, reintenta PUT /api/productos
-                    if (!res.ok && (res.status === 404 || res.status === 405)) {
-                        res = await fetch('/api/productos', {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                    }
-                } else {
-                    // Creación de producto nuevo
-                    res = await fetch('/api/productos', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!res.ok && (res.status === 404 || res.status === 405)) {
-                        res = await fetch('/api/productos', {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                    }
                 }
 
                 let data = {};
@@ -449,7 +460,7 @@
                 if (res.ok || data.exito || data.id || data.acknowledged) {
                     alert('¡Producto guardado correctamente!');
                     cancelarEdicion();
-                    cargarProductos();
+                    await cargarProductos();
                 } else {
                     const detalle = data.error || data.mensaje || data.message || `Código ${res.status}`;
                     alert('Error al guardar el producto: ' + detalle);
